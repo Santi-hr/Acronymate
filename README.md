@@ -4,16 +4,19 @@ Helpful script to aid in the acronym definition table generation from word docum
 ## What is its purpose?
 This script was created after the tedious task of reviewing several documents at work and having to process the same acronyms in all of them.
 
-The script extracts the acronyms from the .docx, shows you where they are found giving context and provides a "database" for definitions. Once you add a new acronym the definition will be awaiting for the next time it appears in another document. This way there is no need to lose time searching again how exactly that acronym was defined. Finally it generates an acronym table in docx format for ease of copying it to the final document.
+The script extracts the acronyms from the .docx, shows you where they are found giving context and provides a "database" for definitions. Once you add a new acronym the definition will be waiting  for the next time it appears in another document. This way there is no need to lose time searching again how exactly that acronym was defined. Finally, it generates an acronym table in docx format for ease of copying it to the final document.
 
-The script is thought to be used with colleages keeping the database file in a shared folder. Some degree of protection is added to prevent overwriting others changes.
+The script is thought to be used with colleagues keeping the database file in a shared folder. Some degree of protection is added to prevent overwriting others changes.
 
-### And what does the name means?
+The user interface looks like this:
+![User interface](https://raw.githubusercontent.com/Santi-hr/Acronymate/master/other/User_Interface_Example.jpg)
+
+### And what does the name mean?
 Acronym + mate :)
 
 # Status
-This is a work in progress. Currently the script has a spanish command line interface. I have several improvements in my todo list like a translation (at least to English), better support for multiple users (Keeping track if the "database" is in use), upgrading to a GUI (Probably tkinter), etc.
-Also I'm aware of some issues that need some work. The most critical is that acronyms are not found in pending to be approved changes.
+This is a work in progress. Currently the script has a Spanish command line interface. I have several improvements in my TODO list like a translation (at least to English), better support for multiple users (Keeping track if the "database" is in use), upgrading to a GUI (Probably tkinter), etc.
+Also, I'm aware of some issues that need some work. The most critical is that acronyms are not found in pending to be approved changes.
 If the script proves to be useful I will invest more time to it. 
 
 # How to use
