@@ -11,6 +11,8 @@ class CmdProgressBar:
         :param bar_len: Bar width in characters
         """
         self.upper = upper
+        if self.upper == 0:  # Fixme: Prevent divisions by zero
+            self.upper = 1
         self.str_units = str_units
         self.bar_len = bar_len
 
