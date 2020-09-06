@@ -5,9 +5,14 @@ def ensure_directory(directory_in):
     """Check if folder exist and create it otherwise
 
     :param directory_in: String path to directory
-    :return: pathlib object
+    :return: True if there were no errors
     """
-    Path(directory_in).mkdir(parents=True, exist_ok=True)
+    flag_return = True
+    try:
+        Path(directory_in).mkdir(parents=True, exist_ok=True)
+    except FileNotFoundError:
+        flag_return = False
+    return flag_return
 
 
 def get_filename_from_path(path_in):

@@ -116,16 +116,26 @@ class AuxAcroObj:
     def print_dict_coincidences(self):
         """Prints to console the acronym data from DB and document acronyms table"""
         print("Tabla del documento: ", end="")
-        if len(self.def_list_doc_table) > 0:
-            print(self.def_list_doc_table)
-        else:
-            print(ach.color_str("No encontrado", ach.AnsiColorCode.GRAY))
+        print(self.__get_str_sorted_acro_list(self.def_list_doc_table))
 
         print("      Base de datos: ", end="")
-        if len(self.def_list_db) > 0:
-            print(self.def_list_db)
+        print(self.__get_str_sorted_acro_list(self.def_list_db))
+
+    def __get_str_sorted_acro_list(self, def_list):
+        str_out = ""
+        if len(def_list):
+            str_out += "["
+            for i, definition in enumerate(def_list):
+                if i != 0:
+                    str_out += ", "
+                str_out += "{'Main': '%s'" % definition['Main']
+                if 'Translation' in definition:
+                    str_out += ", 'Translation': '%s'" % definition['Translation']
+                str_out += "}"
+            str_out += "]"
         else:
-            print(ach.color_str("No encontrado", ach.AnsiColorCode.GRAY))
+            str_out = ach.color_str("No encontrado", ach.AnsiColorCode.GRAY)
+        return str_out
 
     def get_def_strings(self):
         """Returns pretty definition strings to be output to console
@@ -429,6 +439,18 @@ def get_user_confirmation(str_in="¿Desea continuar?"):
         else:
             print_error("ERROR - Comando no reconocido. Elige entre sí('y') y no('n')")
     return flag_return
+
+def print_ellapsed_time(elapsed_f_sec):
+    hours, minutes = 0, 0
+    while elapsed_f_sec >= 3600:
+        elapsed_f_sec -= 3600
+        hours += 1
+    while elapsed_f_sec >= 60:
+        elapsed_f_sec -= 60
+        minutes += 1
+    seconds = int(elapsed_f_sec)
+    print("Han transcurrido %s:%s:%s desde el inicio del programa" %
+          (str(hours).zfill(2), str(minutes).zfill(2), str(seconds).zfill(2)))
 
 
 def print_error(str_in):
