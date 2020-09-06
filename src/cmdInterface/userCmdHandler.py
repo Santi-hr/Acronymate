@@ -306,7 +306,7 @@ def handle_db_save(acro_dict_handler):
                     db_filename = db_filename_list[0]+"_unverfied."+db_filename_list[1]
                     flag_overwrite = False
     else:
-        print_error("La ruta %s no es accesible", folder_output)
+        print_error("La ruta %s no es accesible" % folder_output)
         folder_output = get_existing_folder_from_user()
     save_file(folder_output, db_filename, flag_overwrite, acro_dict_handler.save_db)
 
@@ -319,7 +319,7 @@ def handle_db_save(acro_dict_handler):
 
         pathHelpers.ensure_directory(bak_folder_output)
         if not bak_folder_output.exists():
-            print_error("La ruta %s no es accesible", bak_folder_output)
+            print_error("La ruta %s no es accesible" % bak_folder_output)
             bak_folder_output = get_existing_folder_from_user()
 
         save_file(bak_folder_output, bak_db_filename, flag_overwrite, acro_dict_handler.save_db_backup)
