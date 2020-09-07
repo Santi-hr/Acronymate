@@ -1,4 +1,5 @@
 import time
+from src.cmdInterface import ansiColorHelper as ach
 
 
 class CmdProgressBar:
@@ -34,7 +35,9 @@ class CmdProgressBar:
             char_not_completed = self.bar_len - char_completed
 
             str_out = "%s: %d/%d (%0.2f%%) " % (self.str_units, value_in, self.upper, perc_completed * 100) \
-                      + "[" + "#" * char_completed + " " * char_not_completed + "] " \
+                      + "[" + ach.AnsiColorCode.DARK_GREEN \
+                      + "#" * char_completed + " " * char_not_completed \
+                      + ach.AnsiColorCode.END + "] " \
                       + "Tiempo transcurrido: %0.2fs" % (time.perf_counter() - self.start_time)
             print('\r' + str_out, end="")
             # Print a line break in the last iteration

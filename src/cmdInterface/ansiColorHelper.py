@@ -14,6 +14,7 @@ class AnsiColorCode:
     DEFAULT = '\033[39m'
     DARK_CYAN = '\033[36m'
     DARK_YELLOW = '\033[33m'
+    DARK_GREEN = '\033[32m'
 
     BACK_BLACK = '\033[40m'
     BACK_RED = '\033[41m'
