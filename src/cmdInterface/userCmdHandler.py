@@ -319,7 +319,7 @@ def process_acro_found(acro_dict_handler):
             # -- SELECT --
             elif user_command == 's':
                 if aux_acro_obj.has_multiple_defs():
-                    idx_list = get_user_idx_list("Elige que acrónimos seleccionar (Ej: 1,2,4): ")
+                    idx_list = get_user_idx_list("Elige que definiciones seleccionar (Ej: 1,2,4): ")
                     aux_acro_obj.select_defs(idx_list)
                 else:
                     print("Esta opción solo está disponible para acrónimos con múltiples definiciones")
@@ -351,12 +351,12 @@ def process_acro_found(acro_dict_handler):
 def print_process_acro_found_help():
     """Prints acronym handling user commands help"""
     print("  y: Aceptar     - Guarda el acrónimo con la información mostrada y actualiza la base de datos.")
-    print("  n: Saltar      - Descarta el acrónimo y se pasa al siguiente.")
+    print("  n: Saltar      - Descarta el acrónimo y continúa al siguiente.")
     print("  e: Editar      - Modifica una definición. En principal se indica la definición en el idioma de origen.")
     print("                   En traducción se indica la definición en Español. Dejar vacío si no es necesaria.")
     print("  a: Añadir      - Añade una definición adicional.")
-    print("  s: Seleccionar - Alterna la selección de una definición. Las definiciones en gris se guardarán en la base")
-    print("                   de datos, pero no se incluirán en la tabla de acrónimos de salida.")
+    print("  s: Seleccionar - Selecciona las definiciones a usar. Aquellas deseleccionadas (en gris) no se incluirán en la tabla ")
+    print("                   de acrónimos de salida. La diferencia con eliminar es que la definición se mantiene en la base de datos.")
     print("  b: Blacklist   - Alterna el estado del acrónimo en la lista negra. Si está en esta lista se saltará ")
     print("                   automáticamente al procesar en modo semi-automático.")
     print("  d: Eliminar    - Elimina el acrónimo o una de sus definiciónes de la base de datos.")
