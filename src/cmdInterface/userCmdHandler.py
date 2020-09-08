@@ -42,6 +42,45 @@ class AuxAcroObj:
             flag_return = True
         return flag_return
 
+    def is_in_db(self):
+        """Returns True if acronym is in database"""
+        flag_return = False
+        if len(self.def_list_db) > 0:
+            flag_return = True
+        return flag_return
+
+    def is_blacklisted(self):
+        """Returns True if the acronym is in the database blacklist"""
+        return self.dict_handler.is_blacklisted(self.acro)
+
+    def toggle_blacklisted_status(self):
+        self.dict_handler.toggle_in_blacklist(self.acro)
+
+    def defs_discrepancy(self):
+        """Returns True if db definition does not match with the acronym table one. As this means that the acro could
+        have different or other def than the one in the db. If def is not found in the acro table the fcn returns False
+        """
+        flag_return = False
+        # Check discrepancy only if definitions found both in db and acro table
+        if len(self.def_list_db) > 0 and len(self.def_list_doc_table) > 0:
+            if len(self.def_list_db) != len(self.def_list_doc_table):
+                flag_return = True
+            else:
+                for i in range(len(self.def_list_db)):
+                    if self.def_list_db[i]['Main'] == self.def_list_doc_table[i]['Main']:
+                        # Compare Translations. If its not found the string will be empty
+                        str_trans_db, str_trans_doc = "", ""
+                        if 'Translation' in self.def_list_db[i]:
+                            str_trans_db = self.def_list_db[i]['Translation']
+                        if 'Translation' in self.def_list_doc_table[i]:
+                            str_trans_doc = self.def_list_doc_table[i]['Translation']
+                        if str_trans_db != str_trans_doc:
+                            flag_return = True
+                    else:
+                        # Main definitions not equal
+                        flag_return = True
+        return flag_return
+
     def edit_def(self, idx, str_main, str_trans):
         """Edits the acronym definition
 
@@ -116,16 +155,30 @@ class AuxAcroObj:
     def print_dict_coincidences(self):
         """Prints to console the acronym data from DB and document acronyms table"""
         print("Tabla del documento: ", end="")
-        if len(self.def_list_doc_table) > 0:
-            print(self.def_list_doc_table)
-        else:
-            print(ach.color_str("No encontrado", ach.AnsiColorCode.GRAY))
+        print(self.__get_str_sorted_acro_list(self.def_list_doc_table))
 
         print("      Base de datos: ", end="")
-        if len(self.def_list_db) > 0:
-            print(self.def_list_db)
+        print(self.__get_str_sorted_acro_list(self.def_list_db))
+
+        if self.defs_discrepancy():
+            print_warn("Discrepancia detectada entre base de datos y tabla del documento")
+
+    def __get_str_sorted_acro_list(self, def_list):
+        """Return formatted string with all definition ordered"""
+        str_out = ""
+        if len(def_list):
+            str_out += "["
+            for i, definition in enumerate(def_list):
+                if i != 0:
+                    str_out += ", "
+                str_out += "{'Main': '%s'" % definition['Main']
+                if 'Translation' in definition:
+                    str_out += ", 'Translation': '%s'" % definition['Translation']
+                str_out += "}"
+            str_out += "]"
         else:
-            print(ach.color_str("No encontrado", ach.AnsiColorCode.GRAY))
+            str_out = ach.color_str("No encontrado", ach.AnsiColorCode.GRAY)
+        return str_out
 
     def get_def_strings(self):
         """Returns pretty definition strings to be output to console
@@ -155,6 +208,7 @@ class AuxAcroObj:
 
         return str_def_main, str_def_trans
 
+    ################ AuxAcroObj END #################
 
 def get_docx_filepath_from_user():
     """Asks the user for a word document and returns it"""
@@ -186,6 +240,7 @@ def process_acro_found(acro_dict_handler):
 
     :param acro_dict_handler: Acronym dictionary objects
     """
+    flag_auto_command = get_user_confirmation("¿Quieres procesar en modo semi-automático?") #todo: add info
     for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys())):
         # Create an auxilary object for each acronym
         aux_acro_obj = AuxAcroObj(acro, acro_dict_handler)
@@ -211,11 +266,26 @@ def process_acro_found(acro_dict_handler):
         flag_finish = False
         while not flag_finish:
             str_def_main, str_def_trans = aux_acro_obj.get_def_strings()
-            print(ach.color_str("  Acrónimo:", ach.AnsiColorCode.BOLD), acro)
+            print(ach.color_str("  Acrónimo:", ach.AnsiColorCode.BOLD), acro, end="")
+            if aux_acro_obj.is_blacklisted():
+                print(ach.color_str(" (EN LISTA NEGRA)", ach.AnsiColorCode.DARK_YELLOW))
+            else:
+                print("")
             print(ach.color_str(" Principal:", ach.AnsiColorCode.BOLD), str_def_main)
             print(ach.color_str("Traducción:", ach.AnsiColorCode.BOLD), str_def_trans)
 
-            user_command = input("Introduce comando (y/n/e/a/s/d/h): ").lower()
+            # Obtain user command or process automatic selection
+            user_command = ""
+            if flag_auto_command:
+                if aux_acro_obj.is_blacklisted():
+                    user_command = 'n'  # Skip blacklisted acronym
+                else:
+                    if aux_acro_obj.is_in_db() and not aux_acro_obj.has_multiple_defs() and not aux_acro_obj.defs_discrepancy():
+                        user_command = 'y'
+            aux_acro_obj.defs_discrepancy()
+            if user_command == "":
+                user_command = input("Introduce comando (y/n/e/a/s/b/d/h): ").lower()
+
             # -- ACCEPT CHANGES --
             if user_command == 'y':
                 if aux_acro_obj.check_def():
@@ -249,6 +319,9 @@ def process_acro_found(acro_dict_handler):
                     aux_acro_obj.select_def(idx_def_to_edit)
                 else:
                     print("Esta opción solo está disponible para acrónimos con múltiples definiciones")
+            # -- BLACKLIST --
+            elif user_command == 'b':
+                aux_acro_obj.toggle_blacklisted_status()
             # -- DELETE --
             elif user_command == 'd':
                 print_warn("ATENCIÓN - El borrado eliminará la definición de la base de datos (si está en esta).\n"
@@ -280,6 +353,8 @@ def print_process_acro_found_help():
     print("  a: Añadir      - Añade una definición adicional.")
     print("  s: Seleccionar - Alterna la selección de una definición. Las definiciones en gris se guardarán en la base")
     print("                   de datos, pero no se incluirán en la tabla de acrónimos de salida.")
+    print("  b: Blacklist   - Alterna el estado del acrónimo en la lista negra. Si está en esta lista se saltará ")
+    print("                   automáticamente al procesar en modo semi-automático.")
     print("  d: Eliminar    - Elimina el acrónimo o una de sus definiciónes de la base de datos.")
     print("  h: Ayuda       - Muestra esta información.")
 
@@ -429,6 +504,20 @@ def get_user_confirmation(str_in="¿Desea continuar?"):
         else:
             print_error("ERROR - Comando no reconocido. Elige entre sí('y') y no('n')")
     return flag_return
+
+
+def print_ellapsed_time(elapsed_f_sec):
+    """Prints time as hours minutes and seconds since the begining of the programm"""
+    hours, minutes = 0, 0
+    while elapsed_f_sec >= 3600:
+        elapsed_f_sec -= 3600
+        hours += 1
+    while elapsed_f_sec >= 60:
+        elapsed_f_sec -= 60
+        minutes += 1
+    seconds = int(elapsed_f_sec)
+    print("Han transcurrido %s:%s:%s desde el inicio del programa" %
+          (str(hours).zfill(2), str(minutes).zfill(2), str(seconds).zfill(2)))
 
 
 def print_error(str_in):
