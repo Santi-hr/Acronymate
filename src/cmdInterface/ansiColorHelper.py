@@ -8,13 +8,14 @@ class AnsiColorCode:
     GREEN = '\033[92m'
     YELLOW = '\033[93m'
     BLUE = '\033[94m'
-    PURPLE = '\033[95m'
+    MAGENTA = '\033[95m'
     CYAN = '\033[96m'
 
     DEFAULT = '\033[39m'
     DARK_CYAN = '\033[36m'
     DARK_YELLOW = '\033[33m'
     DARK_GREEN = '\033[32m'
+    DARK_MAGENTA = '\033[35m'
 
     BACK_BLACK = '\033[40m'
     BACK_RED = '\033[41m'

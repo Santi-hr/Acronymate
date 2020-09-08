@@ -51,8 +51,10 @@ class AuxAcroObj:
 
     def is_blacklisted(self):
         """Returns True if the acronym is in the database blacklist"""
-        # TODO Complete callign acroDictHandler
-        return False
+        return self.dict_handler.is_blacklisted(self.acro)
+
+    def toggle_blacklisted_status(self):
+        self.dict_handler.toggle_in_blacklist(self.acro)
 
     def defs_discrepancy(self):
         """Returns True if db definition does not match with the acronym table one. As this means that the acro could
@@ -264,7 +266,11 @@ def process_acro_found(acro_dict_handler):
         flag_finish = False
         while not flag_finish:
             str_def_main, str_def_trans = aux_acro_obj.get_def_strings()
-            print(ach.color_str("  Acrónimo:", ach.AnsiColorCode.BOLD), acro)
+            print(ach.color_str("  Acrónimo:", ach.AnsiColorCode.BOLD), acro, end="")
+            if aux_acro_obj.is_blacklisted():
+                print(ach.color_str(" (EN LISTA NEGRA)", ach.AnsiColorCode.DARK_YELLOW))
+            else:
+                print("")
             print(ach.color_str(" Principal:", ach.AnsiColorCode.BOLD), str_def_main)
             print(ach.color_str("Traducción:", ach.AnsiColorCode.BOLD), str_def_trans)
 
@@ -278,7 +284,7 @@ def process_acro_found(acro_dict_handler):
                         user_command = 'y'
             aux_acro_obj.defs_discrepancy()
             if user_command == "":
-                user_command = input("Introduce comando (y/n/e/a/s/d/h): ").lower()
+                user_command = input("Introduce comando (y/n/e/a/s/b/d/h): ").lower()
 
             # -- ACCEPT CHANGES --
             if user_command == 'y':
@@ -313,6 +319,9 @@ def process_acro_found(acro_dict_handler):
                     aux_acro_obj.select_def(idx_def_to_edit)
                 else:
                     print("Esta opción solo está disponible para acrónimos con múltiples definiciones")
+            # -- BLACKLIST --
+            elif user_command == 'b':
+                aux_acro_obj.toggle_blacklisted_status()
             # -- DELETE --
             elif user_command == 'd':
                 print_warn("ATENCIÓN - El borrado eliminará la definición de la base de datos (si está en esta).\n"
@@ -344,6 +353,8 @@ def print_process_acro_found_help():
     print("  a: Añadir      - Añade una definición adicional.")
     print("  s: Seleccionar - Alterna la selección de una definición. Las definiciones en gris se guardarán en la base")
     print("                   de datos, pero no se incluirán en la tabla de acrónimos de salida.")
+    print("  b: Blacklist   - Alterna el estado del acrónimo en la lista negra. Si está en esta lista se saltará ")
+    print("                   automáticamente al procesar en modo semi-automático.")
     print("  d: Eliminar    - Elimina el acrónimo o una de sus definiciónes de la base de datos.")
     print("  h: Ayuda       - Muestra esta información.")
 

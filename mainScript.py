@@ -2,11 +2,12 @@ import time
 from src import acroDictHandler
 from src.common.defines import *
 from src.docxHandlers import docxExporter, docxReader
-from src.cmdInterface import userCmdHandler
+from src.cmdInterface import userCmdHandler, ansiColorHelper as ach
 
 
 # 0. Configure environment
 time_begin_acronymate = time.monotonic()
+ach.enable_ansi_in_windows_cmd()
 
 # 1. Initialization
 userCmdHandler.print_logo()

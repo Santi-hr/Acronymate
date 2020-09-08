@@ -69,6 +69,21 @@ class AcroDictHandler:
                 self.acros_output[acro_in]['Def'].append(definition)
         self.__add_db_last_use(acro_in)
 
+    def is_blacklisted(self, acro_in):
+        return acro_in in self.full_db['Blacklist']
+
+    def toggle_in_blacklist(self, acro_in):
+        if self.is_blacklisted(acro_in):
+            idx_found = -1
+            for i, bl_entry in enumerate(self.full_db['Blacklist']):
+                if bl_entry == acro_in:
+                    idx_found = i
+                    break
+            self.full_db['Blacklist'].pop(idx_found)
+        else:
+            self.full_db['Blacklist'].append(acro_in)
+
+
     def check_db_integrity(self):
         """Returns true if it is safe to overwrite the database"""
         # Currently the check consists on comparing the database ['Admin_data']['Date'] to the one read at the begining
@@ -174,6 +189,10 @@ class AcroDictHandler:
                     self.full_db['Acronyms'][key]['Properties']['Last_edit'] = \
                         self.full_db['Acronyms'][key]['Properties']['Creation']
 
+        if 'Blacklist' not in self.full_db:
+            self.full_db['Blacklist'] = []
+            #Todo: Sanitize: Remove blacklist duplicates
+
         if 'Admin_data' not in self.full_db:
             userCmdHandler.print_warn("No se encuentra la sección Admin_data, no se podrá verificar el guardado seguro")
             self.full_db['Admin_data'] = dict()
@@ -193,4 +212,3 @@ class AcroDictHandler:
         for acro in self.acros_db.keys():
             if not re.match(define_regex_acro_find, acro):
                 self.list_no_regex.append(acro)
-
