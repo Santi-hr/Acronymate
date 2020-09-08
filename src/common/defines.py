@@ -6,4 +6,4 @@ from config import *
 define_regex_acro_find = '[A-ZÁÉÍÓÚ]{' + str(config_min_acro_len) + ',}'
 
 # --------- OTHER -------------
-define_acronymate_version = "v0.1.2"
+define_acronymate_version = "v0.1.3"
