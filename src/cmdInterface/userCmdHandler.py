@@ -125,12 +125,17 @@ class AuxAcroObj:
             self.selected_def.pop(idx)
         self.flag_update_db = True
 
-    def select_def(self, idx):
+    def select_defs(self, idx_list):
         """Alternates an acronym slection state
 
-        :param idx: Acronym definition to select/unselect
+        :param idx: Acronyms to be selected
         """
-        self.selected_def[idx-1] = not self.selected_def[idx-1]
+        n_defs = len(self.selected_def)
+        for i in range(n_defs):
+            self.selected_def[i] = False
+        for i in range(len(idx_list)):
+            if 0 <= idx_list[i] - 1 < n_defs:
+                self.selected_def[idx_list[i] - 1] = True
 
     def check_def(self):
         """Returns True if the acronym is valid to be used"""
@@ -314,9 +319,8 @@ def process_acro_found(acro_dict_handler):
             # -- SELECT --
             elif user_command == 's':
                 if aux_acro_obj.has_multiple_defs():
-                    idx_def_to_edit = get_num_from_user("Elige un acrónimo para alternar su estado de selección",
-                                                        lower=1, upper=len(aux_acro_obj.proposed_def))
-                    aux_acro_obj.select_def(idx_def_to_edit)
+                    idx_list = get_user_idx_list("Elige que definiciones seleccionar (Ej: 1,2,4): ")
+                    aux_acro_obj.select_defs(idx_list)
                 else:
                     print("Esta opción solo está disponible para acrónimos con múltiples definiciones")
             # -- BLACKLIST --
@@ -347,12 +351,12 @@ def process_acro_found(acro_dict_handler):
 def print_process_acro_found_help():
     """Prints acronym handling user commands help"""
     print("  y: Aceptar     - Guarda el acrónimo con la información mostrada y actualiza la base de datos.")
-    print("  n: Saltar      - Descarta el acrónimo y se pasa al siguiente.")
+    print("  n: Saltar      - Descarta el acrónimo y continúa al siguiente.")
     print("  e: Editar      - Modifica una definición. En principal se indica la definición en el idioma de origen.")
     print("                   En traducción se indica la definición en Español. Dejar vacío si no es necesaria.")
     print("  a: Añadir      - Añade una definición adicional.")
-    print("  s: Seleccionar - Alterna la selección de una definición. Las definiciones en gris se guardarán en la base")
-    print("                   de datos, pero no se incluirán en la tabla de acrónimos de salida.")
+    print("  s: Seleccionar - Selecciona las definiciones a usar. Aquellas deseleccionadas (en gris) no se incluirán en la tabla ")
+    print("                   de acrónimos de salida. La diferencia con eliminar es que la definición se mantiene en la base de datos.")
     print("  b: Blacklist   - Alterna el estado del acrónimo en la lista negra. Si está en esta lista se saltará ")
     print("                   automáticamente al procesar en modo semi-automático.")
     print("  d: Eliminar    - Elimina el acrónimo o una de sus definiciónes de la base de datos.")
@@ -504,6 +508,29 @@ def get_user_confirmation(str_in="¿Desea continuar?"):
         else:
             print_error("ERROR - Comando no reconocido. Elige entre sí('y') y no('n')")
     return flag_return
+
+
+def get_user_idx_list(str_in="Introduce enteros separados por comas: "):
+    """Ask and returns a list of ints separated by commas
+
+    :param str_in: Text shown to the user
+    :return: List of integers
+    """
+    return_list = []
+    flag_finish = False
+    while not flag_finish:
+        user_input = input(str_in)
+        flag_finish = True
+        return_list = []
+        for substr in user_input.split(","):
+            try:
+                return_list.append(int(substr.strip()))
+            except ValueError:
+                flag_finish = False
+                print_error("ERROR - Formato incorrecto. Introduce números enteros separados por comas")
+                break
+    return return_list
+
 
 
 def print_ellapsed_time(elapsed_f_sec):
