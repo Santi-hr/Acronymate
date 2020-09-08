@@ -117,6 +117,7 @@ def process_acro_table(acro_table, dict_acro_table):
     # Todo: Allow for custom tables via configure file
     # Fixme: Prevent explosion if table has merged lines
     if 'Flag_Processed' not in dict_acro_table and len(acro_table.rows[0].cells) == 2:
+        print(" (Procesando tabla de acrónimos del documento)", end="")
         for i, row in enumerate(acro_table.rows):
             if i == 0:  # Skip header
                 continue

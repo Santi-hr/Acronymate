@@ -1,9 +1,12 @@
+import time
 from src import acroDictHandler
 from src.common.defines import *
 from src.docxHandlers import docxExporter, docxReader
-from src.cmdInterface import ansiColorHelper as ach, userCmdHandler
+from src.cmdInterface import userCmdHandler, ansiColorHelper as ach
+
 
 # 0. Configure environment
+time_begin_acronymate = time.monotonic()
 ach.enable_ansi_in_windows_cmd()
 
 # 1. Initialization
@@ -26,3 +29,5 @@ if docx_export_filename[-5:] != ".docx":
     docx_export_filename += ".docx"
 userCmdHandler.save_file(
     config_docx_export_folder, docx_export_filename, False, docxExporter.save_document, obj_output_doc)
+
+userCmdHandler.print_ellapsed_time(time.monotonic()-time_begin_acronymate)

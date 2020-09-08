@@ -1,0 +1,16 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# virtualenv
+venv/
+
+# idea folder
+.idea/
+
+# User folders
+data/
+input/
+output/
+script_launcher.bat
