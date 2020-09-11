@@ -224,9 +224,13 @@ def get_docx_filepath_from_user():
         try:
             files_in_path = Path(input_path).glob('*.docx')
             path_list = []
-            for i, f in enumerate(files_in_path):
-                print("  %d -" % (i+1), pathHelpers.get_filename_from_path(f))
-                path_list.append(f) #Todo: No mostrar los que empiecen por ~?
+            counter = 0
+            for f in files_in_path:
+                filename = pathHelpers.get_filename_from_path(f)
+                if filename[0] != '~':
+                    print("  %d -" % (counter+1), pathHelpers.get_filename_from_path(f))
+                    path_list.append(f)
+                    counter += 1
             if len(path_list) == 0:
                 print_error("ERROR - No se encuentran archivos '.docx' en la ruta seleccionada'")
             else:
