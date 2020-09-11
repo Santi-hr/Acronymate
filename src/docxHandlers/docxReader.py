@@ -22,13 +22,22 @@ def extract_acro_from_str(str_in, dict_found_acro, regex_in=""):
     if re_results:
         # 2. Iterate trough all matches (There could be multiple acronyms in a paragraph)
         for re_result in re_results:
-            # 3. Save context for user analysis (Only some of the paragraph)
+            # 3. Save context for user analysis (Only part of the string)
             context_width = 200
-            # Ensure the width is achieved by checking the available width
-            # Fixme: Solo recorta bien el contexto si el acro está al principio
-            context_substr_ini = int(max(re_result.start(0) - context_width / 2, 0))
-            context_substr_end = int(min(re_result.start(0) +
-                                         (context_width - (re_result.start(0) - context_substr_ini)), len(str_in)))
+            # Ensure the context width is achieved
+            prev_context = context_width / 2
+            next_context = context_width / 2
+            # Check if there are unused characters at front/back after adding/subtracting the context. If so, add them
+            # to the opposite side.
+            char_diff_ini = re_result.start(0) - context_width / 2
+            if char_diff_ini < 0:
+                next_context -= char_diff_ini  # Addition, double negative
+            char_diff_end = len(str_in) - (re_result.start(0) + context_width / 2)
+            if char_diff_end < 0:
+                prev_context -= char_diff_end  # Addition, double negative
+
+            context_substr_ini = int(max(re_result.start(0) - prev_context, 0))
+            context_substr_end = int(min(re_result.start(0) + next_context, len(str_in)))
 
             # Context with acronym remarked using ANSI Color Codes
             str_context = ansiColorHelper.highlight_substr(
@@ -117,7 +126,6 @@ def process_acro_table(acro_table, dict_acro_table):
     # Todo: Allow for custom tables via configure file
     # Fixme: Prevent explosion if table has merged lines
     if 'Flag_Processed' not in dict_acro_table and len(acro_table.rows[0].cells) == 2:
-        print(" (Procesando tabla de acrónimos del documento)", end="")
         for i, row in enumerate(acro_table.rows):
             if i == 0:  # Skip header
                 continue
