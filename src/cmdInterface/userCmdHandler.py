@@ -3,7 +3,7 @@ from pathlib import Path
 from src.common.defines import *
 from src.common import pathHelpers
 from src.cmdInterface import ansiColorHelper as ach
-from src import acroAuxObj
+from src.acroHandlers import acroAuxObj
 
 
 def get_docx_filepath_from_user():

@@ -24,7 +24,7 @@ def extract_acro_word(filepath, acro_dict_handler):
     # the document acronym table that have not been found yet (Ej: ExCOMMS, JdP)
     second_regex = "" # All words combined into a regex. It speeds up drastically the search as only one pass is needed
 
-    if config_use_acro_from_doc_table: #todo, quitar acceso directo
+    if config_use_acro_from_doc_table: #todo, revisar acceso directo a dict handler
         for acro_key in acro_dict_handler.acros_doc_table.keys():
             if acro_key not in acro_dict_handler.acros_found:
                 second_regex += re.escape(acro_key) + r'|'
