@@ -206,7 +206,7 @@ def handle_db_save(acro_dict_handler):
     :param acro_dict_handler: Acronym dictionary objects
     """
     print("Guardando ")
-    print("Resumen de cambios en la base de datos:", acro_dict_handler.log_db_changes)
+    print("Resumen de cambios en la base de datos:", acro_dict_handler.obj_db.log_db_changes)
     folder_output = Path(config_acro_db_folder)
     db_filename = config_acro_db_file
     flag_overwrite = True
@@ -214,7 +214,7 @@ def handle_db_save(acro_dict_handler):
     if folder_output.exists():
         path_output = folder_output / db_filename
         if path_output.exists(): # Skip checks if db file does't exist yet
-            if not acro_dict_handler.check_db_integrity(): # Check if file was updated by another user before saving
+            if not acro_dict_handler.obj_db.check_db_integrity(): # Check if file was updated by another user before saving
                 print_warn("ATENCIÓN - Es posible que otro usuario haya modificado el archivo de base de datos. Se recomienda "
                            "guardar con otro nombre y revisar los cambios manualmente (Opción merge próximamente)")
                 if get_user_confirmation("¿Guardar con otro nombre?"):
@@ -224,7 +224,7 @@ def handle_db_save(acro_dict_handler):
     else:
         print_error("La ruta %s no es accesible" % folder_output)
         folder_output = get_existing_folder_from_user()
-    save_file(folder_output, db_filename, flag_overwrite, acro_dict_handler.save_db)
+    save_file(folder_output, db_filename, flag_overwrite, acro_dict_handler.obj_db.save_db)
 
     # Same simplified logic for the backup file. Backups are not overwriten, less checks needed
     if config_save_backups: #todo, delete older files?
@@ -238,7 +238,7 @@ def handle_db_save(acro_dict_handler):
             print_error("La ruta %s no es accesible" % bak_folder_output)
             bak_folder_output = get_existing_folder_from_user()
 
-        save_file(bak_folder_output, bak_db_filename, flag_overwrite, acro_dict_handler.save_db_backup)
+        save_file(bak_folder_output, bak_db_filename, flag_overwrite, acro_dict_handler.obj_db.save_db_backup)
 
 
 def save_file(folder, filename, overwrite, save_fcn, *args):

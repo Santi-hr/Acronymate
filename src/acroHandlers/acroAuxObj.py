@@ -20,7 +20,7 @@ class acroAuxObj:
             self.proposed_def = self.def_list_doc_table
 
         # Look acronym in database
-        self.def_list_db = self.dict_handler.search_def_in_db(self.acro)
+        self.def_list_db = self.dict_handler.obj_db.search_def_in_db(self.acro)
         # DB has priority
         if len(self.def_list_db) > 0:
             self.proposed_def = self.def_list_db
@@ -47,10 +47,11 @@ class acroAuxObj:
 
     def is_blacklisted(self):
         """Returns True if the acronym is in the database blacklist"""
-        return self.dict_handler.is_blacklisted(self.acro)
+        return self.dict_handler.obj_db.is_blacklisted(self.acro)
 
     def toggle_blacklisted_status(self):
-        self.dict_handler.toggle_in_blacklist(self.acro)
+        """Toggles blacklist status in the db"""
+        self.dict_handler.obj_db.toggle_in_blacklist(self.acro)
 
     def defs_discrepancy(self):
         """Returns True if db definition does not match with the acronym table one. As this means that the acro could
@@ -117,7 +118,7 @@ class acroAuxObj:
         """
         idx = idx - 1 # Input is user friendly (Counting starts at 1)
         if len(self.proposed_def) == 1:
-            self.dict_handler.delete_acro_in_db(self.acro)
+            self.dict_handler.obj_db.delete_acro_in_db(self.acro)
         else:
             self.proposed_def.pop(idx)
             self.selected_def.pop(idx)
@@ -152,7 +153,7 @@ class acroAuxObj:
     def save_and_use_acro(self):
         """Accepts changes and stores them to DB if needed"""
         if self.flag_update_db:
-            self.dict_handler.update_acro_in_db(self.acro, self.proposed_def)
+            self.dict_handler.obj_db.update_acro_in_db(self.acro, self.proposed_def)
         self.dict_handler.update_acro_output(self.acro, self.proposed_def, self.selected_def)
 
     def get_str_sorted_acro_list(self, def_list):

@@ -30,7 +30,7 @@ def extract_acro_word(filepath, acro_dict_handler):
                 second_regex += re.escape(acro_key) + r'|'
 
     if config_use_non_matching_acro_from_db:
-        for acro_key in acro_dict_handler.list_no_regex:
+        for acro_key in acro_dict_handler.obj_db.list_no_regex:
             if acro_key not in acro_dict_handler.acros_found and acro_key not in second_regex:
                 second_regex += re.escape(acro_key) + r'|'
 
@@ -158,7 +158,7 @@ def process_acro_table(acro_table, acro_dict_handler):
     # When a table is found with a different number of rows it is skiped
     # Todo: Allow for custom tables via configure file
     # Fixme: Prevent explosion if table has merged lines
-    if not acro_dict_handler.is_doc_table_processed() and len(acro_table.rows[0].cells) == 2:
+    if not acro_dict_handler.flag_doc_table_processed and len(acro_table.rows[0].cells) == 2:
         for i, row in enumerate(acro_table.rows):
             if i == 0:  # Skip header
                 continue
@@ -179,11 +179,10 @@ def process_acro_table(acro_table, acro_dict_handler):
                 if '(' not in definition:
                     main_def = definition
                 else:
-                    main_def = ""
                     re_match = re.fullmatch("(.*)\((.*)\)", definition)  # Todo: Fix "Def (Expl) (Def_es (Expl_es))"
                     if re_match:
                         main_def = re_match.group(1).strip()
                         trans_def = re_match.group(2).strip()
 
-            acro_dict_handler.add_acronym_doc_table(acronym, main_def, trans_def)
-    acro_dict_handler.set_doc_table_processed()
+                acro_dict_handler.add_acronym_doc_table(acronym, main_def, trans_def)
+    acro_dict_handler.flag_doc_table_processed = True
