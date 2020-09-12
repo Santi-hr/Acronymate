@@ -14,13 +14,13 @@ class AcroDictHandler:
         self.str_prev_date = ""
         self.str_file = "Undefined"  # File path for logging purposes
 
-        self.acros_found = dict()       # Acronyms found in the document
-        self.acros_doc_table = dict()   # Acronyms from the document acronyms table
-        self.doc_table_found = False    # True if the document acronyms table is found
-        self.acros_db = dict()          # Acronyms from the DB
-        self.full_db = dict()           # Full DB object. Includes acronyms and administration data
-        self.full_db_ori = dict()       # Copy of the full DB object for backuping
-        self.acros_output = dict()      # Acronyms to be exported
+        self.acros_found = dict()        # Acronyms found in the document
+        self.acros_doc_table = dict()    # Acronyms from the document acronyms table
+        self.doc_table_processed = False # True if the document acronyms table is found and processed
+        self.acros_db = dict()           # Acronyms from the DB
+        self.full_db = dict()            # Full DB object. Includes acronyms and administration data
+        self.full_db_ori = dict()        # Copy of the full DB object for backuping
+        self.acros_output = dict()       # Acronyms to be exported
         self.log_db_changes = {'Added': [], 'Modified': [], 'Deleted': []}
         self.list_no_regex = []  # Todo: Convert to iterable object
 
@@ -147,8 +147,6 @@ class AcroDictHandler:
             db_file_path = Path(config_acro_db_folder) / config_acro_db_file
             with open(db_file_path, 'r', encoding="UTF-8") as db_file:
                 self.full_db = json.load(db_file)
-                if config_use_non_matching_acro_from_db:
-                    self.__find_non_regex_acronyms()
                 try:
                     self.str_prev_date = self.full_db['Admin_data']['Date']
                 except KeyError:
@@ -163,6 +161,9 @@ class AcroDictHandler:
 
         self.__check_acros_db()
         self.acros_db = self.full_db['Acronyms']
+
+        if config_use_non_matching_acro_from_db:
+            self.__find_non_regex_acronyms()
 
     def __check_acros_db(self):
         """Checks the loaded database filled. Fixes missing labels if it can"""
@@ -212,3 +213,30 @@ class AcroDictHandler:
         for acro in self.acros_db.keys():
             if not re.match(define_regex_acro_find, acro):
                 self.list_no_regex.append(acro)
+
+    def add_acronym_found(self, acro_in, str_context_in):
+        # 4. Create empty dict if acronym is first found
+        if acro_in not in self.acros_found:
+            self.acros_found[acro_in] = {'Count': 0, 'Context': []}
+
+        # Store data of acronym in dict
+        self.acros_found[acro_in]['Count'] += 1
+        self.acros_found[acro_in]['Context'].append(str_context_in)
+
+    def is_doc_table_processed(self):
+        return self.doc_table_processed
+
+    def set_doc_table_processed(self):
+        self.doc_table_processed = True
+
+    def add_acronym_doc_table(self, acro_in, str_main, str_trans):
+        # Create dict entry
+        if acro_in not in self.acros_doc_table:
+            # Some tables have duplicated lines for multiple definitions
+            self.acros_doc_table[acro_in] = {'Def': []}
+
+        aux_def = dict()
+        aux_def['Main'] = str_main
+        if str_trans != "":
+            aux_def['Translation'] = str_trans
+        self.acros_doc_table[acro_in]['Def'].append(aux_def)
