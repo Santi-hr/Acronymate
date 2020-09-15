@@ -1,5 +1,6 @@
 import re
 import docx
+import lxml
 from src.common.defines import *
 from src.common import pathHelpers
 from src.cmdInterface import ansiColorHelper, cmdProgressBar
@@ -42,6 +43,28 @@ def extract_acro_word(filepath, acro_dict_handler):
         # Alternate: r'\b('+second_regex[:-1]+r')(\b|(?=\W))'
         extract_acro_from_paragraphs(doc_obj, acro_dict_handler, second_regex)
         extract_acro_from_tables(doc_obj, acro_dict_handler, second_regex)
+
+
+def accepted_text(docx_elem, docx_elem_xml, doc_nsmap):
+    str_accepted_text = ""
+    if "w:ins" in docx_elem_xml:
+        # print(docx_elem_xml)
+        target = lxml.etree.XML(docx_elem_xml)
+        # Search all paragraphs in the XML
+        for paragraph in target.xpath('//w:p', namespaces=doc_nsmap):
+            # Search all runs and inserted runs (Tack Changes). Deleted runs (w:del) are skipped
+            for text_run in paragraph.xpath('w:r | w:ins/w:r', namespaces=doc_nsmap):
+                # Handle linebreaks first. It seems that appear in their own run or before text
+                if text_run.xpath('w:br', namespaces=doc_nsmap):
+                    str_accepted_text += '\n'
+                for text_tag in text_run.xpath('w:t', namespaces=doc_nsmap):
+                    str_accepted_text += text_tag.text
+            str_accepted_text += "\n"  #Append new line between paragraphs (There can be multiple pgphs in tables)
+        str_accepted_text = str_accepted_text[:-1]  #Remove last paragraph new line char
+    else:
+        # Use python docx when possible as it has the text already extracted
+        str_accepted_text = docx_elem.text
+    return str_accepted_text
 
 
 def extract_acro_from_str(str_in, acro_dict_handler, regex_in=""):
@@ -96,9 +119,9 @@ def extract_acro_from_paragraphs(doc_obj, acro_dict_handler, regex_in=""):
     """
     # Iterate trough all paragraphs
     obj_progress_bar = cmdProgressBar.CmdProgressBar(len(doc_obj.paragraphs), "Párrafos")
-    for i in range(len(doc_obj.paragraphs)):
-        par_txt = doc_obj.paragraphs[i].text
-        extract_acro_from_str(par_txt, acro_dict_handler, regex_in=regex_in)
+    for i, paragraph in enumerate(doc_obj.paragraphs):
+        str_accepted_text = accepted_text(paragraph, paragraph._p.xml, doc_obj.element.nsmap)
+        extract_acro_from_str(str_accepted_text, acro_dict_handler, regex_in=regex_in)
 
         obj_progress_bar.update(i + 1)
 
@@ -118,7 +141,7 @@ def extract_acro_from_tables(doc_obj, acro_dict_handler, regex_in=""):
         for j, row in enumerate(table.rows):
             row_cell_list = []
             for cell in row.cells:
-                row_cell_list.append(cell.text)
+                row_cell_list.append(accepted_text(cell, cell._tc.xml, doc_obj.element.nsmap))
             row_text = config_tb_col_separator.join(row_cell_list)
 
             if j == 0:
