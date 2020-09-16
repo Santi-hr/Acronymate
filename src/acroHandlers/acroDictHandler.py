@@ -40,8 +40,7 @@ class AcroDictHandler:
             # Some tables have duplicated lines for multiple definitions
             self.acros_doc_table[acro_in] = {'Def': []}
 
-        aux_def = dict()
-        aux_def['Main'] = str_main
+        aux_def = {'Main': str_main}
         if str_trans != "":
             aux_def['Translation'] = str_trans
         self.acros_doc_table[acro_in]['Def'].append(aux_def)

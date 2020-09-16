@@ -78,7 +78,7 @@ def extract_acro_from_str(str_in, acro_dict_handler, regex_in=""):
     if regex_in == "":
         regex_in = define_regex_acro_find
 
-    re_results = re.finditer(regex_in, str_in)
+    re_results = re.finditer(regex_in, str_in.replace('\n', config_new_line_separator))
 
     if re_results:
         # 2. Iterate trough all matches (There could be multiple acronyms in a paragraph)
@@ -150,10 +150,9 @@ def extract_acro_from_tables(doc_obj, acro_dict_handler, regex_in=""):
                     break  # Do not process acronym table as found acronyms
 
             # Line breaks are removed to reduce space used when outputting the context string to console
-            extract_acro_from_str(row_text.replace('\n', config_new_line_separator), acro_dict_handler, regex_in=regex_in)
+            extract_acro_from_str(row_text, acro_dict_handler, regex_in=regex_in)
 
         obj_progress_bar.update(i + 1)
-
 
 def is_acronym_table_header(row_input):
     """Checks if the string matches any document acronyms table header defined
@@ -194,15 +193,12 @@ def process_acro_table(acro_table, acro_dict_handler):
                 continue
 
             # Process definitions
-            for j in range(len(definitions)):
-                main_def = ""
+            for raw_def in definitions:
+                main_def = raw_def.strip()
                 trans_def = ""
 
-                definition = definitions[j].strip()
-                if '(' not in definition:
-                    main_def = definition
-                else:
-                    re_match = re.fullmatch("(.*)\((.*)\)", definition)  # Todo: Fix "Def (Expl) (Def_es (Expl_es))"
+                if '(' in main_def:
+                    re_match = re.fullmatch("(.*)\((.*)\)", main_def)  # Todo: Fix "Def (Expl) (Def_es (Expl_es))"
                     if re_match:
                         main_def = re_match.group(1).strip()
                         trans_def = re_match.group(2).strip()
