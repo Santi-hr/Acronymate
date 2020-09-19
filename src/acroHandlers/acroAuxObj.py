@@ -156,7 +156,7 @@ class acroAuxObj:
             self.dict_handler.obj_db.update_acro_in_db(self.acro, self.proposed_def)
         self.dict_handler.update_acro_output(self.acro, self.proposed_def, self.selected_def)
 
-    def get_str_sorted_acro_list(self, def_list):
+    def get_str_pretty_definition_list(self, def_list):
         """Return formatted string with all definition ordered"""
         str_out = ""
         if len(def_list):

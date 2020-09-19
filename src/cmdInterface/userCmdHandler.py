@@ -2,6 +2,7 @@ from datetime import datetime
 from pathlib import Path
 from src.common.defines import *
 from src.common import pathHelpers
+from src.common import stringHelpers as strHlprs
 from src.cmdInterface import ansiColorHelper as ach
 from src.acroHandlers import acroAuxObj
 
@@ -41,7 +42,7 @@ def process_acro_found(acro_dict_handler):
     :param acro_dict_handler: Acronym dictionary objects
     """
     flag_auto_command = get_user_confirmation("¿Quieres procesar en modo semi-automático?") #todo: add info
-    for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys())):
+    for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.remove_accents)):
         # Create an auxilary object for each acronym
         aux_acro_obj = acroAuxObj.acroAuxObj(acro, acro_dict_handler)
 
@@ -62,9 +63,9 @@ def process_acro_found(acro_dict_handler):
         print(str_half_header)
 
         print("Tabla del documento: ", end="")
-        print(aux_acro_obj.get_str_sorted_acro_list(aux_acro_obj.def_list_doc_table))
+        print(aux_acro_obj.get_str_pretty_definition_list(aux_acro_obj.def_list_doc_table))
         print("      Base de datos: ", end="")
-        print(aux_acro_obj.get_str_sorted_acro_list(aux_acro_obj.def_list_db))
+        print(aux_acro_obj.get_str_pretty_definition_list(aux_acro_obj.def_list_db))
         if aux_acro_obj.defs_discrepancy():
             print_warn("Discrepancia detectada entre base de datos y tabla del documento")
 
