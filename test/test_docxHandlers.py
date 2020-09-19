@@ -8,11 +8,14 @@ class TestDocxMethods(unittest.TestCase):
     def setUp(self):
         self.docx_test = "doc_testing_1.docx"
 
-        self.acros_expected = ["ACROÁ", "ACROAB", "ACROBOLD", "ACROBULLET", "ACROÉ", "ACROESPAÑA", "ACROFONT", "ACROFOOTER",
-                      "ACROHEADER", "ACROÍ", "ACROINPAR", "ACROITALIC", "ACRONUM", "ACROÓ", "ACROONCE", "ACROPN",
-                      "ACROQMARK", "ACROREPEAT", "ACROSUB", "ACROTBBREAK", "ACROTBCOMBINEDONE", "ACROTBCOMBINEDTHREE",
-                      "ACROTBCOMBINEDTWO", "ACROTBLINE", "ACROTBSIMPLE", "ACROTITLE", "ACROÚ", "BREAKS", "ID", "TCACROADD",
-                      "TCACROFIX", "TCACROIN", "TCACROTBADD", "TCACROTBADDNEW", "VERYLONGACRONYM"]
+        self.acros_expected = ["ACROÁ", "ACROAB", "ACROBOLD", "ACROBULLET", "ACROÉ", "ACROESPAÑA", "ACROFONT",
+                               "ACROFOOTER", "ACROFOOTERSECTWO", "ACROHEADER", "ACROHEADERSECTWO", "ACROHEADERTB",
+                               "ACROÍ", "ACROINPAR", "ACROITALIC", "ACRONUM", "ACROÓ", "ACROONCE", "ACROPN",
+                               "ACROQMARK", "ACROREPEAT", "ACROSUB", "ACROTBBREAK", "ACROTBCOMBINEDONE",
+                               "ACROTBCOMBINEDTHREE", "ACROTBCOMBINEDTWO", "ACROTBLINE", "ACROTBSIMPLE", "ACROTITLE",
+                               "ACROÚ", "BREAKS", "ID", "TCACROADD", "TCACROFIX", "TCACROFOOTERADD", "TCACROIN",
+                               "TCACROTBADD", "TCACROTBADDNEW", "VERYLONGACRONYM"]
+
         self.len_acros_expected = len(self.acros_expected)
 
     def test_no_acronyms(self):
@@ -38,14 +41,14 @@ class TestDocxMethods(unittest.TestCase):
         docxReader.extract_acro_word(self.docx_test, acro_dict_handler)
 
         # Check the ordering
-        self.assertTrue(False) #Test to be defined
+        self.assertTrue(False)  # Test to be defined
 
     def test_sort_acronyms(self):
         acro_dict_handler = acroDictHandler.AcroDictHandler()
         docxReader.extract_acro_word(self.docx_test, acro_dict_handler)
 
         # Check the ordering
-        self.assertTrue(False) #Test to be defined
+        self.assertTrue(False)  # Test to be defined
 
 
 if __name__ == '__main__':
