@@ -69,7 +69,7 @@ def accepted_text(docx_elem, docx_elem_xml, doc_nsmap):
     return str_accepted_text
 
 
-def extract_acro_from_str(str_in, acro_dict_handler, regex_in=""):
+def extract_acro_from_str(str_in_raw, acro_dict_handler, regex_in=""):
     """Finds acronyms in a text string and stores them into a dictionary
 
     :param str_in: Input text string
@@ -81,11 +81,14 @@ def extract_acro_from_str(str_in, acro_dict_handler, regex_in=""):
         regex_in = define_regex_acro_find
 
     # Line breaks are removed to reduce space used when outputting the context string to console
-    re_results = re.finditer(regex_in, str_in.replace('\n', config_new_line_separator))
+    str_in = str_in_raw.replace('\n', config_new_line_separator)
+    re_results = re.finditer(regex_in, str_in)
 
     if re_results:
         # 2. Iterate trough all matches (There could be multiple acronyms in a paragraph)
         for re_result in re_results:
+            if re_result.group(0) == "AEO":
+                a=10
             # 3. Save context for user analysis (Only part of the string)
             context_width = 200
             # Ensure the context width is achieved

@@ -8,10 +8,10 @@ class TestDocxMethods(unittest.TestCase):
     def setUp(self):
         self.docx_test = "doc_testing_1.docx"
 
-        self.acros_expected = ["ACROÁ", "ACROAB", "ACROBOLD", "ACROBULLET", "ACROÉ", "ACROESPAÑA", "ACROFONT",
-                               "ACROFOOTER", "ACROFOOTERSECTWO", "ACROHEADER", "ACROHEADERSECTWO", "ACROHEADERTB",
-                               "ACROÍ", "ACROINPAR", "ACROITALIC", "ACRONUM", "ACROÓ", "ACROONCE", "ACROPN",
-                               "ACROQMARK", "ACROREPEAT", "ACROSUB", "ACROTBBREAK", "ACROTBCOMBINEDONE",
+        self.acros_expected = ["ACROÁ", "ACROAB", "ACROBOLD", "ACROBULLET", "ACRODOCPROP", "ACROÉ", "ACROESPAÑA",
+                               "ACROFONT", "ACROFOOTER", "ACROFOOTERSECTWO", "ACROHEADER", "ACROHEADERSECTWO",
+                               "ACROHEADERTB", "ACROÍ", "ACROINPAR", "ACROITALIC", "ACRONUM", "ACROÓ", "ACROONCE",
+                               "ACROPN", "ACROQMARK", "ACROREPEAT", "ACROSUB", "ACROTBBREAK", "ACROTBCOMBINEDONE",
                                "ACROTBCOMBINEDTHREE", "ACROTBCOMBINEDTWO", "ACROTBLINE", "ACROTBSIMPLE", "ACROTITLE",
                                "ACROÚ", "BREAKS", "ID", "TCACROADD", "TCACROFIX", "TCACROFOOTERADD", "TCACROIN",
                                "TCACROTBADD", "TCACROTBADDNEW", "VERYLONGACRONYM"]
