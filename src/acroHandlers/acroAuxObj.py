@@ -90,7 +90,8 @@ class acroAuxObj:
         if str_trans != "":
             self.proposed_def[idx]['Translation'] = str_trans
         else:
-            del self.proposed_def[idx]['Translation']
+            if  'Translation' in self.proposed_def[idx]:
+                del self.proposed_def[idx]['Translation']
         self.flag_update_db = True
 
     def add_def(self, str_main, str_trans):

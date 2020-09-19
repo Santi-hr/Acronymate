@@ -17,3 +17,8 @@ script_launcher.bat
 
 # Hidden docx files
 *~*.docx
+
+# Pyinstaler
+dist/
+build/
+*.spec
