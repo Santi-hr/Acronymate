@@ -1,7 +1,9 @@
 import unittest
+from src.common import stringHelpers as strHlprs
 from src.acroHandlers import acroDictHandler
 from src.docxHandlers import docxReader
-
+import sys
+import os
 
 class TestDocxMethods(unittest.TestCase):
 
@@ -17,6 +19,11 @@ class TestDocxMethods(unittest.TestCase):
                                "TCACROTBADD", "TCACROTBADDNEW", "VERYLONGACRONYM"]
 
         self.len_acros_expected = len(self.acros_expected)
+
+        sys.stdout = open(os.devnull, "w")  # Redirect standard output to not get prints during testing
+
+    def tearDown(self):
+        sys.stdout = sys.__stdout__
 
     def test_no_acronyms(self):
         acro_dict_handler = acroDictHandler.AcroDictHandler()
@@ -47,8 +54,12 @@ class TestDocxMethods(unittest.TestCase):
         acro_dict_handler = acroDictHandler.AcroDictHandler()
         docxReader.extract_acro_word(self.docx_test, acro_dict_handler)
 
-        # Check the ordering
-        self.assertTrue(False)  # Test to be defined
+        # Check if more acros than expected are found
+        self.assertEqual(len(self.acros_expected), len(acro_dict_handler.acros_found.keys()))
+
+        sorted_acros = sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.remove_accents)
+        for i in range(len(self.acros_expected)):
+            self.assertEqual(self.acros_expected[i], sorted_acros[i])
 
 
 if __name__ == '__main__':

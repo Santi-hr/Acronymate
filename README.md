@@ -18,7 +18,8 @@ Acronym + mate :)
 
 # Status
 This is a work in progress. Currently the script has a only a Spanish command line interface. I have several improvements in my TODO list like a translation (at least to English), better support for multiple users (Keeping track if the "database" is in use), upgrading to a GUI (Probably tkinter), etc.
-If the script proves to be useful I will invest more time to it. 
+If the script proves to be useful I will invest more time to it.
+If you wish to use this script for other languages than Spanish or English please check if the regex in common/defines contains all the special characters your language uses.
 
 # How to use
 Launch 'mainScript.py' and follow the instructions. Currently all user interaction is done through the console. Use the command 'h' to get help. 
