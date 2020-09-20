@@ -79,8 +79,7 @@ def extract_acro_from_str(str_in_raw, acro_dict_handler, regex_in=""):
     """
     # 1. Find Acronyms as regex matches of groups of N Capital Leters. The regex can be changed for other uses
     if regex_in == "":
-        regex_in = dv.define_regex_acro_find
-        print(regex_in)
+        regex_in = cv.config_regex_acro_find
 
     # Line breaks are removed to reduce space used when outputting the context string to console
     str_in = str_in_raw.replace('\n', dv.define_new_line_separator)

@@ -1,4 +1,4 @@
-
+from src.common import defines as dv
 """This file is for user configurable defines. The functions that update this values are in configHandler."""
 
 # --------- ACRONYM SEARCH -------------
@@ -23,3 +23,6 @@ config_use_acro_from_doc_table = True        # Searches non regex matching acron
 config_use_non_matching_acro_from_db = True  # Adds to the search non regex matching acronyms added to the database
 config_save_backups = True                   # Set to True to enable the creation of backups after each usage
 
+# ......... NOT DIRECTLY CONFIGURABLE ..........
+""" The following variables are configurable by changing one of the above, they should not appear on the config file """
+config_regex_acro_find = dv.define_regex_acro_find_raw.replace("rep_min_acro_len", str(config_min_acro_len))

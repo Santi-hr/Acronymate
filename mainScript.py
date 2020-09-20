@@ -1,7 +1,6 @@
 import time
 from src.acroHandlers import acroDictHandler
 from src.common import configVars as cv
-from src.common import configHandler
 from src.docxHandlers import docxExporter, docxReader
 from src.cmdInterface import userCmdHandler, ansiColorHelper as ach
 
@@ -12,6 +11,7 @@ ach.enable_ansi_in_windows_cmd()
 
 # 1. Initialization
 userCmdHandler.print_logo()
+userCmdHandler.load_config_data()
 acro_dict_handler = acroDictHandler.AcroDictHandler()
 
 # 2. Get docx file and process it

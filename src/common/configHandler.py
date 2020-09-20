@@ -56,9 +56,8 @@ def read_config_file():
             cv.config_save_backups = dict_config["Flags"]["Save backups"]
 
             # UPDATE DEFINES
-            dv.define_regex_acro_find = dv.define_regex_acro_find_raw.replace(
+            cv.config_regex_acro_find = dv.define_regex_acro_find_raw.replace(
                 "rep_min_acro_len", str(cv.config_min_acro_len))
-
         except KeyError:
             flag_success = False
 

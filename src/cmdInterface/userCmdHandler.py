@@ -2,18 +2,29 @@ from datetime import datetime
 from pathlib import Path
 from src.common import defines as dv
 from src.common import configVars as cv
+from src.common import configHandler
 from src.common import pathHelpers
 from src.common import stringHelpers as strHlprs
 from src.cmdInterface import ansiColorHelper as ach
 from src.acroHandlers import acroAuxObj
 
 
+def load_config_data():
+    """Loads config data and ask the user for actions in case the loading fails"""
+    if not configHandler.read_config_file():
+        print_error("ERROR - No se ha podido cargar el fichero de configuración")
+        if get_user_confirmation("¿Crear nuevo fichero de configuración con valores por defecto?"):
+            configHandler.generate_default_config_file()
+        else:
+            print("Saliendo ...")
+            exit(-15)
+
+
 def get_docx_filepath_from_user():
     """Asks the user for a word document and returns it"""
     flag_finish = False
     while not flag_finish:
-        print_warn("¡Recuerda usar una copia del documento con todos los cambios aceptados!")
-        input_path = input("Copia la ruta de la carpeta donde se encuentra el archivo a procesar: ")
+        input_path = input("\nCopia la ruta de la carpeta donde se encuentra el archivo a procesar: ")
         try:
             files_in_path = Path(input_path).glob('*.docx')
             path_list = []
