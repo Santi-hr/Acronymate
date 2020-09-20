@@ -3,7 +3,7 @@ from config import *
 """This file is for non-user configurable defines"""
 
 # --------- ACRONYM SEARCH -------------
-define_regex_acro_find = '[A-ZÁÉÍÓÚÑÇÄËÏÖÜÀÈÌÒÙ]{' + str(config_min_acro_len) + ',}'
+define_regex_acro_find = '[A-ZÁÉÍÓÚ]{' + str(config_min_acro_len) + ',}'
 
 # --------- OTHER -------------
-define_acronymate_version = "v0.2.0"
+define_acronymate_version = "v0.1.2"

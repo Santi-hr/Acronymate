@@ -1,6 +1,5 @@
 import docx
 from src.common.defines import *
-from src.common import stringHelpers as strHlprs
 from src.cmdInterface import cmdProgressBar
 
 
@@ -54,7 +53,7 @@ def generate_output_docx(acro_dict_handler):
     for cell in table.rows[0].cells:
         cell._tc.tcPr.tcW.type = 'auto'
 
-    for n_acro, acro in enumerate(sorted(acro_dict_handler.acros_output.keys(), key=strHlprs.remove_accents)):
+    for n_acro, acro in enumerate(sorted(acro_dict_handler.acros_output.keys())):
         row_cells = table.add_row().cells
         row_cells[0].text = acro
         row_cells[0].paragraphs[0].runs[0].font.bold = True
