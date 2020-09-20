@@ -2,10 +2,218 @@ from datetime import datetime
 from pathlib import Path
 from src.common.defines import *
 from src.common import pathHelpers
-from src.common import stringHelpers as strHlprs
 from src.cmdInterface import ansiColorHelper as ach
-from src.acroHandlers import acroAuxObj
 
+
+class AuxAcroObj:
+    """Class to handle one acronym while user updates it"""
+    def __init__(self, acro, dict_handler):
+        """Class constructor
+
+        :param acro: Acronym string
+        :param dict_handler: Acronym dictionary handler
+        """
+        self.acro = acro
+        self.dict_handler = dict_handler
+        self.proposed_def = [{'Main': ""}]
+        self.flag_update_db = True # If acro is not found in the db it would need to be added
+
+        # Look acronym in table document
+        self.def_list_doc_table = self.dict_handler.search_def_in_doc_table(self.acro)
+        if len(self.def_list_doc_table) > 0:
+            self.proposed_def = self.def_list_doc_table
+
+        # Look acronym in database
+        self.def_list_db = self.dict_handler.search_def_in_db(self.acro)
+        # DB has priority
+        if len(self.def_list_db) > 0:
+            self.proposed_def = self.def_list_db
+            self.flag_update_db = False
+
+        # Fill the selected list
+        self.selected_def = []
+        for i in range(len(self.proposed_def)):
+            self.selected_def.append(True)
+
+    def has_multiple_defs(self):
+        """Returns True if acronym has multiple definitions"""
+        flag_return = False
+        if len(self.proposed_def) > 1:
+            flag_return = True
+        return flag_return
+
+    def is_in_db(self):
+        """Returns True if acronym is in database"""
+        flag_return = False
+        if len(self.def_list_db) > 0:
+            flag_return = True
+        return flag_return
+
+    def is_blacklisted(self):
+        """Returns True if the acronym is in the database blacklist"""
+        return self.dict_handler.is_blacklisted(self.acro)
+
+    def toggle_blacklisted_status(self):
+        self.dict_handler.toggle_in_blacklist(self.acro)
+
+    def defs_discrepancy(self):
+        """Returns True if db definition does not match with the acronym table one. As this means that the acro could
+        have different or other def than the one in the db. If def is not found in the acro table the fcn returns False
+        """
+        flag_return = False
+        # Check discrepancy only if definitions found both in db and acro table
+        if len(self.def_list_db) > 0 and len(self.def_list_doc_table) > 0:
+            if len(self.def_list_db) != len(self.def_list_doc_table):
+                flag_return = True
+            else:
+                for i in range(len(self.def_list_db)):
+                    if self.def_list_db[i]['Main'] == self.def_list_doc_table[i]['Main']:
+                        # Compare Translations. If its not found the string will be empty
+                        str_trans_db, str_trans_doc = "", ""
+                        if 'Translation' in self.def_list_db[i]:
+                            str_trans_db = self.def_list_db[i]['Translation']
+                        if 'Translation' in self.def_list_doc_table[i]:
+                            str_trans_doc = self.def_list_doc_table[i]['Translation']
+                        if str_trans_db != str_trans_doc:
+                            flag_return = True
+                    else:
+                        # Main definitions not equal
+                        flag_return = True
+        return flag_return
+
+    def edit_def(self, idx, str_main, str_trans):
+        """Edits the acronym definition
+
+        :param idx: Acronym definition to edit
+        :param str_main: Acronym definition in original language
+        :param str_trans: Acronym definition translated
+        """
+        idx = idx - 1 # Input is user friendly (Counting starts at 1)
+        self.proposed_def[idx]['Main'] = str_main
+        if str_trans != "":
+            self.proposed_def[idx]['Translation'] = str_trans
+        self.flag_update_db = True
+
+    def add_def(self, str_main, str_trans):
+        """Adds a new acronym definition
+
+        :param str_main: Acronym definition in original language
+        :param str_trans: Acronym definition translated
+        """
+        if self.proposed_def[0]['Main'] != "": # Only add definitions if there is one already, else edit the first
+            aux_def = dict()
+            aux_def['Main'] = str_main
+            if str_trans != "":
+                aux_def['Translation'] = str_trans
+            self.proposed_def.append(aux_def)
+            self.selected_def.append(True)
+            self.flag_update_db = True
+        else:
+            # If there is no definitions edit the first definition
+            self.edit_def(1, str_main, str_trans)
+
+    def delete_def(self, idx):
+        """Deletes an acronym definition
+
+        :param idx: Acronym definition to delete
+        """
+        idx = idx - 1 # Input is user friendly (Counting starts at 1)
+        if len(self.proposed_def) == 1:
+            self.dict_handler.delete_acro_in_db(self.acro)
+        else:
+            self.proposed_def.pop(idx)
+            self.selected_def.pop(idx)
+        self.flag_update_db = True
+
+    def select_defs(self, idx_list):
+        """Alternates an acronym slection state
+
+        :param idx: Acronyms to be selected
+        """
+        n_defs = len(self.selected_def)
+        for i in range(n_defs):
+            self.selected_def[i] = False
+        for i in range(len(idx_list)):
+            if 0 <= idx_list[i] - 1 < n_defs:
+                self.selected_def[idx_list[i] - 1] = True
+
+    def check_def(self):
+        """Returns True if the acronym is valid to be used"""
+        flag_return = True
+        # Acronym needs at least 1 definition
+        if self.proposed_def[0]['Main'] == "":
+            flag_return = False
+        # Acronym needs at least 1 selected
+        for i in range(len(self.selected_def)):
+            if self.selected_def[i]:
+                break
+        else:
+            flag_return = False
+        return flag_return
+
+    def save_and_use_acro(self):
+        """Accepts changes and stores them to DB if needed"""
+        if self.flag_update_db:
+            self.dict_handler.update_acro_in_db(self.acro, self.proposed_def)
+        self.dict_handler.update_acro_output(self.acro, self.proposed_def, self.selected_def)
+
+    def print_dict_coincidences(self):
+        """Prints to console the acronym data from DB and document acronyms table"""
+        print("Tabla del documento: ", end="")
+        print(self.__get_str_sorted_acro_list(self.def_list_doc_table))
+
+        print("      Base de datos: ", end="")
+        print(self.__get_str_sorted_acro_list(self.def_list_db))
+
+        if self.defs_discrepancy():
+            print_warn("Discrepancia detectada entre base de datos y tabla del documento")
+
+    def __get_str_sorted_acro_list(self, def_list):
+        """Return formatted string with all definition ordered"""
+        str_out = ""
+        if len(def_list):
+            str_out += "["
+            for i, definition in enumerate(def_list):
+                if i != 0:
+                    str_out += ", "
+                str_out += "{'Main': '%s'" % definition['Main']
+                if 'Translation' in definition:
+                    str_out += ", 'Translation': '%s'" % definition['Translation']
+                str_out += "}"
+            str_out += "]"
+        else:
+            str_out = ach.color_str("No encontrado", ach.AnsiColorCode.GRAY)
+        return str_out
+
+    def get_def_strings(self):
+        """Returns pretty definition strings to be output to console
+
+        :return: Tuple with main and translation strings
+        """
+        str_def_main, str_def_trans = "", ""
+        if len(self.proposed_def) == 1:
+            str_def_main = self.proposed_def[0]['Main']
+            if 'Translation' in self.proposed_def[0]:
+                str_def_trans = self.proposed_def[0]['Translation']
+        else:
+            # Show list with index of there is multiple definitions. Unselected definitions are shown in gray
+            str_def_main, str_def_trans = "[", "["
+            for i, definition in enumerate(self.proposed_def):
+                i_ = i + 1
+                color = ach.AnsiColorCode.DEFAULT
+                if not self.selected_def[i]:
+                    color = ach.AnsiColorCode.GRAY
+                str_def_main += ach.color_str("%d: %s" % (i_, definition['Main']), color) + ", "
+                str_aux_trans = ""
+                if 'Translation' in definition:
+                    str_aux_trans += definition['Translation']
+                str_def_trans += ach.color_str("%d: %s" % (i_, str_aux_trans), color) + ", "
+            str_def_main = str_def_main[:-2] + "]"
+            str_def_trans = str_def_trans[:-2] + "]"
+
+        return str_def_main, str_def_trans
+
+    ################ AuxAcroObj END #################
 
 def get_docx_filepath_from_user():
     """Asks the user for a word document and returns it"""
@@ -16,13 +224,9 @@ def get_docx_filepath_from_user():
         try:
             files_in_path = Path(input_path).glob('*.docx')
             path_list = []
-            counter = 0
-            for f in files_in_path:
-                filename = pathHelpers.get_filename_from_path(f)
-                if filename[0] != '~':
-                    print("  %d -" % (counter+1), pathHelpers.get_filename_from_path(f))
-                    path_list.append(f)
-                    counter += 1
+            for i, f in enumerate(files_in_path):
+                print("  %d -" % (i+1), pathHelpers.get_filename_from_path(f))
+                path_list.append(f) #Todo: No mostrar los que empiecen por ~?
             if len(path_list) == 0:
                 print_error("ERROR - No se encuentran archivos '.docx' en la ruta seleccionada'")
             else:
@@ -42,9 +246,9 @@ def process_acro_found(acro_dict_handler):
     :param acro_dict_handler: Acronym dictionary objects
     """
     flag_auto_command = get_user_confirmation("¿Quieres procesar en modo semi-automático?") #todo: add info
-    for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.remove_accents)):
+    for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys())):
         # Create an auxilary object for each acronym
-        aux_acro_obj = acroAuxObj.acroAuxObj(acro, acro_dict_handler)
+        aux_acro_obj = AuxAcroObj(acro, acro_dict_handler)
 
         # Generate header and prints it
         max_acros = len(acro_dict_handler.acros_found.keys())
@@ -59,15 +263,8 @@ def process_acro_found(acro_dict_handler):
         for context in acro_dict_handler.acros_found[acro]['Context']:
             print("     ", context)
 
-        # Print found definitions
         print(str_half_header)
-
-        print("Tabla del documento: ", end="")
-        print(aux_acro_obj.get_str_pretty_definition_list(aux_acro_obj.def_list_doc_table))
-        print("      Base de datos: ", end="")
-        print(aux_acro_obj.get_str_pretty_definition_list(aux_acro_obj.def_list_db))
-        if aux_acro_obj.defs_discrepancy():
-            print_warn("Discrepancia detectada entre base de datos y tabla del documento")
+        aux_acro_obj.print_dict_coincidences()
 
         # Ask the user for commands
         print(str_half_header)
@@ -90,98 +287,65 @@ def process_acro_found(acro_dict_handler):
                 else:
                     if aux_acro_obj.is_in_db() and not aux_acro_obj.has_multiple_defs() and not aux_acro_obj.defs_discrepancy():
                         user_command = 'y'
+            aux_acro_obj.defs_discrepancy()
             if user_command == "":
                 user_command = input("Introduce comando (y/n/e/a/s/b/d/h): ").lower()
 
-            if user_command == 'y':  # -- ACCEPT CHANGES --
-                flag_finish = process_acro_command_accept(aux_acro_obj)
-            elif user_command == 'n':  # -- DISCARD ACRONYM --
-                flag_finish = process_acro_command_skip()
-            elif user_command == 'e':  # -- EDIT --
-                flag_finish = process_acro_command_edit(aux_acro_obj)
-            elif user_command == 'a':  # -- ADD --
-                flag_finish = process_acro_command_add(aux_acro_obj)
-            elif user_command == 's':  # -- SELECT --
-                flag_finish = process_acro_command_select(aux_acro_obj)
-            elif user_command == 'b':  # -- BLACKLIST --
-                flag_finish = process_acro_command_blacklist(aux_acro_obj)
-            elif user_command == 'd':  # -- DELETE --
-                flag_finish = process_acro_command_delete(aux_acro_obj)
-            elif user_command == 'h':  # -- HELP --
+            # -- ACCEPT CHANGES --
+            if user_command == 'y':
+                if aux_acro_obj.check_def():
+                    aux_acro_obj.save_and_use_acro()
+                    print_ok("Se guarda el acrónimo")
+                    flag_finish = True
+                else:
+                    print_error(
+                        "ERROR - Comprueba que el acrónimo está definido y que al menos 1 definición está seleccionada")
+            # -- DISCARD ACRONYM --
+            elif user_command == 'n':
+                print_ok("Se descarta el acrónimo")
+                flag_finish = True
+            # -- EDIT --
+            elif user_command == 'e':
+                idx_def_to_edit = 1
+                if aux_acro_obj.has_multiple_defs():
+                    idx_def_to_edit = get_num_from_user("¿Cual quieres editar?",
+                                                        lower=1, upper=len(aux_acro_obj.proposed_def))
+                user_def_main, user_def_trans = get_def_str_from_user()
+                aux_acro_obj.edit_def(idx_def_to_edit, user_def_main, user_def_trans)
+            # -- ADD --
+            elif user_command == 'a':
+                user_def_main, user_def_trans = get_def_str_from_user()
+                aux_acro_obj.add_def(user_def_main, user_def_trans)
+            # -- SELECT --
+            elif user_command == 's':
+                if aux_acro_obj.has_multiple_defs():
+                    idx_list = get_user_idx_list("Elige que definiciones seleccionar (Ej: 1,2,4): ")
+                    aux_acro_obj.select_defs(idx_list)
+                else:
+                    print("Esta opción solo está disponible para acrónimos con múltiples definiciones")
+            # -- BLACKLIST --
+            elif user_command == 'b':
+                aux_acro_obj.toggle_blacklisted_status()
+            # -- DELETE --
+            elif user_command == 'd':
+                print_warn("ATENCIÓN - El borrado eliminará la definición de la base de datos (si está en esta).\n"
+                           "Para no usar el acrónimo usa el comando 'n', si hay múltiples definiciones usa 's' para "
+                           "elegir cuales usar.")
+                if get_user_confirmation():
+                    idx_def_to_edit = 1
+                    if aux_acro_obj.has_multiple_defs():
+                        idx_def_to_edit = get_num_from_user("¿Cual quieres eliminar?",
+                                                            lower=1, upper=len(aux_acro_obj.proposed_def))
+                    else:
+                        print_ok("Se elimina el acrónimo")
+                        flag_finish = True # If we delete the last definition continue with the next acronym
+                    aux_acro_obj.delete_def(idx_def_to_edit)
+            # -- HELP --
+            elif user_command == 'h':
                 print_process_acro_found_help()
             # -- default --
             else:
                 print_error("ERROR - Comando no reconocido. Usa el comando 'h' para obtener ayuda")
-
-
-#------ process_acro_found command functions ------#
-def process_acro_command_accept(aux_acro_obj):
-    flag_finish = False
-    if aux_acro_obj.check_def():
-        aux_acro_obj.save_and_use_acro()
-        print_ok("Se guarda el acrónimo")
-        flag_finish = True
-    else:
-        print_error(
-            "ERROR - Comprueba que el acrónimo está definido y que al menos 1 definición está seleccionada")
-    return flag_finish
-
-
-def process_acro_command_skip():
-    print_ok("Se descarta el acrónimo")
-    flag_finish = True
-    return flag_finish
-
-
-def process_acro_command_edit(aux_acro_obj):
-    flag_finish = False
-    idx_def_to_edit = 1
-    if aux_acro_obj.has_multiple_defs():
-        idx_def_to_edit = get_num_from_user("¿Cual quieres editar?",
-                                            lower=1, upper=len(aux_acro_obj.proposed_def))
-    user_def_main, user_def_trans = get_def_str_from_user()
-    aux_acro_obj.edit_def(idx_def_to_edit, user_def_main, user_def_trans)
-    return flag_finish
-
-
-def process_acro_command_add(aux_acro_obj):
-    flag_finish = False
-    user_def_main, user_def_trans = get_def_str_from_user()
-    aux_acro_obj.add_def(user_def_main, user_def_trans)
-    return flag_finish
-
-
-def process_acro_command_select(aux_acro_obj):
-    flag_finish = False
-    if aux_acro_obj.has_multiple_defs():
-        idx_list = get_user_idx_list("Elige que definiciones seleccionar (Ej: 1,2,4): ")
-        aux_acro_obj.select_defs(idx_list)
-    else:
-        print("Esta opción solo está disponible para acrónimos con múltiples definiciones")
-    return flag_finish
-
-
-def process_acro_command_blacklist(aux_acro_obj):
-    flag_finish = False
-    aux_acro_obj.toggle_blacklisted_status()
-    return flag_finish
-
-
-def process_acro_command_delete(aux_acro_obj):
-    flag_finish = False
-    print_warn("ATENCIÓN - El borrado eliminará la definición de la base de datos (si está en esta).\n"
-               "Para no usar el acrónimo usa el comando 'n', si hay múltiples definiciones usa 's' para "
-               "elegir cuales usar.")
-    if get_user_confirmation():
-        idx_def_to_edit = 1
-        if aux_acro_obj.has_multiple_defs():
-            idx_def_to_edit = get_num_from_user("¿Cual quieres eliminar?",
-                                                lower=1, upper=len(aux_acro_obj.proposed_def))
-        else:
-            print_ok("Se elimina el acrónimo")
-            flag_finish = True  # If we delete the last definition continue with the next acronym
-        aux_acro_obj.delete_def(idx_def_to_edit)
-    return flag_finish
 
 
 def print_process_acro_found_help():
@@ -199,15 +363,13 @@ def print_process_acro_found_help():
     print("  h: Ayuda       - Muestra esta información.")
 
 
-########### SAVE FUNCTIONS WITH USER HANDLING #############
-
 def handle_db_save(acro_dict_handler):
     """Handles interface for the update of the database
 
     :param acro_dict_handler: Acronym dictionary objects
     """
     print("Guardando ")
-    print("Resumen de cambios en la base de datos:", acro_dict_handler.obj_db.log_db_changes)
+    print("Resumen de cambios en la base de datos:", acro_dict_handler.log_db_changes)
     folder_output = Path(config_acro_db_folder)
     db_filename = config_acro_db_file
     flag_overwrite = True
@@ -215,7 +377,7 @@ def handle_db_save(acro_dict_handler):
     if folder_output.exists():
         path_output = folder_output / db_filename
         if path_output.exists(): # Skip checks if db file does't exist yet
-            if not acro_dict_handler.obj_db.check_db_integrity(): # Check if file was updated by another user before saving
+            if not acro_dict_handler.check_db_integrity(): # Check if file was updated by another user before saving
                 print_warn("ATENCIÓN - Es posible que otro usuario haya modificado el archivo de base de datos. Se recomienda "
                            "guardar con otro nombre y revisar los cambios manualmente (Opción merge próximamente)")
                 if get_user_confirmation("¿Guardar con otro nombre?"):
@@ -225,7 +387,7 @@ def handle_db_save(acro_dict_handler):
     else:
         print_error("La ruta %s no es accesible" % folder_output)
         folder_output = get_existing_folder_from_user()
-    save_file(folder_output, db_filename, flag_overwrite, acro_dict_handler.obj_db.save_db)
+    save_file(folder_output, db_filename, flag_overwrite, acro_dict_handler.save_db)
 
     # Same simplified logic for the backup file. Backups are not overwriten, less checks needed
     if config_save_backups: #todo, delete older files?
@@ -239,7 +401,7 @@ def handle_db_save(acro_dict_handler):
             print_error("La ruta %s no es accesible" % bak_folder_output)
             bak_folder_output = get_existing_folder_from_user()
 
-        save_file(bak_folder_output, bak_db_filename, flag_overwrite, acro_dict_handler.obj_db.save_db_backup)
+        save_file(bak_folder_output, bak_db_filename, flag_overwrite, acro_dict_handler.save_db_backup)
 
 
 def save_file(folder, filename, overwrite, save_fcn, *args):
@@ -277,8 +439,6 @@ def save_file(folder, filename, overwrite, save_fcn, *args):
             folder = get_existing_folder_from_user()
     print_ok("Se ha guardado el fichero: %s" % path_output)
 
-
-########### GET USER INPUT FCNS #############
 
 def get_existing_folder_from_user():
     """Asks and returns a folder inputted by the user. The folder will always exist"""
@@ -372,7 +532,6 @@ def get_user_idx_list(str_in="Introduce enteros separados por comas: "):
     return return_list
 
 
-########### PRINT HELPER FCNS #############
 
 def print_ellapsed_time(elapsed_f_sec):
     """Prints time as hours minutes and seconds since the begining of the programm"""
