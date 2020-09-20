@@ -17,6 +17,12 @@ config_docx_export_folder = "output"        # Folder where output acronym docx w
 
 config_acro_db_bkp_folder = "data/backup/"  # Folder where databases backups will be saved
 
+# --------- OUTPUT TABLE -------------
+# Configuration for output table. It is recommended to generate a test document before real use to prevent errors
+config_output_font = "Verdana"          # Font name
+config_output_font_size = 7             # Font size (points) for the acronym table rows
+config_output_font_size_header = 9      # Font size (points) for the acronym table header
+
 # --------- FLAGS -------------
 # Acronym processing flags (For best results keep them enabled)
 config_use_acro_from_doc_table = True        # Searches non regex matching acronyms from the document

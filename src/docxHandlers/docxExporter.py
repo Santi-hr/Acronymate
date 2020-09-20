@@ -1,5 +1,6 @@
 import docx
 from src.common import defines as dv
+from src.common import configVars as cv
 from src.common import stringHelpers as strHlprs
 from src.cmdInterface import cmdProgressBar
 
@@ -18,18 +19,18 @@ def generate_output_docx(acro_dict_handler):
     # --- Define styles ---
     obj_normal_style = document.styles['Normal']
     font = obj_normal_style.font
-    font.name = 'Calibri'
-    font.size = docx.shared.Pt(10)
+    font.name = cv.config_output_font
+    font.size = docx.shared.Pt(cv.config_output_font_size)
     paragraph_format = obj_normal_style.paragraph_format
-    paragraph_format.space_after = docx.shared.Pt(0)
+    paragraph_format.space_after = docx.shared.Pt(2)
     paragraph_format.space_before = docx.shared.Pt(2)
 
     obj_header_style = document.styles.add_style('HeaderStyle', docx.enum.style.WD_STYLE_TYPE.PARAGRAPH)
     hdr_font = obj_header_style.font
-    hdr_font.size = docx.shared.Pt(12)
-    hdr_font.name = 'Calibri'
+    hdr_font.size = docx.shared.Pt(cv.config_output_font_size_header)
+    hdr_font.name = cv.config_output_font
     paragraph_format = obj_header_style.paragraph_format
-    paragraph_format.space_after = docx.shared.Pt(0)
+    paragraph_format.space_after = docx.shared.Pt(2)
     paragraph_format.space_before = docx.shared.Pt(2)
 
     # --- Footer ---

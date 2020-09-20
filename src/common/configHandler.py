@@ -20,12 +20,18 @@ def generate_default_config_file():
             "DB filename": cv.config_acro_db_file,
             "DB backup folder": cv.config_acro_db_bkp_folder
         },
+        "Output Table": {
+            "Font": cv.config_output_font,
+            "Font size": cv.config_output_font_size,
+            "Font size header": cv.config_output_font_size_header,
+        },
         "Flags": {
             "Use acronym document table": cv.config_use_acro_from_doc_table,
             "Use non matching acronyms from DB": cv.config_use_non_matching_acro_from_db,
             "Save backups": cv.config_save_backups,
         },
     }
+
     with open("acronymate_config.json", 'w', encoding="utf-8") as cfg_file:
         json.dump(dict_config, cfg_file, ensure_ascii=False, sort_keys=False, indent=4)
 
@@ -50,6 +56,10 @@ def read_config_file():
             cv.config_acro_db_folder = dict_config["Paths"]["DB folder"]
             cv.config_acro_db_file = dict_config["Paths"]["DB filename"]
             cv.config_acro_db_bkp_folder = dict_config["Paths"]["DB backup folder"]
+
+            cv.config_output_font = dict_config["Output Table"]["Font"]
+            cv.config_output_font_size = dict_config["Output Table"]["Font size"]
+            cv.config_output_font_size_header = dict_config["Output Table"]["Font size header"]
 
             cv.config_use_acro_from_doc_table = dict_config["Flags"]["Use acronym document table"]
             cv.config_use_non_matching_acro_from_db = dict_config["Flags"]["Use non matching acronyms from DB"]
