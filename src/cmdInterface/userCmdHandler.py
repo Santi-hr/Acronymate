@@ -47,13 +47,55 @@ def get_docx_filepath_from_user():
 
     return filepath
 
-
 def process_acro_found(acro_dict_handler):
+    """Main interface, asks first how the acronyms should be processed"""
+    flag_finish = False
+    while not flag_finish:
+        user_command = input("¿Como procesar los acrónimos? (m/s/e/a/h): ").lower()
+        if user_command == 'm':  # -- MANUAL --
+            process_acro_found_one_by_one(acro_dict_handler, flag_auto_command=False)
+            flag_finish = True
+        elif user_command == 's':  # -- SEMIAUTOMATIC --
+            process_acro_found_one_by_one(acro_dict_handler, flag_auto_command=True)
+            flag_finish = True
+        elif user_command == 'e':  # -- EXPORT ONLY --
+            process_acro_found_to_export_empty(acro_dict_handler)
+            flag_finish = True
+        elif user_command == 'a':  # -- ABOUT --
+            print_about_info()
+        elif user_command == 'h':  # -- HELP --
+            print_process_acro_found_modes_help()
+        # -- default --
+        else:
+            print_error("ERROR - Comando no reconocido. Usa el comando 'h' para obtener ayuda")
+
+def print_process_acro_found_modes_help():
+    """Prints acronym processing modes help"""
+    print("  m: Manual    - Se procesa uno a uno cada acrónimo de forma manual.")
+    print("  s: Semi-auto - Sutomáticamente se aceptan los acrónimos que están en la base de datos y se saltan los que")
+    print("                 están añadidos a la Blacklist. Se procesan manualmente aquellos no definidos, con múltiples")
+    print("                 definiciones o cuando la definición de base de datos no coincida con la del documento.")
+    print("  e: Exportar  - Exporta todos los acrónimos encontrados sin incluir sus definiciones.")
+    print("  a: Acerca de - Muestra información del programa.")
+    print("  h: Ayuda     - Muestra esta información.")
+
+def print_about_info():
+    """Prints about info"""
+    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2020")
+    print("Dependencias:")
+    print("    python-docx: Copyright (c) 2013 Steve Canny, https://github.com/scanny")
+    print("    lxml: Copyright (c) 2004 Infrae. All rights reserved.")
+
+def process_acro_found_to_export_empty(acro_dict_handler):
+    for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.remove_accents)):
+        aux_acro_obj = acroAuxObj.acroAuxObj(acro, acro_dict_handler)
+        aux_acro_obj.use_empty_acro()
+
+def process_acro_found_one_by_one(acro_dict_handler, flag_auto_command):
     """Main interface, process acronyms one by one asking the user what to do
 
     :param acro_dict_handler: Acronym dictionary objects
     """
-    flag_auto_command = get_user_confirmation("¿Quieres procesar en modo semi-automático?") #todo: add info
     for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.remove_accents)):
         # Create an auxilary object for each acronym
         aux_acro_obj = acroAuxObj.acroAuxObj(acro, acro_dict_handler)
@@ -103,7 +145,7 @@ def process_acro_found(acro_dict_handler):
                     if aux_acro_obj.is_in_db() and not aux_acro_obj.has_multiple_defs() and not aux_acro_obj.defs_discrepancy():
                         user_command = 'y'
             if user_command == "":
-                user_command = input("Introduce comando (y/n/e/a/s/b/d/h): ").lower()
+                user_command = input("Introduce comando (y/n/e/a/s/b/d/m/h): ").lower()
 
             if user_command == 'y':  # -- ACCEPT CHANGES --
                 flag_finish = process_acro_command_accept(aux_acro_obj)
@@ -119,6 +161,8 @@ def process_acro_found(acro_dict_handler):
                 flag_finish = process_acro_command_blacklist(aux_acro_obj)
             elif user_command == 'd':  # -- DELETE --
                 flag_finish = process_acro_command_delete(aux_acro_obj)
+            elif user_command == 'm':  # -- MODE --
+                flag_auto_command = process_acro_change_mode(flag_auto_command)
             elif user_command == 'h':  # -- HELP --
                 print_process_acro_found_help()
             # -- default --
@@ -196,6 +240,18 @@ def process_acro_command_delete(aux_acro_obj):
     return flag_finish
 
 
+def process_acro_change_mode(flag_auto_command):
+    """Alternates between manual and semiauto modes after getting user confirmation"""
+    flag_output = flag_auto_command
+    if get_user_confirmation("¿Cambiar de modo de procesamiento?"):
+        if flag_auto_command:
+            flag_output = False
+            print("Se cambia a modo manual")
+        else:
+            flag_output = True
+            print("Se cambia a modo semiautomático")
+    return flag_output
+
 def print_process_acro_found_help():
     """Prints acronym handling user commands help"""
     print("  y: Aceptar     - Guarda el acrónimo con la información mostrada y actualiza la base de datos.")
@@ -208,6 +264,7 @@ def print_process_acro_found_help():
     print("  b: Blacklist   - Alterna el estado del acrónimo en la lista negra. Si está en esta lista se saltará ")
     print("                   automáticamente al procesar en modo semi-automático.")
     print("  d: Eliminar    - Elimina el acrónimo o una de sus definiciónes de la base de datos.")
+    print("  m: Modo        - Alterna entre modos de procesamiento manual y semiautomático.")
     print("  h: Ayuda       - Muestra esta información.")
 
 
@@ -417,6 +474,7 @@ def print_ok(str_in):
 
 def print_logo():
     """Prints the program starting logo"""
+    # Georgia 11
     color = ach.AnsiColorCode.DARK_YELLOW
     print("")
     print(ach.color_str("      db       .g8\"\"\"bgd `7MM\"\"\"Mq.   .g8\"\"8q. `7MN.   `7MF`YMM'   `MM`7MMM.     ,MMF'     db  MMP\"\"MM\"\"YMM `7MM\"\"\"YMM ", color))

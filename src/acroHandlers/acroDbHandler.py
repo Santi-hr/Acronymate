@@ -27,10 +27,11 @@ class AcroDbHandler:
 
         :param acro_in: Acronym to be updated
         """
-        list_last_uses = self.full_db['Acronyms'][acro_in]['Properties']['Last_uses']
-        list_last_uses.append((str_last_use_file, self.str_curr_date))
-        while len(list_last_uses) > 5:
-            list_last_uses.pop(0)
+        if acro_in in self.full_db['Acronyms']:
+            list_last_uses = self.full_db['Acronyms'][acro_in]['Properties']['Last_uses']
+            list_last_uses.append((str_last_use_file, self.str_curr_date))
+            while len(list_last_uses) > 5:
+                list_last_uses.pop(0)
 
     def search_def_in_db(self, acro_in):
         """Searches for an acronym in the acronym-database dictionary and returns its definition"""
