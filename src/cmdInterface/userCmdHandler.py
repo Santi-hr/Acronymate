@@ -1,18 +1,30 @@
 from datetime import datetime
 from pathlib import Path
-from src.common.defines import *
+from src.common import defines as dv
+from src.common import configVars as cv
+from src.common import configHandler
 from src.common import pathHelpers
 from src.common import stringHelpers as strHlprs
 from src.cmdInterface import ansiColorHelper as ach
 from src.acroHandlers import acroAuxObj
 
 
+def load_config_data():
+    """Loads config data and ask the user for actions in case the loading fails"""
+    if not configHandler.read_config_file():
+        print_error("ERROR - No se ha podido cargar el fichero de configuración")
+        if get_user_confirmation("¿Crear nuevo fichero de configuración con valores por defecto?"):
+            configHandler.generate_default_config_file()
+        else:
+            print("Saliendo ...")
+            exit(-15)
+
+
 def get_docx_filepath_from_user():
     """Asks the user for a word document and returns it"""
     flag_finish = False
     while not flag_finish:
-        print_warn("¡Recuerda usar una copia del documento con todos los cambios aceptados!")
-        input_path = input("Copia la ruta de la carpeta donde se encuentra el archivo a procesar: ")
+        input_path = input("\nCopia la ruta de la carpeta donde se encuentra el archivo a procesar: ")
         try:
             files_in_path = Path(input_path).glob('*.docx')
             path_list = []
@@ -208,8 +220,8 @@ def handle_db_save(acro_dict_handler):
     """
     print("Guardando ")
     print("Resumen de cambios en la base de datos:", acro_dict_handler.obj_db.log_db_changes)
-    folder_output = Path(config_acro_db_folder)
-    db_filename = config_acro_db_file
+    folder_output = Path(cv.config_acro_db_folder)
+    db_filename = cv.config_acro_db_file
     flag_overwrite = True
     # Get a valid folder
     if folder_output.exists():
@@ -228,10 +240,10 @@ def handle_db_save(acro_dict_handler):
     save_file(folder_output, db_filename, flag_overwrite, acro_dict_handler.obj_db.save_db)
 
     # Same simplified logic for the backup file. Backups are not overwriten, less checks needed
-    if config_save_backups: #todo, delete older files?
+    if cv.config_save_backups: #todo, delete older files?
         flag_overwrite = False
-        bak_folder_output = Path(config_acro_db_bkp_folder)
-        aux_filename_list = config_acro_db_file.split('.')
+        bak_folder_output = Path(cv.config_acro_db_bkp_folder)
+        aux_filename_list = cv.config_acro_db_file.split('.')
         bak_db_filename = aux_filename_list[0] + "_backup(" + datetime.now().strftime("%Y%m%d") + ")." + aux_filename_list[1]
 
         pathHelpers.ensure_directory(bak_folder_output)
@@ -414,5 +426,5 @@ def print_logo():
     print(ach.color_str("   AbmmmqMA  MM.           MM  YM.  MM.      ,MP M   `MM.M      MM      M  YM.P'  MM    AbmmmqMA    MM        MM   Y  ,", color))
     print(ach.color_str("  A'     VML `Mb.     ,'   MM   `Mb.`Mb.    ,dP' M     YMM      MM      M  `YM'   MM   A'     VML   MM        MM     ,M", color))
     print(ach.color_str(".AMA.   .AMMA. `\"bmmmd'  .JMML. .JMM. `\"bmmd\"' .JML.    YM    .JMML.  .JML. `'  .JMML.AMA.   .AMMA.JMML.    .JMMmmmmMMM", color))
-    print("Acronymate", define_acronymate_version, " - SAHR Projects 2020 -  Versión para docx solo en Español")
+    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2020")
     print("")

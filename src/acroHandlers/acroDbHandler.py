@@ -2,7 +2,8 @@ import json
 import re
 from datetime import datetime
 from pathlib import Path
-from src.common.defines import *
+from src.common import defines as dv
+from src.common import configVars as cv
 from src.cmdInterface import userCmdHandler
 
 
@@ -101,7 +102,7 @@ class AcroDbHandler:
         # acronyms DB file is in a shared folder and conexion is lost)
         flag_is_correct = False
         try:
-            db_file_path = Path(config_acro_db_folder) / config_acro_db_file
+            db_file_path = Path(cv.config_acro_db_folder) / cv.config_acro_db_file
             with open(db_file_path, 'r', encoding="UTF-8") as db_file:
                 aux_full_db = json.load(db_file)
             if aux_full_db['Admin_data']['Date'] == self.str_prev_date:
@@ -114,16 +115,16 @@ class AcroDbHandler:
 
     def __load_acros_db(self):
         """Loads the acronyms database file"""
-        print("Cargando la base de datos de acrónimos (%s) ..." % config_acro_db_file)
+        print("Cargando la base de datos de acrónimos (%s) ..." % cv.config_acro_db_file)
         try:
-            db_file_path = Path(config_acro_db_folder) / config_acro_db_file
+            db_file_path = Path(cv.config_acro_db_folder) / cv.config_acro_db_file
             with open(db_file_path, 'r', encoding="UTF-8") as db_file:
                 self.full_db = json.load(db_file)
                 try:
                     self.str_prev_date = self.full_db['Admin_data']['Date']
                 except KeyError:
                     self.str_prev_date = "Not found"
-                if config_save_backups: #Todo: Perform a deep copy instead of reading two times the file?
+                if cv.config_save_backups: #Todo: Perform a deep copy instead of reading two times the file?
                     with open(db_file_path, 'r', encoding="UTF-8") as db_file:
                         self.full_db_ori = json.load(db_file)
         except FileNotFoundError as e:
@@ -134,7 +135,7 @@ class AcroDbHandler:
         self.__check_acros_db()
         self.acros_db = self.full_db['Acronyms']
 
-        if config_use_non_matching_acro_from_db:
+        if cv.config_use_non_matching_acro_from_db:
             self.__find_non_regex_acronyms()
 
     def __check_acros_db(self):
@@ -186,10 +187,10 @@ class AcroDbHandler:
         self.full_db['Admin_data']['Date'] = datetime.now().strftime("%d/%m/%Y %H:%M:%S %f")
         self.full_db['Admin_data']['Changelog'] = self.log_db_changes
         self.full_db['Admin_data']['Prev_date'] = self.str_prev_date
-        self.full_db['Admin_data']['Version'] = define_acronymate_version
+        self.full_db['Admin_data']['Version'] = dv.define_acronymate_version
 
     def __find_non_regex_acronyms(self):
         """Compiles list of acronyms that do not match the current regex"""
         for acro in self.acros_db.keys():
-            if not re.match(define_regex_acro_find, acro):
+            if not re.match(cv.config_regex_acro_find, acro):
                 self.list_no_regex.append(acro)
