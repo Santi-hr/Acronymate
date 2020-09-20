@@ -1,5 +1,5 @@
 import time
-from src import acroDictHandler
+from src.acroHandlers import acroDictHandler
 from src.common.defines import *
 from src.docxHandlers import docxExporter, docxReader
 from src.cmdInterface import userCmdHandler, ansiColorHelper as ach
