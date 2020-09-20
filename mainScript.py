@@ -1,6 +1,7 @@
 import time
 from src.acroHandlers import acroDictHandler
-from src.common.defines import *
+from src.common import configVars as cv
+from src.common import configHandler
 from src.docxHandlers import docxExporter, docxReader
 from src.cmdInterface import userCmdHandler, ansiColorHelper as ach
 
@@ -28,6 +29,6 @@ docx_export_filename = "Acronyms_" + acro_dict_handler.str_file
 if docx_export_filename[-5:] != ".docx":
     docx_export_filename += ".docx"
 userCmdHandler.save_file(
-    config_docx_export_folder, docx_export_filename, False, docxExporter.save_document, obj_output_doc)
+    cv.config_docx_export_folder, docx_export_filename, False, docxExporter.save_document, obj_output_doc)
 
 userCmdHandler.print_ellapsed_time(time.monotonic()-time_begin_acronymate)

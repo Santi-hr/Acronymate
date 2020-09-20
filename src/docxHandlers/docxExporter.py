@@ -1,5 +1,5 @@
 import docx
-from src.common.defines import *
+from src.common import defines as dv
 from src.common import stringHelpers as strHlprs
 from src.cmdInterface import cmdProgressBar
 
@@ -34,7 +34,7 @@ def generate_output_docx(acro_dict_handler):
 
     # --- Footer ---
     section_footer = document.sections[0].footer
-    section_footer.paragraphs[0].text = "ACRONYMATE " + define_acronymate_version + " - SAHR Projects 2020"
+    section_footer.paragraphs[0].text = "ACRONYMATE " + dv.define_acronymate_version + " - SAHR Projects 2020"
     section_footer.paragraphs[0].alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.RIGHT
 
     # --- Document ---

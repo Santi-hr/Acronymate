@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
-from src.common.defines import *
+from src.common import defines as dv
+from src.common import configVars as cv
 from src.common import pathHelpers
 from src.common import stringHelpers as strHlprs
 from src.cmdInterface import ansiColorHelper as ach
@@ -208,8 +209,8 @@ def handle_db_save(acro_dict_handler):
     """
     print("Guardando ")
     print("Resumen de cambios en la base de datos:", acro_dict_handler.obj_db.log_db_changes)
-    folder_output = Path(config_acro_db_folder)
-    db_filename = config_acro_db_file
+    folder_output = Path(cv.config_acro_db_folder)
+    db_filename = cv.config_acro_db_file
     flag_overwrite = True
     # Get a valid folder
     if folder_output.exists():
@@ -228,10 +229,10 @@ def handle_db_save(acro_dict_handler):
     save_file(folder_output, db_filename, flag_overwrite, acro_dict_handler.obj_db.save_db)
 
     # Same simplified logic for the backup file. Backups are not overwriten, less checks needed
-    if config_save_backups: #todo, delete older files?
+    if cv.config_save_backups: #todo, delete older files?
         flag_overwrite = False
-        bak_folder_output = Path(config_acro_db_bkp_folder)
-        aux_filename_list = config_acro_db_file.split('.')
+        bak_folder_output = Path(cv.config_acro_db_bkp_folder)
+        aux_filename_list = cv.config_acro_db_file.split('.')
         bak_db_filename = aux_filename_list[0] + "_backup(" + datetime.now().strftime("%Y%m%d") + ")." + aux_filename_list[1]
 
         pathHelpers.ensure_directory(bak_folder_output)
@@ -414,5 +415,5 @@ def print_logo():
     print(ach.color_str("   AbmmmqMA  MM.           MM  YM.  MM.      ,MP M   `MM.M      MM      M  YM.P'  MM    AbmmmqMA    MM        MM   Y  ,", color))
     print(ach.color_str("  A'     VML `Mb.     ,'   MM   `Mb.`Mb.    ,dP' M     YMM      MM      M  `YM'   MM   A'     VML   MM        MM     ,M", color))
     print(ach.color_str(".AMA.   .AMMA. `\"bmmmd'  .JMML. .JMM. `\"bmmd\"' .JML.    YM    .JMML.  .JML. `'  .JMML.AMA.   .AMMA.JMML.    .JMMmmmmMMM", color))
-    print("Acronymate", define_acronymate_version, " - SAHR Projects 2020 -  Versión para docx solo en Español")
+    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2020")
     print("")
