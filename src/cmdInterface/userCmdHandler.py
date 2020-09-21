@@ -1,18 +1,30 @@
 from datetime import datetime
 from pathlib import Path
-from src.common.defines import *
+from src.common import defines as dv
+from src.common import configVars as cv
+from src.common import configHandler
 from src.common import pathHelpers
 from src.common import stringHelpers as strHlprs
 from src.cmdInterface import ansiColorHelper as ach
 from src.acroHandlers import acroAuxObj
 
 
+def load_config_data():
+    """Loads config data and ask the user for actions in case the loading fails"""
+    if not configHandler.read_config_file():
+        print_error("ERROR - No se ha podido cargar el fichero de configuración")
+        if get_user_confirmation("¿Crear nuevo fichero de configuración con valores por defecto?"):
+            configHandler.generate_default_config_file()
+        else:
+            print("Saliendo ...")
+            exit(-15)
+
+
 def get_docx_filepath_from_user():
     """Asks the user for a word document and returns it"""
     flag_finish = False
     while not flag_finish:
-        print_warn("¡Recuerda usar una copia del documento con todos los cambios aceptados!")
-        input_path = input("Copia la ruta de la carpeta donde se encuentra el archivo a procesar: ")
+        input_path = input("\nCopia la ruta de la carpeta donde se encuentra el archivo a procesar: ")
         try:
             files_in_path = Path(input_path).glob('*.docx')
             path_list = []
@@ -35,28 +47,76 @@ def get_docx_filepath_from_user():
 
     return filepath
 
-
 def process_acro_found(acro_dict_handler):
+    """Main interface, asks first how the acronyms should be processed"""
+    flag_finish = False
+    while not flag_finish:
+        user_command = input("¿Como procesar los acrónimos? (m/s/e/a/h): ").lower()
+        if user_command == 'm':  # -- MANUAL --
+            process_acro_found_one_by_one(acro_dict_handler, flag_auto_command=False)
+            flag_finish = True
+        elif user_command == 's':  # -- SEMIAUTOMATIC --
+            process_acro_found_one_by_one(acro_dict_handler, flag_auto_command=True)
+            flag_finish = True
+        elif user_command == 'e':  # -- EXPORT ONLY --
+            process_acro_found_to_export_empty(acro_dict_handler)
+            flag_finish = True
+        elif user_command == 'a':  # -- ABOUT --
+            print_about_info()
+        elif user_command == 'h':  # -- HELP --
+            print_process_acro_found_modes_help()
+        # -- default --
+        else:
+            print_error("ERROR - Comando no reconocido. Usa el comando 'h' para obtener ayuda")
+
+def print_process_acro_found_modes_help():
+    """Prints acronym processing modes help"""
+    print("  m: Manual    - Se procesa uno a uno cada acrónimo de forma manual.")
+    print("  s: Semi-auto - Sutomáticamente se aceptan los acrónimos que están en la base de datos y se saltan los que")
+    print("                 están añadidos a la Blacklist. Se procesan manualmente aquellos no definidos, con múltiples")
+    print("                 definiciones o cuando la definición de base de datos no coincida con la del documento.")
+    print("  e: Exportar  - Exporta todos los acrónimos encontrados sin incluir sus definiciones.")
+    print("  a: Acerca de - Muestra información del programa.")
+    print("  h: Ayuda     - Muestra esta información.")
+
+def print_about_info():
+    """Prints about info"""
+    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2020")
+    print("Dependencias:")
+    print("    python-docx: Copyright (c) 2013 Steve Canny, https://github.com/scanny")
+    print("    lxml: Copyright (c) 2004 Infrae. All rights reserved.")
+
+def process_acro_found_to_export_empty(acro_dict_handler):
+    for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.remove_accents)):
+        aux_acro_obj = acroAuxObj.acroAuxObj(acro, acro_dict_handler)
+        aux_acro_obj.use_empty_acro()
+
+def process_acro_found_one_by_one(acro_dict_handler, flag_auto_command):
     """Main interface, process acronyms one by one asking the user what to do
 
     :param acro_dict_handler: Acronym dictionary objects
     """
-    flag_auto_command = get_user_confirmation("¿Quieres procesar en modo semi-automático?") #todo: add info
-    for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.remove_accents)):
+    acro_list = sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.remove_accents)
+    acro_idx = 0
+    flag_undo = False  # If True the acronym will try to be reverted
+    while acro_idx < len(acro_list):
         # Create an auxilary object for each acronym
-        aux_acro_obj = acroAuxObj.acroAuxObj(acro, acro_dict_handler)
+        aux_acro_obj = acroAuxObj.acroAuxObj(acro_list[acro_idx], acro_dict_handler)
+        if flag_undo:
+            aux_acro_obj.remove_used_acro()
+        flag_undo = False
 
         # Generate header and prints it
         max_acros = len(acro_dict_handler.acros_found.keys())
-        str_header = (" %s (%d/%d) " % (acro, i+1, max_acros)).center(80,'-')
+        str_header = (" %s (%d/%d) " % (acro_list[acro_idx], acro_idx+1, max_acros)).center(80,'-')
         str_half_header = "_"*round(len(str_header)/2)
 
         print("")
         print(str_header)
 
         # Print acronym matches
-        print(ach.color_str("Coincidencias:", ach.AnsiColorCode.BOLD), acro_dict_handler.acros_found[acro]['Count']) # Matches
-        for context in acro_dict_handler.acros_found[acro]['Context']:
+        print(ach.color_str("Coincidencias:", ach.AnsiColorCode.BOLD), acro_dict_handler.acros_found[acro_list[acro_idx]]['Count']) # Matches
+        for context in acro_dict_handler.acros_found[acro_list[acro_idx]]['Context']:
             print("     ", context)
 
         # Print found definitions
@@ -74,7 +134,7 @@ def process_acro_found(acro_dict_handler):
         flag_finish = False
         while not flag_finish:
             str_def_main, str_def_trans = aux_acro_obj.get_def_strings()
-            print(ach.color_str("  Acrónimo:", ach.AnsiColorCode.BOLD), acro, end="")
+            print(ach.color_str("  Acrónimo:", ach.AnsiColorCode.BOLD), acro_list[acro_idx], end="")
             if aux_acro_obj.is_blacklisted():
                 print(ach.color_str(" (EN LISTA NEGRA)", ach.AnsiColorCode.DARK_YELLOW))
             else:
@@ -91,7 +151,7 @@ def process_acro_found(acro_dict_handler):
                     if aux_acro_obj.is_in_db() and not aux_acro_obj.has_multiple_defs() and not aux_acro_obj.defs_discrepancy():
                         user_command = 'y'
             if user_command == "":
-                user_command = input("Introduce comando (y/n/e/a/s/b/d/h): ").lower()
+                user_command = input("Introduce comando (y/n/e/a/s/b/d/z/m/h): ").lower()
 
             if user_command == 'y':  # -- ACCEPT CHANGES --
                 flag_finish = process_acro_command_accept(aux_acro_obj)
@@ -107,11 +167,16 @@ def process_acro_found(acro_dict_handler):
                 flag_finish = process_acro_command_blacklist(aux_acro_obj)
             elif user_command == 'd':  # -- DELETE --
                 flag_finish = process_acro_command_delete(aux_acro_obj)
+            elif user_command == 'z':  # -- UNDO --
+                flag_finish, acro_idx, flag_undo = process_acro_undo(acro_idx)
+            elif user_command == 'm':  # -- MODE --
+                flag_auto_command = process_acro_change_mode(flag_auto_command)
             elif user_command == 'h':  # -- HELP --
                 print_process_acro_found_help()
             # -- default --
             else:
                 print_error("ERROR - Comando no reconocido. Usa el comando 'h' para obtener ayuda")
+        acro_idx = acro_idx + 1
 
 
 #------ process_acro_found command functions ------#
@@ -183,6 +248,26 @@ def process_acro_command_delete(aux_acro_obj):
         aux_acro_obj.delete_def(idx_def_to_edit)
     return flag_finish
 
+def process_acro_undo(acro_idx):
+    """Returns to previous acronym and marks it to be removed from the used list"""
+    acro_idx = max(acro_idx - 2, -1)  # Index always increments 1 after command
+    flag_finish = True
+    flag_undo = True
+
+    return flag_finish, acro_idx, flag_undo
+
+
+def process_acro_change_mode(flag_auto_command):
+    """Alternates between manual and semiauto modes after getting user confirmation"""
+    flag_output = flag_auto_command
+    if get_user_confirmation("¿Cambiar de modo de procesamiento?"):
+        if flag_auto_command:
+            flag_output = False
+            print("Se cambia a modo manual")
+        else:
+            flag_output = True
+            print("Se cambia a modo semiautomático")
+    return flag_output
 
 def print_process_acro_found_help():
     """Prints acronym handling user commands help"""
@@ -196,6 +281,8 @@ def print_process_acro_found_help():
     print("  b: Blacklist   - Alterna el estado del acrónimo en la lista negra. Si está en esta lista se saltará ")
     print("                   automáticamente al procesar en modo semi-automático.")
     print("  d: Eliminar    - Elimina el acrónimo o una de sus definiciónes de la base de datos.")
+    print("  z: Deshacer    - Retrocede al acrónimo anterior.")
+    print("  m: Modo        - Alterna entre modos de procesamiento manual y semiautomático.")
     print("  h: Ayuda       - Muestra esta información.")
 
 
@@ -208,8 +295,8 @@ def handle_db_save(acro_dict_handler):
     """
     print("Guardando ")
     print("Resumen de cambios en la base de datos:", acro_dict_handler.obj_db.log_db_changes)
-    folder_output = Path(config_acro_db_folder)
-    db_filename = config_acro_db_file
+    folder_output = Path(cv.config_acro_db_folder)
+    db_filename = cv.config_acro_db_file
     flag_overwrite = True
     # Get a valid folder
     if folder_output.exists():
@@ -228,10 +315,10 @@ def handle_db_save(acro_dict_handler):
     save_file(folder_output, db_filename, flag_overwrite, acro_dict_handler.obj_db.save_db)
 
     # Same simplified logic for the backup file. Backups are not overwriten, less checks needed
-    if config_save_backups: #todo, delete older files?
+    if cv.config_save_backups: #todo, delete older files?
         flag_overwrite = False
-        bak_folder_output = Path(config_acro_db_bkp_folder)
-        aux_filename_list = config_acro_db_file.split('.')
+        bak_folder_output = Path(cv.config_acro_db_bkp_folder)
+        aux_filename_list = cv.config_acro_db_file.split('.')
         bak_db_filename = aux_filename_list[0] + "_backup(" + datetime.now().strftime("%Y%m%d") + ")." + aux_filename_list[1]
 
         pathHelpers.ensure_directory(bak_folder_output)
@@ -405,6 +492,7 @@ def print_ok(str_in):
 
 def print_logo():
     """Prints the program starting logo"""
+    # Georgia 11
     color = ach.AnsiColorCode.DARK_YELLOW
     print("")
     print(ach.color_str("      db       .g8\"\"\"bgd `7MM\"\"\"Mq.   .g8\"\"8q. `7MN.   `7MF`YMM'   `MM`7MMM.     ,MMF'     db  MMP\"\"MM\"\"YMM `7MM\"\"\"YMM ", color))
@@ -414,5 +502,5 @@ def print_logo():
     print(ach.color_str("   AbmmmqMA  MM.           MM  YM.  MM.      ,MP M   `MM.M      MM      M  YM.P'  MM    AbmmmqMA    MM        MM   Y  ,", color))
     print(ach.color_str("  A'     VML `Mb.     ,'   MM   `Mb.`Mb.    ,dP' M     YMM      MM      M  `YM'   MM   A'     VML   MM        MM     ,M", color))
     print(ach.color_str(".AMA.   .AMMA. `\"bmmmd'  .JMML. .JMM. `\"bmmd\"' .JML.    YM    .JMML.  .JML. `'  .JMML.AMA.   .AMMA.JMML.    .JMMmmmmMMM", color))
-    print("Acronymate", define_acronymate_version, " - SAHR Projects 2020 -  Versión para docx solo en Español")
+    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2020")
     print("")

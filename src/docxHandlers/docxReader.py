@@ -1,7 +1,8 @@
 import re
 import docx
 import lxml
-from src.common.defines import *
+from src.common import defines as dv
+from src.common import configVars as cv
 from src.common import pathHelpers
 from src.cmdInterface import ansiColorHelper, cmdProgressBar
 
@@ -26,12 +27,12 @@ def extract_acro_word(filepath, acro_dict_handler):
     # the document acronym table that have not been found yet (Ej: ExCOMMS, JdP)
     second_regex = "" # All words combined into a regex. It speeds up drastically the search as only one pass is needed
 
-    if config_use_acro_from_doc_table:  # todo, revisar acceso directo a dict handler
+    if cv.config_use_acro_from_doc_table:  # todo, revisar acceso directo a dict handler
         for acro_key in acro_dict_handler.acros_doc_table.keys():
             if acro_key not in acro_dict_handler.acros_found:
                 second_regex += re.escape(acro_key) + r'|'
 
-    if config_use_non_matching_acro_from_db:
+    if cv.config_use_non_matching_acro_from_db:
         for acro_key in acro_dict_handler.obj_db.list_no_regex:
             if acro_key not in acro_dict_handler.acros_found and acro_key not in second_regex:
                 second_regex += re.escape(acro_key) + r'|'
@@ -78,17 +79,15 @@ def extract_acro_from_str(str_in_raw, acro_dict_handler, regex_in=""):
     """
     # 1. Find Acronyms as regex matches of groups of N Capital Leters. The regex can be changed for other uses
     if regex_in == "":
-        regex_in = define_regex_acro_find
+        regex_in = cv.config_regex_acro_find
 
     # Line breaks are removed to reduce space used when outputting the context string to console
-    str_in = str_in_raw.replace('\n', config_new_line_separator)
+    str_in = str_in_raw.replace('\n', dv.define_new_line_separator)
     re_results = re.finditer(regex_in, str_in)
 
     if re_results:
         # 2. Iterate trough all matches (There could be multiple acronyms in a paragraph)
         for re_result in re_results:
-            if re_result.group(0) == "AEO":
-                a=10
             # 3. Save context for user analysis (Only part of the string)
             context_width = 200
             # Ensure the context width is achieved
@@ -147,7 +146,7 @@ def extract_acro_from_tables(doc_obj, acro_dict_handler, regex_in=""):
             row_cell_list = []
             for cell in row.cells:
                 row_cell_list.append(accepted_text(cell, cell._tc.xml, doc_obj.element.nsmap))
-            row_text = config_tb_col_separator.join(row_cell_list)
+            row_text = dv.define_tb_col_separator.join(row_cell_list)
 
             if j == 0:
                 if is_acronym_table_header(row_text):
@@ -165,7 +164,8 @@ def is_acronym_table_header(row_input):
     :return: True if any match is found
     """
     flag_return = False
-    for header in config_acronym_table_headers:
+    for header_columns in cv.config_acronym_table_headers:
+        header = dv.define_tb_col_separator.join(header_columns)
         if row_input == header:
             flag_return = True
             break
@@ -244,6 +244,6 @@ def extract_acro_from_header(docx_section_obj, acro_dict_handler, nsmap, regex_i
             row_cell_list = []
             for cell in row.cells:
                 row_cell_list.append(accepted_text(cell, cell._tc.xml, nsmap))
-            row_text = config_tb_col_separator.join(row_cell_list)
+            row_text = dv.define_tb_col_separator.join(row_cell_list)
             # Acronym table not expected in header/footers
             extract_acro_from_str(row_text, acro_dict_handler, regex_in=regex_in)
