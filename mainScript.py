@@ -20,6 +20,7 @@ docxReader.extract_acro_word(docx_input_path, acro_dict_handler)
 
 # 3. Present the user the acronyms found
 userCmdHandler.process_acro_found(acro_dict_handler)
+acro_dict_handler.mark_acro_output_as_used()
 
 # 4. Save changes and generate output document
 userCmdHandler.handle_db_save(acro_dict_handler)

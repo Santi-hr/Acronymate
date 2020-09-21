@@ -96,21 +96,27 @@ def process_acro_found_one_by_one(acro_dict_handler, flag_auto_command):
 
     :param acro_dict_handler: Acronym dictionary objects
     """
-    for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.remove_accents)):
+    acro_list = sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.remove_accents)
+    acro_idx = 0
+    flag_undo = False  # If True the acronym will try to be reverted
+    while acro_idx < len(acro_list):
         # Create an auxilary object for each acronym
-        aux_acro_obj = acroAuxObj.acroAuxObj(acro, acro_dict_handler)
+        aux_acro_obj = acroAuxObj.acroAuxObj(acro_list[acro_idx], acro_dict_handler)
+        if flag_undo:
+            aux_acro_obj.remove_used_acro()
+        flag_undo = False
 
         # Generate header and prints it
         max_acros = len(acro_dict_handler.acros_found.keys())
-        str_header = (" %s (%d/%d) " % (acro, i+1, max_acros)).center(80,'-')
+        str_header = (" %s (%d/%d) " % (acro_list[acro_idx], acro_idx+1, max_acros)).center(80,'-')
         str_half_header = "_"*round(len(str_header)/2)
 
         print("")
         print(str_header)
 
         # Print acronym matches
-        print(ach.color_str("Coincidencias:", ach.AnsiColorCode.BOLD), acro_dict_handler.acros_found[acro]['Count']) # Matches
-        for context in acro_dict_handler.acros_found[acro]['Context']:
+        print(ach.color_str("Coincidencias:", ach.AnsiColorCode.BOLD), acro_dict_handler.acros_found[acro_list[acro_idx]]['Count']) # Matches
+        for context in acro_dict_handler.acros_found[acro_list[acro_idx]]['Context']:
             print("     ", context)
 
         # Print found definitions
@@ -128,7 +134,7 @@ def process_acro_found_one_by_one(acro_dict_handler, flag_auto_command):
         flag_finish = False
         while not flag_finish:
             str_def_main, str_def_trans = aux_acro_obj.get_def_strings()
-            print(ach.color_str("  Acrónimo:", ach.AnsiColorCode.BOLD), acro, end="")
+            print(ach.color_str("  Acrónimo:", ach.AnsiColorCode.BOLD), acro_list[acro_idx], end="")
             if aux_acro_obj.is_blacklisted():
                 print(ach.color_str(" (EN LISTA NEGRA)", ach.AnsiColorCode.DARK_YELLOW))
             else:
@@ -145,7 +151,7 @@ def process_acro_found_one_by_one(acro_dict_handler, flag_auto_command):
                     if aux_acro_obj.is_in_db() and not aux_acro_obj.has_multiple_defs() and not aux_acro_obj.defs_discrepancy():
                         user_command = 'y'
             if user_command == "":
-                user_command = input("Introduce comando (y/n/e/a/s/b/d/m/h): ").lower()
+                user_command = input("Introduce comando (y/n/e/a/s/b/d/z/m/h): ").lower()
 
             if user_command == 'y':  # -- ACCEPT CHANGES --
                 flag_finish = process_acro_command_accept(aux_acro_obj)
@@ -161,6 +167,8 @@ def process_acro_found_one_by_one(acro_dict_handler, flag_auto_command):
                 flag_finish = process_acro_command_blacklist(aux_acro_obj)
             elif user_command == 'd':  # -- DELETE --
                 flag_finish = process_acro_command_delete(aux_acro_obj)
+            elif user_command == 'z':  # -- UNDO --
+                flag_finish, acro_idx, flag_undo = process_acro_undo(acro_idx)
             elif user_command == 'm':  # -- MODE --
                 flag_auto_command = process_acro_change_mode(flag_auto_command)
             elif user_command == 'h':  # -- HELP --
@@ -168,6 +176,7 @@ def process_acro_found_one_by_one(acro_dict_handler, flag_auto_command):
             # -- default --
             else:
                 print_error("ERROR - Comando no reconocido. Usa el comando 'h' para obtener ayuda")
+        acro_idx = acro_idx + 1
 
 
 #------ process_acro_found command functions ------#
@@ -239,6 +248,14 @@ def process_acro_command_delete(aux_acro_obj):
         aux_acro_obj.delete_def(idx_def_to_edit)
     return flag_finish
 
+def process_acro_undo(acro_idx):
+    """Returns to previous acronym and marks it to be removed from the used list"""
+    acro_idx = max(acro_idx - 2, -1)  # Index always increments 1 after command
+    flag_finish = True
+    flag_undo = True
+
+    return flag_finish, acro_idx, flag_undo
+
 
 def process_acro_change_mode(flag_auto_command):
     """Alternates between manual and semiauto modes after getting user confirmation"""
@@ -264,6 +281,7 @@ def print_process_acro_found_help():
     print("  b: Blacklist   - Alterna el estado del acrónimo en la lista negra. Si está en esta lista se saltará ")
     print("                   automáticamente al procesar en modo semi-automático.")
     print("  d: Eliminar    - Elimina el acrónimo o una de sus definiciónes de la base de datos.")
+    print("  z: Deshacer    - Retrocede al acrónimo anterior.")
     print("  m: Modo        - Alterna entre modos de procesamiento manual y semiautomático.")
     print("  h: Ayuda       - Muestra esta información.")
 

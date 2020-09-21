@@ -53,4 +53,13 @@ class AcroDictHandler:
         for i, definition in enumerate(def_list_in):
             if selection_list_in[i]:
                 self.acros_output[acro_in]['Def'].append(definition)
-        self.obj_db.add_db_last_use(acro_in, self.str_file)
+
+    def remove_acro_output(self, acro_in):
+        """Removes acro from the output list"""
+        if acro_in in self.acros_output:
+            del self.acros_output[acro_in]
+
+    def mark_acro_output_as_used(self):
+        """Stores in a list what acronyms were used. Call this function before exporting"""
+        for acro in self.acros_output:
+            self.obj_db.add_db_last_use(acro, self.str_file)

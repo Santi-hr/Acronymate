@@ -161,6 +161,10 @@ class acroAuxObj:
         """Sets the acro to output without definition. Used for the direct export mode"""
         self.dict_handler.update_acro_output(self.acro, [{'Main': ""}], [True])
 
+    def remove_used_acro(self):
+        """Removes acro from the output list"""
+        self.dict_handler.remove_acro_output(self.acro)
+
     def get_str_pretty_definition_list(self, def_list):
         """Return formatted string with all definition ordered"""
         str_out = ""
