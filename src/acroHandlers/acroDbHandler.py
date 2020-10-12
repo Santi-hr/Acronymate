@@ -111,7 +111,7 @@ class AcroDbHandler:
         except FileNotFoundError as e:
             userCmdHandler.print_db_except_file_not_found(e)
         except json.decoder.JSONDecodeError as e:
-            userCmdHandler.print_db_except_decode(e)
+            userCmdHandler.print_db_except_decode_error(e)
         except KeyError as e:
             userCmdHandler.print_db_except_key_error(e)
         return flag_is_correct
@@ -133,7 +133,7 @@ class AcroDbHandler:
         except FileNotFoundError as e:
             userCmdHandler.print_db_except_file_not_found(e)
         except json.decoder.JSONDecodeError as e:
-            userCmdHandler.print_db_except_decode(e)
+            userCmdHandler.print_db_except_decode_error(e)
 
         self.__check_acros_db()
         self.acros_db = self.full_db['Acronyms']
@@ -171,13 +171,13 @@ class AcroDbHandler:
             #Todo: Sanitize: Remove blacklist duplicates
 
         if 'Admin_data' not in self.full_db:
-            userCmdHandler.print_db_check_no_admin_data()
+            userCmdHandler.print_db_check_admin_data_wrong()
             self.full_db['Admin_data'] = dict()
             self.__set_admin_data_in_db()
             flag_status = False
         else:
             if 'Date' not in self.full_db['Admin_data']:
-                userCmdHandler.print_db_check_no_admin_data()
+                userCmdHandler.print_db_check_admin_data_wrong()
                 flag_status = False
 
         if flag_status:

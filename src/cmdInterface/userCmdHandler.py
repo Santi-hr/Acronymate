@@ -534,7 +534,7 @@ def get_translated_str_sections():
 def print_db_except_file_not_found(e):
     print_error("No se encuentra el archivo DB: %s" % str(e))
 
-def print_db_except_file_not_found(e):
+def print_db_except_decode_error(e):
     print_error("Archivo DB no parseable: %s" % str(e))
 
 def print_db_except_key_error(e):
