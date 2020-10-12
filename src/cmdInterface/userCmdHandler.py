@@ -23,8 +23,10 @@ def load_config_data():
 def get_docx_filepath_from_user():
     """Asks the user for a word document and returns it"""
     flag_finish = False
+    print("")
+    print(ach.color_str("INFO: Escribe config como ruta para acceder al menú de configuración", ach.AnsiColorCode.DARK_CYAN))
     while not flag_finish:
-        input_path = input("\nCopia la ruta de la carpeta donde se encuentra el archivo a procesar: ")
+        input_path = input("Copia la ruta de la carpeta donde se encuentra el archivo a procesar: ")
         try:
             files_in_path = Path(input_path).glob('*.docx')
             path_list = []
@@ -47,6 +49,7 @@ def get_docx_filepath_from_user():
 
     return filepath
 
+
 def process_acro_found(acro_dict_handler):
     """Main interface, asks first how the acronyms should be processed"""
     flag_finish = False
@@ -68,6 +71,7 @@ def process_acro_found(acro_dict_handler):
         # -- default --
         else:
             print_error("ERROR - Comando no reconocido. Usa el comando 'h' para obtener ayuda")
+
 
 def print_process_acro_found_modes_help():
     """Prints acronym processing modes help"""
@@ -504,3 +508,49 @@ def print_logo():
     print(ach.color_str(".AMA.   .AMMA. `\"bmmmd'  .JMML. .JMM. `\"bmmd\"' .JML.    YM    .JMML.  .JML. `'  .JMML.AMA.   .AMMA.JMML.    .JMMmmmmMMM", color))
     print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2020")
     print("")
+
+
+########### PRINT FUNCTIONS FOR OTHER SCRIPTS #############
+""" These functions are here to unify the console outputs in order to reduce the translation objects to be created 
+and managed"""
+
+#### DocxReader ####
+def print_acronym_search_start():
+    print("Extrayendo acrónimos del documento")
+
+def print_acronym_search_second_pass():
+    print("Repasando la búsqueda con acrónimos especiales")
+
+def get_translated_str_tables():
+    return "Tablas"
+
+def get_translated_str_paragraphs():
+    return "Párrafos"
+
+def get_translated_str_sections():
+    return "Secciones"
+
+#### acroDbHandler ####
+def print_db_except_file_not_found(e):
+    print_error("No se encuentra el archivo DB: %s" % str(e))
+
+def print_db_except_file_not_found(e):
+    print_error("Archivo DB no parseable: %s" % str(e))
+
+def print_db_except_key_error(e):
+    print_error("Error al acceder al diccionario: %s" % str(e))
+
+def print_db_loading_info(db_file_name):
+    print("Cargando la base de datos de acrónimos (%s) ..." % db_file_name)
+
+def print_db_checking():
+    print("Comprobando estado de la base de datos ...")
+
+def print_db_check_no_acros():
+    print_warn("No se encuentran acrónimos, creando diccionario vacío")
+
+def print_db_check_empty_acro(key):
+    print_warn("El acrónimo %s está vacío" % key)
+
+def print_db_check_admin_data_wrong():
+    print_warn("La sección Admin_data no es correcta, no se podrá verificar el guardado seguro")
