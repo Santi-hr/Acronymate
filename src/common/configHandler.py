@@ -6,7 +6,7 @@ from src.common import translationHandler
 """Contains the functions that update the config variables to avoid importing them to other files"""
 #TODO: I know JSON is not an ideal configuration file. Change to one that allow comments if possible
 
-def generate_default_config_file():
+def save_config_file():
     """Generates a default config file using the variables in configVars. See the file for variable comments.
     This functions needs to manually be updated if new configuration values are added.
     """

@@ -5,6 +5,7 @@ from src.common import configVars as cv
 from src.common import configHandler
 from src.common import pathHelpers
 from src.common import stringHelpers as strHlprs
+from src.common import translationHandler
 from src.cmdInterface import ansiColorHelper as ach
 from src.acroHandlers import acroAuxObj
 
@@ -14,7 +15,7 @@ def load_config_data():
     if not configHandler.read_config_file():
         print_error(_("ERROR - No se ha podido cargar el fichero de configuración"))
         if get_user_confirmation(_("¿Crear nuevo fichero de configuración con valores por defecto?")):
-            configHandler.generate_default_config_file()
+            configHandler.save_config_file()
         else:
             print(_("Saliendo ..."))
             exit(-15)
@@ -63,33 +64,70 @@ def config_menu():
     flag_finish = False
     while not flag_finish:
         print(_("Opciones:"))
-        print(_("  1 - Idioma:"), cv.config_locale)
-        print(_("  2 - Nombre de la DB:"), cv.config_acro_db_file)
-        print(_("  3 - Ruta de la DB:"), cv.config_acro_db_folder)
-        print(_("  4 - Longitud mínima de acrónimo:"), cv.config_min_acro_len)
-        option = get_num_from_user(_("Selecciona que quieres modificar"), 0, 4)
+        config_print_options()
+        option = get_num_from_user(_("Selecciona que quieres modificar"), 0, 5)
         if option == 1:
-            print("Modificando idioma")
-            cv.config_locale = input()
+            config_locale()
         elif option == 2:
-            print("Modificando filename")
-            cv.config_acro_db_file = input()
+            config_db_filename()
         elif option == 3:
-            print("Modificando db folder")
-            cv.config_acro_db_folder = input()
+            config_db_folder()
         elif option == 4:
-            print("Modificando min acro")
-            cv.config_min_acro_len = input()
+            config_min_acro_len()
+        elif option == 5:
+            config_backup()
 
         if not get_user_confirmation(_("¿Desea hacer algún otro cambio?")):
             flag_finish = True
 
+    config_print_options()
     if get_user_confirmation(_("¿Desea guardar los cambios?")):
-        configHandler.generate_default_config_file()
+        configHandler.save_config_file()
     else:
         load_config_data()
 
     configHandler.apply_config()
+    print("")
+
+
+def config_print_options():
+    print(_("  1 - Idioma:"), cv.config_locale)
+    print(_("  2 - Nombre de la DB:"), cv.config_acro_db_file)
+    print(_("  3 - Ruta de la DB:"), cv.config_acro_db_folder)
+    print(_("  4 - Longitud mínima de acrónimo:"), cv.config_min_acro_len)
+    print(_("  5 - Guardar backups:"), cv.config_save_backups)
+
+
+def config_locale():
+    """Allows user to select between the available locales"""
+    locale_list = translationHandler.get_locales_list()
+    for i, loc in enumerate(locale_list):
+        print("  %d - %s" % (i+1, loc))
+    option = get_num_from_user(_("Selecciona idioma"), 1, len(locale_list))
+    cv.config_locale = locale_list[option-1]
+
+
+def config_db_filename():
+    new_filename = input(_("Introduce el nombre de la base de datos de acrónimos: ")).strip()
+    path_check = Path(cv.config_acro_db_folder + new_filename)
+    print(path_check, path_check.exists())
+    cv.config_acro_db_file = new_filename
+
+
+def config_db_folder():
+    new_path = input(_("Introduce la carpeta de la base de datos de acrónimos: ")).strip()
+    path_check = Path(new_path)
+    print(path_check, path_check.exists())
+    cv.config_acro_db_folder = new_path
+
+
+def config_min_acro_len():
+    print(_("Un acrónimo se detecta como N letras mayúsculas seguidas. Se recomienda una longitud mínima de 2 o 3"))
+    cv.config_min_acro_len = get_num_from_user(_("Introduce la longitud mínima"), 2, 10)
+
+
+def config_backup():
+    cv.config_save_backups = get_user_confirmation("¿Activar el guardado de copias de seguridad?")
 
 
 def process_acro_found(acro_dict_handler):
