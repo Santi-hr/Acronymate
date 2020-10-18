@@ -20,7 +20,7 @@ class AcroDbHandler:
         self.list_no_regex = []  # Todo: Convert to iterable object?
 
         # Load DB after object creation
-        self.__load_acros_db()
+        self.load_acros_db()
 
     def add_db_last_use(self, acro_in, str_last_use_file):
         """Updates the ['Last_uses'] information of acronym to add the current docx file in use
@@ -103,22 +103,24 @@ class AcroDbHandler:
         # acronyms DB file is in a shared folder and conexion is lost)
         flag_is_correct = False
         try:
-            db_file_path = Path(cv.config_acro_db_folder) / cv.config_acro_db_file
+            db_file_path = Path(cv.config_acro_db_path)
             with open(db_file_path, 'r', encoding="UTF-8") as db_file:
                 aux_full_db = json.load(db_file)
             if aux_full_db['Admin_data']['Date'] == self.str_prev_date:
                 flag_is_correct = True
-        except (FileNotFoundError, json.decoder.JSONDecodeError) as e:
-            userCmdHandler.print_error("No se puede abrir el archivo DB: %s" % str(e))
+        except FileNotFoundError as e:
+            userCmdHandler.print_db_except_file_not_found(e)
+        except json.decoder.JSONDecodeError as e:
+            userCmdHandler.print_db_except_decode_error(e)
         except KeyError as e:
-            userCmdHandler.print_error("Error al acceder al diccionario: %s" % str(e))
+            userCmdHandler.print_db_except_key_error(e)
         return flag_is_correct
 
-    def __load_acros_db(self):
+    def load_acros_db(self):
         """Loads the acronyms database file"""
-        print("Cargando la base de datos de acrónimos (%s) ..." % cv.config_acro_db_file)
+        userCmdHandler.print_db_loading_info(cv.config_acro_db_path)
         try:
-            db_file_path = Path(cv.config_acro_db_folder) / cv.config_acro_db_file
+            db_file_path = Path(cv.config_acro_db_path)
             with open(db_file_path, 'r', encoding="UTF-8") as db_file:
                 self.full_db = json.load(db_file)
                 try:
@@ -129,9 +131,9 @@ class AcroDbHandler:
                     with open(db_file_path, 'r', encoding="UTF-8") as db_file:
                         self.full_db_ori = json.load(db_file)
         except FileNotFoundError as e:
-            userCmdHandler.print_error("Archivo DB no encontrado: %s" % str(e))
+            userCmdHandler.print_db_except_file_not_found(e)
         except json.decoder.JSONDecodeError as e:
-            userCmdHandler.print_error("Archivo DB no parseable: %s" % str(e))
+            userCmdHandler.print_db_except_decode_error(e)
 
         self.__check_acros_db()
         self.acros_db = self.full_db['Acronyms']
@@ -141,10 +143,10 @@ class AcroDbHandler:
 
     def __check_acros_db(self):
         """Checks the loaded database filled. Fixes missing labels if it can"""
-        print("Comprobando estado de la base de datos ...")
+        userCmdHandler.print_db_checking()
         flag_status = True
         if 'Acronyms' not in self.full_db:
-            userCmdHandler.print_warn("No se encuentran acrónimos, creando diccionario vacío")
+            userCmdHandler.print_db_check_no_acros()
             self.full_db['Acronyms'] = dict()
             flag_status = False
         else:
@@ -152,7 +154,7 @@ class AcroDbHandler:
                 if 'Def' not in self.full_db['Acronyms'][key]:
                     self.full_db['Acronyms'][key]['Def'] = [{'Main': ""}]
                 if self.full_db['Acronyms'][key]['Def'][0]['Main'] == "":
-                    userCmdHandler.print_warn("El acrónimo %s está vacío" % key)
+                    userCmdHandler.print_db_check_empty_acro(key)
                     flag_status = False
 
                 if 'Properties' not in self.full_db['Acronyms'][key]:
@@ -169,14 +171,13 @@ class AcroDbHandler:
             #Todo: Sanitize: Remove blacklist duplicates
 
         if 'Admin_data' not in self.full_db:
-            userCmdHandler.print_warn("No se encuentra la sección Admin_data, no se podrá verificar el guardado seguro")
+            userCmdHandler.print_db_check_admin_data_wrong()
             self.full_db['Admin_data'] = dict()
             self.__set_admin_data_in_db()
             flag_status = False
         else:
             if 'Date' not in self.full_db['Admin_data']:
-                userCmdHandler.print_warn(
-                    "No se encuentra la fecha en Admin_data, no se podrá verificar el guardado seguro")
+                userCmdHandler.print_db_check_admin_data_wrong()
                 flag_status = False
 
         if flag_status:

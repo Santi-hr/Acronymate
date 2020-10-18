@@ -9,14 +9,24 @@
             [
                 "Acrónimo",
                 "Significado"
+            ],
+            [
+                "Acronym",
+                "Definition"
+            ],
+            [
+                "Acronym",
+                "Meaning"
             ]
         ]
     },
     "Paths": {
         "Export folder": "output",
-        "DB folder": "data/",
-        "DB filename": "acronymate_DB.json",
+        "DB path": "data/acronymate_DB.json",
         "DB backup folder": "data/backup/"
+    },
+    "Localization": {
+        "Language": "es"
     },
     "Output Table": {
         "Font": "Verdana",

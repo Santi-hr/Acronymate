@@ -1,4 +1,5 @@
 import time
+from src.common import translationHandler
 from src.acroHandlers import acroDictHandler
 from src.common import configVars as cv
 from src.docxHandlers import docxExporter, docxReader
@@ -15,7 +16,7 @@ userCmdHandler.load_config_data()
 acro_dict_handler = acroDictHandler.AcroDictHandler()
 
 # 2. Get docx file and process it
-docx_input_path = userCmdHandler.get_docx_filepath_from_user()
+docx_input_path = userCmdHandler.get_docx_filepath_from_user(acro_dict_handler)
 docxReader.extract_acro_word(docx_input_path, acro_dict_handler)
 
 # 3. Present the user the acronyms found
@@ -33,3 +34,4 @@ userCmdHandler.save_file(
     cv.config_docx_export_folder, docx_export_filename, False, docxExporter.save_document, obj_output_doc)
 
 userCmdHandler.print_ellapsed_time(time.monotonic()-time_begin_acronymate)
+time.sleep(2)
