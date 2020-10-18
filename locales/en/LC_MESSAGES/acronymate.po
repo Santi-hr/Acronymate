@@ -1,0 +1,385 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2020-10-12 21:11+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: src\cmdInterface\userCmdHandler.py:20
+msgid "ERROR - No se ha podido cargar el fichero de configuración"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:21
+msgid "¿Crear nuevo fichero de configuración con valores por defecto?"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:24
+msgid "Saliendo ..."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:32
+msgid "INFO: Escribe 'config' como ruta para acceder al menú de configuración"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:35
+msgid "Copia la ruta de la carpeta donde se encuentra el archivo a procesar: "
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:47
+msgid "ERROR - No se encuentran archivos '.docx' en la ruta seleccionada"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:51
+msgid "ERROR - El nombre de archivo, el nombre de directorio o la sintaxis de la etiqueta del volumen no son correctos"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:52
+msgid "Seleciona el archivo a procesar"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:63
+msgid "¿Como procesar los acrónimos?"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:84
+msgid "  m: Manual    - Se procesa uno a uno cada acrónimo de forma manual."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:85
+msgid "  s: Semi-auto - Automáticamente se aceptan los acrónimos que están en la base de datos y se saltan los que"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:86
+msgid "                 están añadidos a la Blacklist. Se procesan manualmente aquellos no definidos, con múltiples"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:87
+msgid "                 definiciones o cuando la definición de base de datos no coincida con la del documento."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:88
+msgid "  e: Exportar  - Exporta todos los acrónimos encontrados sin incluir sus definiciones."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:89
+msgid "  a: Acerca de - Muestra información del programa."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:90
+msgid "  h: Ayuda     - Muestra esta información."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:96
+msgid "Dependencias:"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:131
+msgid "Coincidencias:"
+msgstr "Matches:"
+
+#: src\cmdInterface\userCmdHandler.py:139
+msgid "Tabla del documento: "
+msgstr "Document table: "
+
+#: src\cmdInterface\userCmdHandler.py:141
+msgid "      Base de datos: "
+msgstr "      Database: "
+
+#: src\cmdInterface\userCmdHandler.py:144
+msgid "Discrepancia detectada entre base de datos y tabla del documento"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:151
+msgid "  Acrónimo:"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:153
+msgid " (EN LISTA NEGRA)"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:156
+msgid " Principal:"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:157
+msgid "Traducción:"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:168
+msgid "Introduce comando"
+msgstr "Input command"
+
+#: src\cmdInterface\userCmdHandler.py:201
+msgid "Se guarda el acrónimo"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:205
+msgid "ERROR - Comprueba que el acrónimo está definido y que al menos 1 definición está seleccionada"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:210
+msgid "Se descarta el acrónimo"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:219
+msgid "¿Cual quieres editar?"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:236
+msgid "Elige que definiciones seleccionar (Ej: 1,2,4): "
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:239
+msgid "Esta opción solo está disponible para acrónimos con múltiples definiciones"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:251
+msgid ""
+"ATENCIÓN - El borrado eliminará la definición de la base de datos (si está en esta)\n"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:252
+msgid "Para no usar el acrónimo usa el comando 'n', si hay múltiples definiciones usa 's' para elegir cuales usar"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:256
+msgid "¿Cual quieres eliminar?"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:259
+msgid "Se elimina el acrónimo"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:276
+msgid "¿Cambiar de modo de procesamiento?"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:279
+msgid "Se cambia a modo manual"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:282
+msgid "Se cambia a modo semiautomático"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:287
+msgid "  y: Aceptar     - Guarda el acrónimo con la información mostrada y actualiza la base de datos."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:288
+msgid "  n: Saltar      - Descarta el acrónimo y continúa al siguiente."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:289
+msgid "  e: Editar      - Modifica una definición. En principal se indica la definición en el idioma de origen."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:290
+msgid "                   En traducción se indica la definición en Español. Dejar vacío si no es necesaria."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:291
+msgid "  a: Añadir      - Añade una definición adicional."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:292
+msgid "  s: Seleccionar - Selecciona las definiciones a usar. Aquellas deseleccionadas (en gris) no se incluirán en la tabla "
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:293
+msgid "                   de acrónimos de salida. La diferencia con eliminar es que la definición se mantiene en la base de datos."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:294
+msgid "  b: Blacklist   - Alterna el estado del acrónimo en la lista negra. Si está en esta lista se saltará "
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:295
+msgid "                   automáticamente al procesar en modo semi-automático."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:296
+msgid "  d: Eliminar    - Elimina el acrónimo o una de sus definiciónes de la base de datos."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:297
+msgid "  z: Deshacer    - Retrocede al acrónimo anterior."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:298
+msgid "  m: Modo        - Alterna entre modos de procesamiento manual y semiautomático."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:299
+msgid "  h: Ayuda       - Muestra esta información."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:309
+msgid ""
+"Guardando\n"
+"Resumen de cambios en la base de datos:"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:318
+msgid "ATENCIÓN - Es posible que otro usuario haya modificado el archivo de base de datos. Se recomienda guardar con otro nombre y revisar los cambios manualmente."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:324
+#: src\cmdInterface\userCmdHandler.py:337
+msgid "La ruta %s no es accesible"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:367
+msgid "Error de permisos al guardar. Se intentará con otro nombre"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:370
+msgid "Se ha producido un error al guardar %s"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:371
+msgid "¿Quieres volver a intentar?"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:374
+msgid "ERROR - Carpeta \"%s\" no encontrada al guardar"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:376
+msgid "Se ha guardado el fichero: %s"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:386
+msgid "Introduce la ruta de una carpeta: "
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:392
+msgid "ERROR - La ruta introducida no existe o no es una carpeta"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:400
+msgid "Introduce definición: "
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:402
+msgid "ERROR - La definición no puede estar vacía"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:405
+msgid "Introduce traducción: "
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:425
+msgid "ERROR - Introduce un número entero en el rango especificado"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:427
+msgid "ERROR - Formato incorrecto. Introduce número entero"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:431
+msgid "¿Desea continuar?"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:447
+msgid "ERROR - Comando no reconocido. Elige entre sí('y') y no('n')"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:451
+msgid "Introduce enteros separados por comas: "
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:468
+msgid "ERROR - Formato incorrecto. Introduce números enteros separados por comas"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:475
+msgid "ERROR - Comando no reconocido. Usa el comando 'h' para obtener ayuda"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:490
+msgid "Han transcurrido %s:%s:%s desde el inicio del programa"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:531
+msgid "Extrayendo acrónimos del documento"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:534
+msgid "Repasando la búsqueda con acrónimos especiales"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:537
+msgid "Tablas"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:540
+msgid "Párrafos"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:543
+msgid "Secciones"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:547
+msgid "No se encuentra el archivo DB: %s"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:550
+msgid "Archivo DB no parseable: %s"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:553
+msgid "Error al acceder al diccionario: %s"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:556
+msgid "Cargando la base de datos de acrónimos (%s) ..."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:559
+msgid "Comprobando estado de la base de datos ..."
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:562
+msgid "No se encuentran acrónimos, creando diccionario vacío"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:565
+msgid "El acrónimo %s está vacío"
+msgstr ""
+
+#: src\cmdInterface\userCmdHandler.py:568
+msgid "La sección Admin_data no es correcta, no se podrá verificar el guardado seguro"
+msgstr ""
+
+#: src\docxHandlers\docxExporter.py:19
+msgid "Generando word con tabla de acrónimos"
+msgstr ""
+
+#: src\docxHandlers\docxExporter.py:20
+msgid "Acrónimos"
+msgstr ""
+
+#: src\docxHandlers\docxExporter.py:47
+msgid "Acrónimos extraidos de: %s"
+msgstr ""
+
+#: src\docxHandlers\docxExporter.py:54
+msgid "Acrónimo"
+msgstr ""
+
+#: src\docxHandlers\docxExporter.py:55
+msgid "Definición"
+msgstr ""
+

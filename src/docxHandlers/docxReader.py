@@ -72,7 +72,7 @@ def accepted_text(docx_elem, docx_elem_xml, doc_nsmap):
 def extract_acro_from_str(str_in_raw, acro_dict_handler, regex_in=""):
     """Finds acronyms in a text string and stores them into a dictionary
 
-    :param str_in: Input text string
+    :param str_in_raw: Input text string
     :param acro_dict_handler: Acronym dictionary objects
     :param regex_in: Regex string
     """

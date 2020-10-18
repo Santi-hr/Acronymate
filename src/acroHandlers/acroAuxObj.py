@@ -173,13 +173,13 @@ class acroAuxObj:
             for i, definition in enumerate(def_list):
                 if i != 0:
                     str_out += ", "
-                str_out += "{'Main': '%s'" % definition['Main']
+                str_out += "{'%s'" % definition['Main']
                 if 'Translation' in definition:
-                    str_out += ", 'Translation': '%s'" % definition['Translation']
+                    str_out += ", '%s'" % definition['Translation']
                 str_out += "}"
             str_out += "]"
         else:
-            str_out = ach.color_str("No encontrado", ach.AnsiColorCode.GRAY)
+            str_out = ach.color_str(_("No encontrado"), ach.AnsiColorCode.GRAY)
         return str_out
 
     def get_def_strings(self):

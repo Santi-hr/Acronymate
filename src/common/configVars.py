@@ -6,7 +6,8 @@ from src.common import defines as dv
 config_min_acro_len = 2
 
 # Expected/possible document acronym table headers
-config_acronym_table_headers = [["Acrónimo", "Definición"], ["Acrónimo", "Significado"]]
+config_acronym_table_headers = [
+    ["Acrónimo", "Definición"], ["Acrónimo", "Significado"],["Acronym", "Definition"], ["Acronym", "Meaning"]]
 
 # --------- FILE PATHS -------------
 config_acro_db_folder = "data/"             # Folder where database file is stored
@@ -16,6 +17,9 @@ config_acro_db_file = "acronymate_DB.json"  # Database filename (You can keep mu
 config_docx_export_folder = "output"        # Folder where output acronym docx will be saved
 
 config_acro_db_bkp_folder = "data/backup/"  # Folder where databases backups will be saved
+
+# --------- LOCALIZATION -------------
+config_locale = "es"
 
 # --------- OUTPUT TABLE -------------
 # Configuration for output table. It is recommended to generate a test document before real use to prevent errors

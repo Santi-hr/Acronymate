@@ -1,6 +1,7 @@
 import json
 from src.common import defines as dv
 from src.common import configVars as cv
+from src.common import translationHandler
 
 """Contains the functions that update the config variables to avoid importing them to other files"""
 #TODO: I know JSON is not an ideal configuration file. Change to one that allow comments if possible
@@ -19,6 +20,9 @@ def generate_default_config_file():
             "DB folder": cv.config_acro_db_folder,
             "DB filename": cv.config_acro_db_file,
             "DB backup folder": cv.config_acro_db_bkp_folder
+        },
+        "Localization": {
+            "Language": cv.config_locale
         },
         "Output Table": {
             "Font": cv.config_output_font,
@@ -57,6 +61,8 @@ def read_config_file():
             cv.config_acro_db_file = dict_config["Paths"]["DB filename"]
             cv.config_acro_db_bkp_folder = dict_config["Paths"]["DB backup folder"]
 
+            cv.config_locale = dict_config["Localization"]["Language"]
+
             cv.config_output_font = dict_config["Output Table"]["Font"]
             cv.config_output_font_size = dict_config["Output Table"]["Font size"]
             cv.config_output_font_size_header = dict_config["Output Table"]["Font size header"]
@@ -72,3 +78,8 @@ def read_config_file():
             flag_success = False
 
     return flag_success
+
+
+def apply_config():
+    """Calls to other functions that need to use the set configuration"""
+    translationHandler.change_translation(cv.config_locale)

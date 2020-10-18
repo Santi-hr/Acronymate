@@ -11,8 +11,8 @@ def generate_output_docx(acro_dict_handler):
     :param acro_dict_handler: Acronym dictionary objects
     :return: python-docx generated document object
     """
-    print("Generando word con tabla de acrónimos")
-    obj_progress_bar = cmdProgressBar.CmdProgressBar(len(acro_dict_handler.acros_output.keys()), "Acrónimos")
+    print(_("Generando word con tabla de acrónimos"))
+    obj_progress_bar = cmdProgressBar.CmdProgressBar(len(acro_dict_handler.acros_output.keys()), _("Acrónimos"))
 
     document = docx.Document()
 
@@ -39,15 +39,15 @@ def generate_output_docx(acro_dict_handler):
     section_footer.paragraphs[0].alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.RIGHT
 
     # --- Document ---
-    document.add_paragraph('Acrónimos extraidos de: %s' % acro_dict_handler.str_file)
+    document.add_paragraph(_('Acrónimos extraidos de: %s') % acro_dict_handler.str_file)
 
     # --- Table ---
     table = document.add_table(rows=1, cols=2)
     # table.obj_normal_style = 'LightShading-Accent1'
     table.autofit = True
     hdr_cells = table.rows[0].cells
-    hdr_cells[0].text = 'Acrónimo'
-    hdr_cells[1].text = 'Definición'
+    hdr_cells[0].text = _('Acrónimo')
+    hdr_cells[1].text = _('Definición')
     for i in range(len(hdr_cells)):
         hdr_cells[i].paragraphs[0].runs[0].font.bold = True
         hdr_cells[i].paragraphs[0].style = obj_header_style
