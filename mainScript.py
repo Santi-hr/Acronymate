@@ -1,5 +1,4 @@
 import time
-from src.common import translationHandler
 from src.acroHandlers import acroDictHandler
 from src.common import configVars as cv
 from src.docxHandlers import docxExporter, docxReader
@@ -34,4 +33,4 @@ userCmdHandler.save_file(
     cv.config_docx_export_folder, docx_export_filename, False, docxExporter.save_document, obj_output_doc)
 
 userCmdHandler.print_ellapsed_time(time.monotonic()-time_begin_acronymate)
-time.sleep(2)
+time.sleep(cv.config_seconds_before_exit)

@@ -23,7 +23,7 @@
     "Paths": {
         "Export folder": "output",
         "DB path": "data/acronymate_DB.json",
-        "DB backup folder": "data/backup/"
+        "DB backup relative folder": "backup/"
     },
     "Localization": {
         "Language": "es"
@@ -37,5 +37,8 @@
         "Use acronym document table": true,
         "Use non matching acronyms from DB": true,
         "Save backups": true
+    },
+    "Other": {
+        "Seconds before exit": 1
     }
 }

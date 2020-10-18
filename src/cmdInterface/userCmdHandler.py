@@ -94,6 +94,7 @@ def config_menu(acro_dict_handler):
 
 
 def config_print_options():
+    """Prints the configurable items"""
     print(_("  1 - Idioma:"), cv.config_locale)
     print(_("  2 - Ruta de la DB:"), cv.config_acro_db_path)
     print(_("  3 - Longitud mínima de acrónimo:"), cv.config_min_acro_len)
@@ -108,6 +109,7 @@ def config_locale():
 
 
 def config_db_path():
+    """Allows user to select a new db file. Both by setting it directly or by searching in a folder"""
     flag_finish = False
     while not flag_finish:
         print(_("Introduce la ruta de la carpeta donde se encuentra el fichero de base de datos de acrónimos o la ruta directa al fichero"))
@@ -121,7 +123,6 @@ def config_db_path():
                         new_path = input_path
                         flag_finish = True
                 else:
-                    print("Ruta a carpeta")
                     list_files = [x.name for x in input_path.glob("*.json") if x.is_file()]
                     new_path = input_path / list_files[get_user_option_from_list(list_files)]
                     flag_finish = True
@@ -130,23 +131,27 @@ def config_db_path():
         except OSError:
             print_error(_("ERROR - La ruta o fichero introducido no existe"))
 
-    cv.config_acro_db_path = new_path
+    cv.config_acro_db_path = str(new_path)
     config_show_configuration_result(cv.config_acro_db_path)
 
 
 def config_min_acro_len():
+    """Allows the user to set the minimum acronym length"""
     print(_("Un acrónimo se detecta como N letras mayúsculas seguidas. Se recomienda una longitud mínima de 2 o 3"))
     cv.config_min_acro_len = get_num_from_user(_("Introduce la longitud mínima"), 2, 10)
     config_show_configuration_result(cv.config_min_acro_len)
 
 
 def config_backup():
+    """Allows the user to enable or disable backup saves"""
     cv.config_save_backups = get_user_confirmation("¿Activar el guardado de copias de seguridad?")
     config_show_configuration_result(cv.config_save_backups)
 
 
 def config_show_configuration_result(configured_var):
+    """Shows the configured variable in green for verification by the user"""
     print_ok(_("Se ha configurado el siguiente valor: %s") % str(configured_var))
+
 
 def process_acro_found(acro_dict_handler):
     """Main interface, asks first how the acronyms should be processed"""
@@ -424,7 +429,7 @@ def handle_db_save(acro_dict_handler):
     # Same simplified logic for the backup file. Backups are not overwriten, less checks needed
     if cv.config_save_backups:  # todo, delete older files?
         flag_overwrite = False
-        bak_folder_output = Path(cv.config_acro_db_bkp_folder)
+        bak_folder_output = Path(cv.config_acro_db_path).parent / cv.config_acro_db_bkp_rel_folder
         aux_filename_list = Path(cv.config_acro_db_path).name.split('.')
         bak_db_filename = aux_filename_list[0] + "_backup(" + datetime.now().strftime("%Y%m%d") + ")." + aux_filename_list[1]
 

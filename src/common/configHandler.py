@@ -18,7 +18,7 @@ def save_config_file():
         "Paths": {
             "Export folder": cv.config_docx_export_folder,
             "DB path": cv.config_acro_db_path,
-            "DB backup folder": cv.config_acro_db_bkp_folder
+            "DB backup relative folder": cv.config_acro_db_bkp_rel_folder
         },
         "Localization": {
             "Language": cv.config_locale
@@ -32,6 +32,9 @@ def save_config_file():
             "Use acronym document table": cv.config_use_acro_from_doc_table,
             "Use non matching acronyms from DB": cv.config_use_non_matching_acro_from_db,
             "Save backups": cv.config_save_backups,
+        },
+        "Other": {
+            "Seconds before exit": cv.config_use_acro_from_doc_table,
         },
     }
 
@@ -57,7 +60,7 @@ def read_config_file():
 
             cv.config_docx_export_folder = dict_config["Paths"]["Export folder"]
             cv.config_acro_db_path = dict_config["Paths"]["DB path"]
-            cv.config_acro_db_bkp_folder = dict_config["Paths"]["DB backup folder"]
+            cv.config_acro_db_bkp_rel_folder = dict_config["Paths"]["DB backup relative folder"]
 
             cv.config_locale = dict_config["Localization"]["Language"]
 
@@ -68,6 +71,8 @@ def read_config_file():
             cv.config_use_acro_from_doc_table = dict_config["Flags"]["Use acronym document table"]
             cv.config_use_non_matching_acro_from_db = dict_config["Flags"]["Use non matching acronyms from DB"]
             cv.config_save_backups = dict_config["Flags"]["Save backups"]
+
+            cv.config_seconds_before_exit = dict_config["Other"]["Seconds before exit"]
 
             # UPDATE DEFINES
             cv.config_regex_acro_find = dv.define_regex_acro_find_raw.replace(
@@ -81,3 +86,4 @@ def read_config_file():
 def apply_config():
     """Calls to other functions that need to use the set configuration"""
     translationHandler.change_translation(cv.config_locale)
+    cv.config_regex_acro_find = dv.define_regex_acro_find_raw.replace("rep_min_acro_len", str(cv.config_min_acro_len))

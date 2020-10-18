@@ -13,7 +13,7 @@ config_acronym_table_headers = [
 # --------- FILE PATHS -------------
 config_acro_db_path = "data/acronymate_DB.json"  # Path to database file is stored (You can keep multiple DB files for different projects)
 config_docx_export_folder = "output"  # Folder where output acronym docx will be saved
-config_acro_db_bkp_folder = "data/backup/"  # Folder where databases backups will be saved
+config_acro_db_bkp_rel_folder = "backup/"  # Folder where databases backups will be saved. Relative to db_path
 
 # --------- LOCALIZATION -------------
 config_locale = "es"
@@ -29,6 +29,9 @@ config_output_font_size_header = 9  # Font size (points) for the acronym table h
 config_use_acro_from_doc_table = True  # Searches non regex matching acronyms from the document
 config_use_non_matching_acro_from_db = True  # Adds to the search non regex matching acronyms added to the database
 config_save_backups = True  # Set to True to enable the creation of backups after each usage
+
+# --------- OTHER -------------
+config_seconds_before_exit = 1  # Seconds before closing the console. Gives some time to see last output
 
 # ......... NOT DIRECTLY CONFIGURABLE ..........
 """ The following variables are configurable by changing one of the above, they should not appear on the config file """
