@@ -17,8 +17,7 @@ def save_config_file():
         },
         "Paths": {
             "Export folder": cv.config_docx_export_folder,
-            "DB folder": cv.config_acro_db_folder,
-            "DB filename": cv.config_acro_db_file,
+            "DB path": cv.config_acro_db_path,
             "DB backup folder": cv.config_acro_db_bkp_folder
         },
         "Localization": {
@@ -57,8 +56,7 @@ def read_config_file():
             cv.config_acronym_table_headers = dict_config["Acronym Search"]["Acronym table headers"]
 
             cv.config_docx_export_folder = dict_config["Paths"]["Export folder"]
-            cv.config_acro_db_folder = dict_config["Paths"]["DB folder"]
-            cv.config_acro_db_file = dict_config["Paths"]["DB filename"]
+            cv.config_acro_db_path = dict_config["Paths"]["DB path"]
             cv.config_acro_db_bkp_folder = dict_config["Paths"]["DB backup folder"]
 
             cv.config_locale = dict_config["Localization"]["Language"]

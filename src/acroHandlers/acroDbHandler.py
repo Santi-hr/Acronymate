@@ -20,7 +20,7 @@ class AcroDbHandler:
         self.list_no_regex = []  # Todo: Convert to iterable object?
 
         # Load DB after object creation
-        self.__load_acros_db()
+        self.load_acros_db()
 
     def add_db_last_use(self, acro_in, str_last_use_file):
         """Updates the ['Last_uses'] information of acronym to add the current docx file in use
@@ -103,7 +103,7 @@ class AcroDbHandler:
         # acronyms DB file is in a shared folder and conexion is lost)
         flag_is_correct = False
         try:
-            db_file_path = Path(cv.config_acro_db_folder) / cv.config_acro_db_file
+            db_file_path = Path(cv.config_acro_db_path)
             with open(db_file_path, 'r', encoding="UTF-8") as db_file:
                 aux_full_db = json.load(db_file)
             if aux_full_db['Admin_data']['Date'] == self.str_prev_date:
@@ -116,11 +116,11 @@ class AcroDbHandler:
             userCmdHandler.print_db_except_key_error(e)
         return flag_is_correct
 
-    def __load_acros_db(self):
+    def load_acros_db(self):
         """Loads the acronyms database file"""
-        userCmdHandler.print_db_loading_info(cv.config_acro_db_file)
+        userCmdHandler.print_db_loading_info(cv.config_acro_db_path)
         try:
-            db_file_path = Path(cv.config_acro_db_folder) / cv.config_acro_db_file
+            db_file_path = Path(cv.config_acro_db_path)
             with open(db_file_path, 'r', encoding="UTF-8") as db_file:
                 self.full_db = json.load(db_file)
                 try:

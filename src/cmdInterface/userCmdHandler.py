@@ -22,7 +22,7 @@ def load_config_data():
     configHandler.apply_config()
 
 
-def get_docx_filepath_from_user():
+def get_docx_filepath_from_user(acro_dict_handler):
     """Asks the user for a word document and returns it"""
     flag_finish = False
     print("")
@@ -31,7 +31,7 @@ def get_docx_filepath_from_user():
     while not flag_finish:
         input_path = input(_("Copia la ruta de la carpeta donde se encuentra el archivo a procesar: "))
         if input_path.strip() == "config":
-            config_menu()
+            config_menu(acro_dict_handler)
         else:
             try:
                 files_in_path = Path(input_path).glob('*.docx')
@@ -49,32 +49,32 @@ def get_docx_filepath_from_user():
                     flag_finish = True
             except OSError:
                 print_error(_("ERROR - El nombre de archivo, el nombre de directorio o la sintaxis de la etiqueta del volumen no son correctos"))
-            user_num = get_num_from_user(_("Seleciona el archivo a procesar"), lower=1, upper=len(path_list))
+    user_num = get_num_from_user(_("Seleciona el archivo a procesar"), lower=1, upper=len(path_list))
 
     filepath = path_list[user_num-1]
 
     return filepath
 
 
-def config_menu():
+def config_menu(acro_dict_handler):
     print("")
     print(_("Menú de configuración rápida")) # Todo: actualizar
     print_warn(_("Este menú solo contiene algunas de las opciones. Para el resto de configuración, modificar manualmente el archivo 'config.json' que acompaña al ejecutable"))
 
     flag_finish = False
+    flag_db_path_updated = False
     while not flag_finish:
         print(_("Opciones:"))
         config_print_options()
-        option = get_num_from_user(_("Selecciona que quieres modificar"), 0, 5)
+        option = get_num_from_user(_("Selecciona que quieres modificar"), 0, 4)
         if option == 1:
             config_locale()
         elif option == 2:
-            config_db_filename()
+            config_db_path()
+            flag_db_path_updated = True
         elif option == 3:
-            config_db_folder()
-        elif option == 4:
             config_min_acro_len()
-        elif option == 5:
+        elif option == 4:
             config_backup()
 
         if not get_user_confirmation(_("¿Desea hacer algún otro cambio?")):
@@ -83,52 +83,70 @@ def config_menu():
     config_print_options()
     if get_user_confirmation(_("¿Desea guardar los cambios?")):
         configHandler.save_config_file()
+
+        configHandler.apply_config()
+        if flag_db_path_updated:
+            acro_dict_handler.obj_db.load_acros_db()
     else:
         load_config_data()
 
-    configHandler.apply_config()
     print("")
 
 
 def config_print_options():
     print(_("  1 - Idioma:"), cv.config_locale)
-    print(_("  2 - Nombre de la DB:"), cv.config_acro_db_file)
-    print(_("  3 - Ruta de la DB:"), cv.config_acro_db_folder)
-    print(_("  4 - Longitud mínima de acrónimo:"), cv.config_min_acro_len)
-    print(_("  5 - Guardar backups:"), cv.config_save_backups)
+    print(_("  2 - Ruta de la DB:"), cv.config_acro_db_path)
+    print(_("  3 - Longitud mínima de acrónimo:"), cv.config_min_acro_len)
+    print(_("  4 - Guardar backups:"), cv.config_save_backups)
 
 
 def config_locale():
     """Allows user to select between the available locales"""
     locale_list = translationHandler.get_locales_list()
-    for i, loc in enumerate(locale_list):
-        print("  %d - %s" % (i+1, loc))
-    option = get_num_from_user(_("Selecciona idioma"), 1, len(locale_list))
-    cv.config_locale = locale_list[option-1]
+    cv.config_locale = locale_list[get_user_option_from_list(locale_list)]
+    config_show_configuration_result(cv.config_locale)
 
 
-def config_db_filename():
-    new_filename = input(_("Introduce el nombre de la base de datos de acrónimos: ")).strip()
-    path_check = Path(cv.config_acro_db_folder + new_filename)
-    print(path_check, path_check.exists())
-    cv.config_acro_db_file = new_filename
+def config_db_path():
+    flag_finish = False
+    while not flag_finish:
+        print(_("Introduce la ruta de la carpeta donde se encuentra el fichero de base de datos de acrónimos o la ruta directa al fichero"))
+        try:
+            input_path = Path(input(_("Introduce ruta: ")).strip())
+            if input_path.exists():
+                if input_path.is_file():
+                    if input_path.suffix != ".json":
+                        print_error(_("ERROR - El fichero debe acabar en '.json'"))
+                    else:
+                        new_path = input_path
+                        flag_finish = True
+                else:
+                    print("Ruta a carpeta")
+                    list_files = [x.name for x in input_path.glob("*.json") if x.is_file()]
+                    new_path = input_path / list_files[get_user_option_from_list(list_files)]
+                    flag_finish = True
+            else:
+                raise OSError
+        except OSError:
+            print_error(_("ERROR - La ruta o fichero introducido no existe"))
 
-
-def config_db_folder():
-    new_path = input(_("Introduce la carpeta de la base de datos de acrónimos: ")).strip()
-    path_check = Path(new_path)
-    print(path_check, path_check.exists())
-    cv.config_acro_db_folder = new_path
+    cv.config_acro_db_path = new_path
+    config_show_configuration_result(cv.config_acro_db_path)
 
 
 def config_min_acro_len():
     print(_("Un acrónimo se detecta como N letras mayúsculas seguidas. Se recomienda una longitud mínima de 2 o 3"))
     cv.config_min_acro_len = get_num_from_user(_("Introduce la longitud mínima"), 2, 10)
+    config_show_configuration_result(cv.config_min_acro_len)
 
 
 def config_backup():
     cv.config_save_backups = get_user_confirmation("¿Activar el guardado de copias de seguridad?")
+    config_show_configuration_result(cv.config_save_backups)
 
+
+def config_show_configuration_result(configured_var):
+    print_ok(_("Se ha configurado el siguiente valor: %s") % str(configured_var))
 
 def process_acro_found(acro_dict_handler):
     """Main interface, asks first how the acronyms should be processed"""
@@ -384,12 +402,13 @@ def handle_db_save(acro_dict_handler):
     :param acro_dict_handler: Acronym dictionary objects
     """
     print(_("Guardando\nResumen de cambios en la base de datos:"), acro_dict_handler.obj_db.log_db_changes)
-    folder_output = Path(cv.config_acro_db_folder)
-    db_filename = cv.config_acro_db_file
+    path_output = Path(cv.config_acro_db_path)
+    folder_output = path_output.parent
+    db_filename = path_output.name
+
     flag_overwrite = True
     # Get a valid folder
     if folder_output.exists():
-        path_output = folder_output / db_filename
         if path_output.exists():  # Skip checks if db file does't exist yet
             if not acro_dict_handler.obj_db.check_db_integrity():  # Check if file was updated by another user before saving
                 print_warn(_("ATENCIÓN - Es posible que otro usuario haya modificado el archivo de base de datos. Se recomienda guardar con otro nombre y revisar los cambios manualmente."))
@@ -406,7 +425,7 @@ def handle_db_save(acro_dict_handler):
     if cv.config_save_backups:  # todo, delete older files?
         flag_overwrite = False
         bak_folder_output = Path(cv.config_acro_db_bkp_folder)
-        aux_filename_list = cv.config_acro_db_file.split('.')
+        aux_filename_list = Path(cv.config_acro_db_path).name.split('.')
         bak_db_filename = aux_filename_list[0] + "_backup(" + datetime.now().strftime("%Y%m%d") + ")." + aux_filename_list[1]
 
         pathHelpers.ensure_directory(bak_folder_output)
@@ -545,6 +564,17 @@ def get_user_idx_list(str_in=_("Introduce enteros separados por comas: ")):
                 print_error(_("ERROR - Formato incorrecto. Introduce números enteros separados por comas"))
                 break
     return return_list
+
+
+def get_user_option_from_list(list_in):
+    """Shows the user all the items of a list and ask him to chose one
+
+    :param list_in: List with options
+    :return: User selected index
+    """
+    for i, loc in enumerate(list_in):
+        print("  %d - %s" % (i+1, loc))
+    return (get_num_from_user(_("Selecciona opción"), 1, len(list_in)))-1  # Return index starting from 0
 
 
 ########### MULTIPLE USED PRINTS #############

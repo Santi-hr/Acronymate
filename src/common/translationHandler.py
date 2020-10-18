@@ -1,5 +1,5 @@
 import gettext
-import pathlib
+from pathlib import Path
 
 # Global variables for translation
 localedir = "locales"#resource_path('locales')
@@ -18,6 +18,6 @@ def change_translation(lang):
 
 def get_locales_list():
     """Returns list of folders in the locale directory"""
-    path = pathlib.Path(localedir).glob('*')
+    path = Path(localedir).glob('*')
     dirs = [x.name for x in path if x.is_dir()]
     return dirs
