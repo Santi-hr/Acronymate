@@ -196,7 +196,7 @@ def print_about_info():
 
 
 def process_acro_found_to_export_empty(acro_dict_handler):
-    for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.remove_accents)):
+    for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.acro_ordering)):
         aux_acro_obj = acroAuxObj.acroAuxObj(acro, acro_dict_handler)
         aux_acro_obj.use_empty_acro()
 
@@ -207,7 +207,7 @@ def process_acro_found_one_by_one(acro_dict_handler, flag_auto_command):
     :param acro_dict_handler: Acronym dictionary objects
     :param flag_auto_command: Set to true to enter in semiautomatic mode
     """
-    acro_list = sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.remove_accents)
+    acro_list = sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.acro_ordering)
     acro_idx = 0
     flag_undo = False  # If True the acronym will try to be reverted
     while acro_idx < len(acro_list):

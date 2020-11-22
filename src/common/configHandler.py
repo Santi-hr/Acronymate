@@ -34,7 +34,7 @@ def save_config_file():
             "Save backups": cv.config_save_backups,
         },
         "Other": {
-            "Seconds before exit": cv.config_use_acro_from_doc_table,
+            "Seconds before exit": cv.config_seconds_before_exit,
         },
     }
 
