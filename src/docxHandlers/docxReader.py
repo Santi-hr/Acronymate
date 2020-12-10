@@ -184,10 +184,7 @@ def process_acro_table(acro_table, acro_dict_handler):
     # Todo: Allow for custom tables via configure file
     # Fixme: Prevent explosion if table has merged lines
     if not acro_dict_handler.flag_doc_table_processed and len(acro_table.rows[0].cells) == 2:
-        for i, row in enumerate(acro_table.rows):
-            if i == 0:  # Skip header
-                continue
-
+        for i, row in enumerate(acro_table.rows[1:]):  # Skipping header (Row 1)
             # Get raw data
             acronym = row.cells[0].text.strip()
             definitions = row.cells[1].text.split('\n')

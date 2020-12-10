@@ -43,7 +43,7 @@ def generate_output_docx(acro_dict_handler):
 
     # --- Table ---
     table = document.add_table(rows=1, cols=2)
-    # table.obj_normal_style = 'LightShading-Accent1'
+    # In case we would like to use some styling: table.obj_normal_style = 'LightShading-Accent1'
     table.autofit = True
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = _('Acrónimo')

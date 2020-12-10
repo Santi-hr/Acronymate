@@ -50,7 +50,7 @@ def read_config_file():
     try:
         with open("acronymate_config.json", 'r', encoding="UTF-8") as cfg_file:
             dict_config = json.load(cfg_file)
-    except (FileNotFoundError, json.decoder.JSONDecodeError) as e:
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
         flag_success = False
 
     if flag_success:

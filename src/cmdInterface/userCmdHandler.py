@@ -197,7 +197,7 @@ def print_about_info():
 
 def process_acro_found_to_export_empty(acro_dict_handler):
     for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.acro_ordering)):
-        aux_acro_obj = acroAuxObj.acroAuxObj(acro, acro_dict_handler)
+        aux_acro_obj = acroAuxObj.AcroAuxObj(acro, acro_dict_handler)
         aux_acro_obj.use_empty_acro()
 
 
@@ -212,7 +212,7 @@ def process_acro_found_one_by_one(acro_dict_handler, flag_auto_command):
     flag_undo = False  # If True the acronym will try to be reverted
     while acro_idx < len(acro_list):
         # Create an auxilary object for each acronym
-        aux_acro_obj = acroAuxObj.acroAuxObj(acro_list[acro_idx], acro_dict_handler)
+        aux_acro_obj = acroAuxObj.AcroAuxObj(acro_list[acro_idx], acro_dict_handler)
         if flag_undo:
             aux_acro_obj.remove_used_acro()
         flag_undo = False
@@ -289,7 +289,6 @@ def process_acro_found_one_by_one(acro_dict_handler, flag_auto_command):
             else:
                 print_error_unrecognized_command()
         acro_idx = acro_idx + 1
-
 
 #------ process_acro_found command functions ------#
 def process_acro_command_accept(aux_acro_obj):
@@ -452,12 +451,11 @@ def save_file(folder, filename, overwrite, save_fcn, *args):
     """
     flag_finish = False
     while not flag_finish:
-        path_output = Path(folder)
-        if path_output.exists():
-            path_output = path_output / filename
-            if not overwrite:
-                if path_output.exists():
-                    path_output = pathHelpers.get_not_existing_file(path_output)
+        path_folder_output = Path(folder)
+        if path_folder_output.exists():
+            path_output = path_folder_output / filename
+            if not overwrite and path_output.exists():
+                path_output = pathHelpers.get_not_existing_file(path_output)
             try:
                 if args:  # Assume good use of args by developer
                     save_fcn(path_output, args[0])
@@ -472,7 +470,7 @@ def save_file(folder, filename, overwrite, save_fcn, *args):
                 if not get_user_confirmation(_("¿Quieres volver a intentar?")):
                     flag_finish = True
         else:
-            print_error(_('ERROR - Carpeta "%s" no encontrada al guardar') % path_output)
+            print_error(_('ERROR - Carpeta "%s" no encontrada al guardar') % path_folder_output)
             folder = get_existing_folder_from_user()
     print_ok(_("Se ha guardado el fichero: %s") % path_output)
 

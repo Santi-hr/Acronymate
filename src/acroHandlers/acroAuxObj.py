@@ -1,7 +1,7 @@
 from src.cmdInterface import ansiColorHelper as ach
 
 
-class acroAuxObj:
+class AcroAuxObj:
     """Class to handle one acronym while user updates it"""
     def __init__(self, acro, dict_handler):
         """Class constructor
@@ -28,7 +28,7 @@ class acroAuxObj:
 
         # Fill the selected list
         self.selected_def = []
-        for i in range(len(self.proposed_def)):
+        for _ in range(len(self.proposed_def)):
             self.selected_def.append(True)
 
     def has_multiple_defs(self):
