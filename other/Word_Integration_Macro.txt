@@ -1,0 +1,48 @@
+
+Sub RunAcronymate()
+'
+' RunAcronymate Macro
+' Extracts acronyms by using the Acronymate executable
+'
+    'User configurable variables
+    Dim Mode As String
+    Dim ExecutablePath As String
+    Dim TempFolderPath As String
+    
+    'Processing mode
+    'Options:
+    '    "e": Export only, without definitions
+    '    "a": Auto, uses DB/doc table to 'guess' the best definition
+    '    "s": Semiauto, need input from the user to add the missing definitions. This mode updates the DB.
+    Mode = "e"
+    'Path where "Acronymate.exe" can be found
+    ExecutablePath = "C:\Users\xxxx\xxxx\Acronymate_folder"
+    'Path to a folder where a temp file can be stored. For example the output folder of Acronymate
+    TempFolderPath = "C:\Users\xxxx\xxxx\Acronymate_folder\output"
+    
+    'Show msg - stop if user does not click Yes
+    Title = "Extract Acronyms using Acronymate"
+    Msg = "This macro launches Acronymate.exe and passes it " & _
+        "a copy of this file to export all the acronyms to a " & _
+        "new document. Configured mode: " & Mode & vbCr & vbCr & _
+        "Do you want to continue?"
+    
+    If MsgBox(Msg, vbYesNo + vbQuestion, Title) <> vbYes Then
+        Exit Sub
+    End If
+    
+    'Create file copy in temp directory
+    Dim TempFilePath As String
+    TempFilePath = TempFolderPath + "\TempDocCopy.docx"
+    
+    Application.Documents.Add ActiveDocument.FullName
+    ActiveDocument.SaveAs2 (TempFilePath)
+    ActiveDocument.Close
+    
+    'Launch Acronymate. It will bring the output document when it finishes its processing
+    Dim RetVal
+    ChDir ExecutablePath
+    'Set last number to 0 to hide the terminal
+    RetVal = Shell(ExecutablePath + "\Acronymate.exe -i " + TempFilePath + " -m " + Mode + " -fn " + ActiveDocument.Name, 1)'
+    
+End Sub

@@ -7,15 +7,19 @@ from src.common import pathHelpers
 from src.cmdInterface import ansiColorHelper, cmdProgressBar, userCmdHandler
 
 
-def extract_acro_word(filepath, acro_dict_handler):
+def extract_acro_word(filepath, acro_dict_handler, filename_overwrite=None):
     """Main function. Opens a docx file and extracts its acronyms
 
     :param filepath: Path string to a docx file
     :param acro_dict_handler: Acronym dictionary objects
+    :param filename_overwrite: String that overwrites the loaded file name stored in the acro handler
     """
     # 1. Open file
     doc_obj = docx.Document(filepath)
     acro_dict_handler.str_file = pathHelpers.get_filename_from_path(filepath)
+    # Overwrite filename if needed. This is used with the word extension to keep only one temp file
+    if filename_overwrite:
+        acro_dict_handler.str_file = filename_overwrite
 
     # 2. Search for acronyms and extract them
     userCmdHandler.print_acronym_search_start()

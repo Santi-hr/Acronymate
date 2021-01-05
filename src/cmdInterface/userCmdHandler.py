@@ -153,27 +153,39 @@ def config_show_configuration_result(configured_var):
     print_ok(_("Se ha configurado el siguiente valor: %s") % str(configured_var))
 
 
-def process_acro_found(acro_dict_handler):
-    """Main interface, asks first how the acronyms should be processed"""
-    flag_finish = False
-    while not flag_finish:
-        user_command = input(_("¿Como procesar los acrónimos?") + " (m/s/e/a/h): ").lower()
-        if user_command == 'm':  # -- MANUAL --
-            process_acro_found_one_by_one(acro_dict_handler, flag_auto_command=False)
-            flag_finish = True
-        elif user_command == 's':  # -- SEMIAUTOMATIC --
-            process_acro_found_one_by_one(acro_dict_handler, flag_auto_command=True)
-            flag_finish = True
-        elif user_command == 'e':  # -- EXPORT ONLY --
+def process_acro_found(acro_dict_handler, overwrite_mode):
+    """Main interface, asks first how the acronyms should be processed
+
+    :param acro_dict_handler: Acronym dictionary object
+    :param overwrite_mode:
+    """
+    if overwrite_mode == "":
+        # Get processing mode from user
+        flag_finish = False
+        while not flag_finish:
+            user_command = input(_("¿Como procesar los acrónimos?") + " (m/s/e/a/h): ").lower()
+            if user_command == 'm':  # -- MANUAL --
+                process_acro_found_one_by_one(acro_dict_handler, flag_auto_command=False)
+                flag_finish = True
+            elif user_command == 's':  # -- SEMIAUTOMATIC --
+                process_acro_found_one_by_one(acro_dict_handler, flag_auto_command=True)
+                flag_finish = True
+            elif user_command == 'e':  # -- EXPORT ONLY --
+                process_acro_found_to_export_empty(acro_dict_handler)
+                flag_finish = True
+            elif user_command == 'a':  # -- ABOUT --
+                print_about_info()
+            elif user_command == 'h':  # -- HELP --
+                print_process_acro_found_modes_help()
+            # -- default --
+            else:
+                print_error_unrecognized_command()
+    else:
+        # Use mode from arguments
+        if overwrite_mode == 'e' or overwrite_mode == 'a':
             process_acro_found_to_export_empty(acro_dict_handler)
-            flag_finish = True
-        elif user_command == 'a':  # -- ABOUT --
-            print_about_info()
-        elif user_command == 'h':  # -- HELP --
-            print_process_acro_found_modes_help()
-        # -- default --
         else:
-            print_error_unrecognized_command()
+            exit(-2) #Fixme: Raise an exception and only exit on the main script
 
 
 def print_process_acro_found_modes_help():
@@ -189,7 +201,7 @@ def print_process_acro_found_modes_help():
 
 def print_about_info():
     """Prints about info"""
-    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2020")
+    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2021")
     print(_("Dependencias:"))
     print("    python-docx: Copyright (c) 2013 Steve Canny, https://github.com/scanny")
     print("    lxml: Copyright (c) 2004 Infrae. All rights reserved.")
@@ -205,7 +217,7 @@ def process_acro_found_to_export_empty(acro_dict_handler):
 def process_acro_found_one_by_one(acro_dict_handler, flag_auto_command):
     """Main interface, process acronyms one by one asking the user what to do
 
-    :param acro_dict_handler: Acronym dictionary objects
+    :param acro_dict_handler: Acronym dictionary object
     :param flag_auto_command: Set to true to enter in semiautomatic mode
     """
     acro_list = sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.acro_ordering)
@@ -404,7 +416,7 @@ def print_process_acro_found_help():
 def handle_db_save(acro_dict_handler):
     """Handles interface for the update of the database
 
-    :param acro_dict_handler: Acronym dictionary objects
+    :param acro_dict_handler: Acronym dictionary object
     """
     print(_("Guardando\nResumen de cambios en la base de datos:"), acro_dict_handler.obj_db.log_db_changes)
     path_output = Path(cv.config_acro_db_path)
@@ -449,6 +461,7 @@ def save_file(folder, filename, overwrite, save_fcn, *args):
     :param overwrite: If false the filename will be change to avoid overwrite
     :param save_fcn: Function called if the folder and filename is correct
     :param args: Arguments passed to save_fcn
+    :return: Final path for saved file
     """
     flag_finish = False
     while not flag_finish:
@@ -474,6 +487,7 @@ def save_file(folder, filename, overwrite, save_fcn, *args):
             print_error(_('ERROR - Carpeta "%s" no encontrada al guardar') % path_folder_output)
             folder = get_existing_folder_from_user()
     print_ok(_("Se ha guardado el fichero: %s") % path_output)
+    return str(path_output)
 
 
 ########### GET USER INPUT FCNS #############
@@ -629,7 +643,7 @@ def print_logo():
     print(ach.color_str("   AbmmmqMA  MM.           MM  YM.  MM.      ,MP M   `MM.M      MM      M  YM.P'  MM    AbmmmqMA    MM        MM   Y  ,", color))
     print(ach.color_str("  A'     VML `Mb.     ,'   MM   `Mb.`Mb.    ,dP' M     YMM      MM      M  `YM'   MM   A'     VML   MM        MM     ,M", color))
     print(ach.color_str(".AMA.   .AMMA. `\"bmmmd'  .JMML. .JMM. `\"bmmd\"' .JML.    YM    .JMML.  .JML. `'  .JMML.AMA.   .AMMA.JMML.    .JMMmmmmMMM", color))
-    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2020")
+    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2021")
     print("")
 
 

@@ -23,7 +23,7 @@ class TestDocxMethods(unittest.TestCase):
 
         self.len_acros_expected = len(self.acros_expected)
 
-        # sys.stdout = open(os.devnull, "w")  # Redirect standard output to not get prints during testing
+        sys.stdout = open(os.devnull, "w")  # Redirect standard output to not get prints during testing
 
     def tearDown(self):
         sys.stdout = sys.__stdout__

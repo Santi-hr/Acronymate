@@ -1,4 +1,4 @@
-lxml==4.6.1
+lxml==4.6.2
 pip==20.2.4
 python-docx==0.8.10
 setuptools==50.3.2
