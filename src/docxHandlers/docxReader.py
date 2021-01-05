@@ -189,7 +189,7 @@ def process_acro_table(acro_table, acro_dict_handler):
             acronym = row.cells[0].text.strip()
             definitions = row.cells[1].text.split('\n')
 
-            if acronym == "":
+            if acronym == "":  # Skip empty rows
                 continue
 
             # Process definitions
@@ -197,11 +197,22 @@ def process_acro_table(acro_table, acro_dict_handler):
                 main_def = raw_def.strip()
                 trans_def = ""
 
-                if '(' in main_def:
-                    re_match = re.fullmatch("(.*)\((.*)\)", main_def)  # Todo: Fix "Def (Expl) (Def_es (Expl_es))"
-                    if re_match:
-                        main_def = re_match.group(1).strip()
-                        trans_def = re_match.group(2).strip()
+                if ')' in main_def:
+                    # Finds the opening and closing parenthesis of the translated part to slice the definition
+                    opening_par = -1
+                    closing_par = main_def.rfind(')')
+                    groups_open = 1  # Group = (). Assumes proper closing of parenthesis
+                    for idx in range(closing_par - 1, 0, -1):
+                        char = main_def[idx]
+                        if main_def[idx] == ')':
+                            groups_open += 1
+                        elif main_def[idx] == '(':
+                            groups_open -= 1
+                        if groups_open == 0:
+                            opening_par = idx
+                            break
+                    trans_def = main_def[opening_par + 1:closing_par].strip()
+                    main_def = main_def[:opening_par - 1].strip()
 
                 acro_dict_handler.add_acronym_doc_table(acronym, main_def, trans_def)
     acro_dict_handler.flag_doc_table_processed = True

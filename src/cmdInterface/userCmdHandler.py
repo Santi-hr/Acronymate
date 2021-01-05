@@ -196,6 +196,7 @@ def print_about_info():
 
 
 def process_acro_found_to_export_empty(acro_dict_handler):
+    """Sets all acronyms as used without definition. Used to generate a quick export"""
     for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.acro_ordering)):
         aux_acro_obj = acroAuxObj.AcroAuxObj(acro, acro_dict_handler)
         aux_acro_obj.use_empty_acro()
