@@ -22,7 +22,7 @@ If the script proves to be useful I will invest more time to it.
 If you wish to use this script for other languages than Spanish or English please check if the regex in common/defines contains all the special characters your language uses.
 
 # How to use
-Launch *mainScript.py*, or the precompiled executable for Windows, and follow the instructions of the user interface.
+Launch *acronymateCmd.py*, or the precompiled executable for Windows, and follow the instructions of the user interface.
 Currently, all user interaction is done through the console. Use the command 'h' to get help. 
 
 A detailed documentation and instructions coming soon.
