@@ -144,7 +144,7 @@ def config_min_acro_len():
 
 def config_backup():
     """Allows the user to enable or disable backup saves"""
-    cv.config_save_backups = get_user_confirmation("¿Activar el guardado de copias de seguridad?")
+    cv.config_save_backups = get_user_confirmation(_("¿Activar el guardado de copias de seguridad?"))
     config_show_configuration_result(cv.config_save_backups)
 
 
@@ -209,6 +209,7 @@ def print_about_info():
 
 def process_acro_found_to_export_empty(acro_dict_handler):
     """Sets all acronyms as used without definition. Used to generate a quick export"""
+    acro_dict_handler.obj_db.needs_save = False  # Prevent modifying the DB as no changes are introduced
     for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.acro_ordering)):
         aux_acro_obj = acroAuxObj.AcroAuxObj(acro, acro_dict_handler)
         aux_acro_obj.use_empty_acro()
@@ -418,39 +419,41 @@ def handle_db_save(acro_dict_handler):
 
     :param acro_dict_handler: Acronym dictionary object
     """
-    print(_("Guardando\nResumen de cambios en la base de datos:"), acro_dict_handler.obj_db.log_db_changes)
-    path_output = Path(cv.config_acro_db_path)
-    folder_output = path_output.parent
-    db_filename = path_output.name
+    # Only save for manual/semi modes. In export/auto modes there are no valid changes and it would generate too many backups
+    if acro_dict_handler.obj_db.needs_save:
+        print(_("Guardando\nResumen de cambios en la base de datos:"), acro_dict_handler.obj_db.log_db_changes)
+        path_output = Path(cv.config_acro_db_path)
+        folder_output = path_output.parent
+        db_filename = path_output.name
 
-    flag_overwrite = True
-    # Get a valid folder
-    if folder_output.exists():
-        if path_output.exists():  # Skip checks if db file does't exist yet
-            if not acro_dict_handler.obj_db.check_db_integrity():  # Check if file was updated by another user before saving
-                print_warn(_("ATENCIÓN - Es posible que otro usuario haya modificado el archivo de base de datos. Se recomienda guardar con otro nombre y revisar los cambios manualmente."))
-                if get_user_confirmation("¿Guardar con otro nombre?"):
-                    db_filename_list = db_filename.split('.')
-                    db_filename = db_filename_list[0]+"_unverfied."+db_filename_list[1]
-                    flag_overwrite = False
-    else:
-        print_error(_("La ruta %s no es accesible") % folder_output)
-        folder_output = get_existing_folder_from_user()
-    save_file(folder_output, db_filename, flag_overwrite, acro_dict_handler.obj_db.save_db)
+        flag_overwrite = True
+        # Get a valid folder
+        if folder_output.exists():
+            if path_output.exists():  # Skip checks if db file does't exist yet
+                if not acro_dict_handler.obj_db.check_db_integrity():  # Check if file was updated by another user before saving
+                    print_warn(_("ATENCIÓN - Es posible que otro usuario haya modificado el archivo de base de datos. Se recomienda guardar con otro nombre y revisar los cambios manualmente."))
+                    if get_user_confirmation(_("¿Guardar con otro nombre?")):
+                        db_filename_list = db_filename.split('.')
+                        db_filename = db_filename_list[0]+"_unverfied."+db_filename_list[1]
+                        flag_overwrite = False
+        else:
+            print_error(_("La ruta %s no es accesible") % folder_output)
+            folder_output = get_existing_folder_from_user()
+        save_file(folder_output, db_filename, flag_overwrite, acro_dict_handler.obj_db.save_db)
 
-    # Same simplified logic for the backup file. Backups are not overwriten, less checks needed
-    if cv.config_save_backups:  # todo, delete older files?
-        flag_overwrite = False
-        bak_folder_output = Path(cv.config_acro_db_path).parent / cv.config_acro_db_bkp_rel_folder
-        aux_filename_list = Path(cv.config_acro_db_path).name.split('.')
-        bak_db_filename = aux_filename_list[0] + "_backup(" + datetime.now().strftime("%Y%m%d") + ")." + aux_filename_list[1]
+        # Same simplified logic for the backup file. Backups are not overwriten, less checks needed
+        if cv.config_save_backups:  # todo, delete older files?
+            flag_overwrite = False
+            bak_folder_output = Path(cv.config_acro_db_path).parent / cv.config_acro_db_bkp_rel_folder
+            aux_filename_list = Path(cv.config_acro_db_path).name.split('.')
+            bak_db_filename = aux_filename_list[0] + "_backup(" + datetime.now().strftime("%Y%m%d") + ")." + aux_filename_list[1]
 
-        pathHelpers.ensure_directory(bak_folder_output)
-        if not bak_folder_output.exists():
-            print_error(_("La ruta %s no es accesible") % bak_folder_output)
-            bak_folder_output = get_existing_folder_from_user()
+            pathHelpers.ensure_directory(bak_folder_output)
+            if not bak_folder_output.exists():
+                print_error(_("La ruta %s no es accesible") % bak_folder_output)
+                bak_folder_output = get_existing_folder_from_user()
 
-        save_file(bak_folder_output, bak_db_filename, flag_overwrite, acro_dict_handler.obj_db.save_db_backup)
+            save_file(bak_folder_output, bak_db_filename, flag_overwrite, acro_dict_handler.obj_db.save_db_backup)
 
 
 def save_file(folder, filename, overwrite, save_fcn, *args):

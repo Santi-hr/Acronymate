@@ -19,6 +19,8 @@ class AcroDbHandler:
         self.log_db_changes = {'Added': [], 'Modified': [], 'Deleted': []}
         self.list_no_regex = []  # Todo: Convert to iterable object?
 
+        self.needs_save = True  # Some processing modes does not change the DB files and saving can be avoided
+
         # Load DB after object creation
         self.load_acros_db()
 

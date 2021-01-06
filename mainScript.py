@@ -28,7 +28,7 @@ userCmdHandler.process_acro_found(acro_dict_handler, obj_argv.mode)
 acro_dict_handler.mark_acro_output_as_used()
 
 # 4. Save changes and generate output document
-userCmdHandler.handle_db_save(acro_dict_handler) # todo: solo guardar si se ejecuta en otro modo que no sea export
+userCmdHandler.handle_db_save(acro_dict_handler)
 
 obj_output_doc = docxExporter.generate_output_docx(acro_dict_handler)
 docx_export_filename = "Acronyms_" + acro_dict_handler.str_file
