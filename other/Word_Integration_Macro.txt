@@ -12,7 +12,7 @@ Sub RunAcronymate()
     'Processing mode
     'Options:
     '    "e": Export only, without definitions
-    '    "a": Auto, uses DB/doc table to 'guess' the best definition
+    '    "a": Auto, uses DB/doc table to 'guess' the best definition. Skips blacklisted acronyms.
     '    "s": Semiauto, need input from the user to add the missing definitions. This mode updates the DB.
     Mode = "e"
     'Path where "Acronymate.exe" can be found

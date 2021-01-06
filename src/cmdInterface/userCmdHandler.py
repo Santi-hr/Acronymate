@@ -157,35 +157,39 @@ def process_acro_found(acro_dict_handler, overwrite_mode):
     """Main interface, asks first how the acronyms should be processed
 
     :param acro_dict_handler: Acronym dictionary object
-    :param overwrite_mode:
+    :param overwrite_mode: Mode variable from program arguments that overwrites user input
     """
-    if overwrite_mode == "":
-        # Get processing mode from user
-        flag_finish = False
-        while not flag_finish:
-            user_command = input(_("¿Como procesar los acrónimos?") + " (m/s/e/a/h): ").lower()
-            if user_command == 'm':  # -- MANUAL --
-                process_acro_found_one_by_one(acro_dict_handler, flag_auto_command=False)
-                flag_finish = True
-            elif user_command == 's':  # -- SEMIAUTOMATIC --
-                process_acro_found_one_by_one(acro_dict_handler, flag_auto_command=True)
-                flag_finish = True
-            elif user_command == 'e':  # -- EXPORT ONLY --
-                process_acro_found_to_export_empty(acro_dict_handler)
-                flag_finish = True
-            elif user_command == 'a':  # -- ABOUT --
-                print_about_info()
-            elif user_command == 'h':  # -- HELP --
-                print_process_acro_found_modes_help()
-            # -- default --
-            else:
-                print_error_unrecognized_command()
-    else:
-        # Use mode from arguments
-        if overwrite_mode == 'e' or overwrite_mode == 'a':
-            process_acro_found_to_export_empty(acro_dict_handler)
+    flag_finish = False
+    while not flag_finish:
+        if overwrite_mode == '':
+            # Get processing mode from user
+            user_command = input(_("¿Como procesar los acrónimos?") + " (m/s/a/e/i/h): ").lower()
         else:
-            exit(-2) #Fixme: Raise an exception and only exit on the main script
+            # Use mode from arguments
+            user_command = overwrite_mode
+
+        if user_command == 'm':  # -- MANUAL --
+            process_acro_found_one_by_one(acro_dict_handler, flag_auto_command=False)
+            flag_finish = True
+        elif user_command == 's':  # -- SEMIAUTOMATIC --
+            process_acro_found_one_by_one(acro_dict_handler, flag_auto_command=True)
+            flag_finish = True
+        elif user_command == 'a':  # -- EXPORT AUTOMATIC --
+            process_acro_found_to_export_auto(acro_dict_handler)
+            flag_finish = True
+        elif user_command == 'e':  # -- EXPORT EMPTY --
+            process_acro_found_to_export_empty(acro_dict_handler)
+            flag_finish = True
+        elif user_command == 'i':  # -- ABOUT/INFO --
+            print_about_info()
+        elif user_command == 'h':  # -- HELP --
+            print_process_acro_found_modes_help()
+        # -- default --
+        else:
+            print_error_unrecognized_command()
+            # Exit program if the mode is wrong
+            if overwrite_mode != '':
+                overwrite_mode = ''  # Clean overwrite to not enter an infinite loop
 
 
 def print_process_acro_found_modes_help():
@@ -193,9 +197,11 @@ def print_process_acro_found_modes_help():
     print(_("  m: Manual    - Se procesa uno a uno cada acrónimo de forma manual."))
     print(_("  s: Semi-auto - Automáticamente se aceptan los acrónimos que están en la base de datos y se saltan los que"))
     print(_("                 están añadidos a la Blacklist. Se procesan manualmente aquellos no definidos, con múltiples"))
-    print(_("                 definiciones o cuando la definición de base de datos no coincida con la del documento."))
+    print(_("                 definiciones o cuando la definición de la base de datos no coincida con la del documento."))
+    print(_("  a: Auto      - Exporta todos los acrónimos encontrados, que no están en la blacklist, con su mejor definición."))
+    print(_("                 Este modo no actualiza la base de datos."))
     print(_("  e: Exportar  - Exporta todos los acrónimos encontrados sin incluir sus definiciones."))
-    print(_("  a: Acerca de - Muestra información del programa."))
+    print(_("  i: Acerca de - Muestra información del programa."))
     print(_("  h: Ayuda     - Muestra esta información."))
 
 
@@ -208,11 +214,21 @@ def print_about_info():
 
 
 def process_acro_found_to_export_empty(acro_dict_handler):
-    """Sets all acronyms as used without definition. Used to generate a quick export"""
+    """Sets all acronyms as used and without definition. Used to generate a quick export"""
     acro_dict_handler.obj_db.needs_save = False  # Prevent modifying the DB as no changes are introduced
     for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.acro_ordering)):
         aux_acro_obj = acroAuxObj.AcroAuxObj(acro, acro_dict_handler)
         aux_acro_obj.use_empty_acro()
+
+
+def process_acro_found_to_export_auto(acro_dict_handler):
+    """Sets all non blacklisted acronyms as used with the best definition (DB->Doc->None).
+    Used to generate a quick export more refined than the export empty option"""
+    acro_dict_handler.obj_db.needs_save = False  # Prevent modifying the DB as no changes are introduced
+    for i, acro in enumerate(sorted(acro_dict_handler.acros_found.keys(), key=strHlprs.acro_ordering)):
+        aux_acro_obj = acroAuxObj.AcroAuxObj(acro, acro_dict_handler)
+        if not aux_acro_obj.is_blacklisted():
+            aux_acro_obj.save_and_use_acro()
 
 
 def process_acro_found_one_by_one(acro_dict_handler, flag_auto_command):
