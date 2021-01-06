@@ -605,20 +605,6 @@ def print_error_unrecognized_command():
 
 ########### PRINT HELPER FCNS #############
 
-def print_ellapsed_time(elapsed_f_sec):
-    """Prints time as hours minutes and seconds since the begining of the programm"""
-    hours, minutes = 0, 0
-    while elapsed_f_sec >= 3600:
-        elapsed_f_sec -= 3600
-        hours += 1
-    while elapsed_f_sec >= 60:
-        elapsed_f_sec -= 60
-        minutes += 1
-    seconds = int(elapsed_f_sec)
-    print(_("Han transcurrido %s:%s:%s desde el inicio del programa") %
-          (str(hours).zfill(2), str(minutes).zfill(2), str(seconds).zfill(2)))
-
-
 def print_error(str_in):
     """Prints a red string"""
     print(ach.color_str(str_in, ach.AnsiColorCode.RED))
