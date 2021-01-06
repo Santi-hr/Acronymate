@@ -15,9 +15,9 @@ Sub RunAcronymate()
     '    "a": Auto, uses DB/doc table to 'guess' the best definition. Skips blacklisted acronyms.
     '    "s": Semiauto, need input from the user to add the missing definitions. This mode updates the DB.
     Mode = "e"
-    'Path where "Acronymate.exe" can be found
+    'Path where "Acronymate.exe" is found
     ExecutablePath = "C:\Users\xxxx\xxxx\Acronymate_folder"
-    'Path to a folder where a temp file can be stored. For example the output folder of Acronymate
+    'Path to a folder where a temp file can be stored. For example, the output folder of Acronymate
     TempFolderPath = "C:\Users\xxxx\xxxx\Acronymate_folder\output"
     
     'Show msg - stop if user does not click Yes
@@ -43,6 +43,6 @@ Sub RunAcronymate()
     Dim RetVal
     ChDir ExecutablePath
     'Set last number to 0 to hide the terminal
-    RetVal = Shell(ExecutablePath + "\Acronymate.exe -i " + TempFilePath + " -m " + Mode + " -fn " + ActiveDocument.Name, 1)'
+    RetVal = Shell(ExecutablePath & "\Acronymate.exe -i """ & TempFilePath & """ -m " & Mode & " -fn """ & ActiveDocument.Name & """", 1)
     
 End Sub

@@ -41,4 +41,4 @@ str_docx_exported_path = userCmdHandler.save_file(
 
 # 5. Open in word the generated document
 if cv.config_open_docx_after_export:
-    os.system('start ' + str_docx_exported_path)
+    os.system('start "Title" "' + str_docx_exported_path + '"')
