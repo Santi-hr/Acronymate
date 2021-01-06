@@ -28,10 +28,14 @@ config_output_font_size_header = 9  # Font size (points) for the acronym table h
 # Acronym processing flags (For best results keep them enabled)
 config_use_acro_from_doc_table = True  # Searches non regex matching acronyms from the document
 config_use_non_matching_acro_from_db = True  # Adds to the search non regex matching acronyms added to the database
-config_save_backups = True  # Set to True to enable the creation of backups after each usage
+# Storage flags
+config_save_backups = True  # Set to True to enable the creation of backups after each run
+config_allow_overwriting_exported = False  # Overwriting output files reduce the growth rate of the output folder
+# Note: Overwriting might not be possible if the file is in use. In that case the flag is ignored
+# Usability flags
+config_open_docx_after_export = True  # Opens the generated acronym .docx using the default program (Only for Windows)
 
 # --------- OTHER -------------
-config_seconds_before_exit = 1  # Seconds before closing the console. Gives some time to see last output
 
 # ......... NOT DIRECTLY CONFIGURABLE ..........
 """ The following variables are configurable by changing one of the above, they should not appear on the config file """

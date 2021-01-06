@@ -36,9 +36,8 @@
     "Flags": {
         "Use acronym document table": true,
         "Use non matching acronyms from DB": true,
-        "Save backups": true
-    },
-    "Other": {
-        "Seconds before exit": 1
+        "Save backups": true,
+        "Allow overwriting exported files": true,
+        "Open docx after export": true
     }
 }

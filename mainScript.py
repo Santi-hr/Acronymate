@@ -35,10 +35,11 @@ docx_export_filename = "Acronyms_" + acro_dict_handler.str_file
 if docx_export_filename[-5:] != ".docx":
     docx_export_filename += ".docx"
 str_docx_exported_path = userCmdHandler.save_file(
-    cv.config_docx_export_folder, docx_export_filename, False, docxExporter.save_document, obj_output_doc)
+    cv.config_docx_export_folder, docx_export_filename, cv.config_allow_overwriting_exported,
+    docxExporter.save_document, obj_output_doc)
 
 userCmdHandler.print_ellapsed_time(time.monotonic()-time_begin_acronymate)
-time.sleep(cv.config_seconds_before_exit)
 
 # 5. Open in word the generated document
-os.system('start ' + str_docx_exported_path)
+if cv.config_open_docx_after_export:
+    os.system('start ' + str_docx_exported_path)
