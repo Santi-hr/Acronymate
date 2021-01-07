@@ -1,0 +1,603 @@
+# ACRONYMATE TRANSLATION
+# Copyright (C) 2021 SAHR Projects
+# SAHR <EMAIL@ADDRESS>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.4.0\n"
+"POT-Creation-Date: 2021-01-07 00:33+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: SAHR\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\acroHandlers\acroAuxObj.py:182
+msgid "No encontrado"
+msgstr "Not found"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\acroHandlers\acroDbHandler.py:186
+msgid "Base de datos correcta"
+msgstr "Database ok!"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:16
+msgid "ERROR - No se ha podido cargar el fichero de configuración"
+msgstr "ERROR - Configuration file could not be loaded"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:17
+msgid "¿Crear nuevo fichero de configuración con valores por defecto?"
+msgstr "Create new default configuration file?"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:20
+msgid "Saliendo ..."
+msgstr "Exiting ..."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:29
+msgid "INFO: Escribe 'config' como ruta para acceder al menú de configuración rápida"
+msgstr "INFO: Write 'config' as a path to access the quick configuration menu"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:32
+msgid "Copia la ruta de la carpeta donde se encuentra el archivo a procesar: "
+msgstr "Copy the path to the file to be processed: "
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:47
+msgid "ERROR - No se encuentran archivos '.docx' en la ruta seleccionada"
+msgstr "ERROR - No '.docx' files found in the selected path"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:51
+msgid "ERROR - El nombre de archivo, el nombre de directorio o la sintaxis de la etiqueta del volumen no son correctos"
+msgstr "ERROR - Filename, folder name, or volume label syntax is not correct"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:52
+msgid "Selecciona el archivo a procesar"
+msgstr "Select which file to process"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:61
+msgid "Menú de configuración rápida"
+msgstr "Quick configuration menu"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:62
+msgid "Este menú solo contiene algunas de las opciones. Para el resto de configuración, modificar manualmente el archivo 'config.json' que acompaña al ejecutable"
+msgstr "This menu only offers some options. For the full configuration, please modify manually the file 'config.json' in the same folder as the executable"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:67
+msgid "Opciones:"
+msgstr "Options:"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:69
+msgid "Selecciona que quieres modificar"
+msgstr "Select which to modify"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:80
+msgid "¿Desea hacer algún otro cambio?"
+msgstr "Do you want to make any other changes?"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:84
+msgid "¿Desea guardar los cambios?"
+msgstr "Do you want to save the changes?"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:98
+msgid "  1 - Idioma:"
+msgstr "  1 - Language:"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:99
+msgid "  2 - Ruta de la DB:"
+msgstr "  2 - DB Path:"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:100
+msgid "  3 - Longitud mínima de acrónimo:"
+msgstr "  3 - Minimum acronym length:"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:101
+msgid "  4 - Guardar backups:"
+msgstr "  4 - Save backups:"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:115
+msgid "Introduce la ruta de la carpeta donde se encuentra el fichero de base de datos de acrónimos o la ruta directa al fichero"
+msgstr "Enter path to the folder where the acronyms database file is located or the direct path to that file"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:117
+msgid "Introduce ruta: "
+msgstr "Enter path: "
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:121
+msgid "ERROR - El fichero debe acabar en '.json'"
+msgstr "ERROR - File must have '.json' extension"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:132
+msgid "ERROR - La ruta o fichero introducido no existe"
+msgstr "ERROR - Folder or file does not exist"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:140
+msgid "Un acrónimo se detecta como N letras mayúsculas seguidas. Se recomienda una longitud mínima de 2 o 3"
+msgstr "An acronym is detected as N consecutive capital letters. It is recommended a minimum of 2 or 3"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:141
+msgid "Introduce la longitud mínima"
+msgstr "Enter minimum length"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:147
+msgid "¿Activar el guardado de copias de seguridad?"
+msgstr "Do you want to enable DB backups?"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:153
+msgid "Se ha configurado el siguiente valor: %s"
+msgstr "Configured value: %s"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:166
+msgid "¿Como procesar los acrónimos?"
+msgstr "How do you want to process the acronyms?"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:197
+msgid "  m: Manual    - Se procesa uno a uno cada acrónimo de forma manual."
+msgstr "  m: Manual    - Acronyms are processed manually one by one."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:198
+msgid "  s: Semi-auto - Automáticamente se aceptan los acrónimos que están en la base de datos y se saltan los que"
+msgstr "  s: Semi-auto - Acronyms that are found in the DB are automatically accepted. The ones that are blacklisted "
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:199
+msgid "                 están añadidos a la blacklist. Se procesan manualmente aquellos no definidos, con múltiples"
+msgstr "                 are skipped. Acronyms with multiple definitions, not defined or whose definition does not"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:200
+msgid "                 definiciones o cuando la definición de la base de datos no coincida con la del documento."
+msgstr "                 match the definition in the document acronym table are processed manually."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:201
+msgid "  a: Auto      - Exporta todos los acrónimos encontrados, que no están en la blacklist, con su mejor definición."
+msgstr "  a: Auto      - Exports all non blacklisted acronyms with the best definition. This mode does not update"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:202
+msgid "                 Este modo no actualiza la base de datos."
+msgstr "                 the database."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:203
+msgid "  e: Exportar  - Exporta todos los acrónimos encontrados sin incluir sus definiciones."
+msgstr "  e: Export    - Export all found acronyms, but without definitions."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:204
+msgid "  i: Acerca de - Muestra información del programa."
+msgstr "  i: About     - Show program information."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:205
+msgid "  h: Ayuda     - Muestra esta información."
+msgstr "  h: Help      - Show this information."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:211
+msgid "Dependencias:"
+msgstr "Dependencies:"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:259
+msgid "Coincidencias:"
+msgstr "Coincidences:"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:267
+msgid "Tabla del documento: "
+msgstr "Document table: "
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:269
+msgid "      Base de datos: "
+msgstr "      Database: "
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:272
+msgid "Discrepancia detectada entre base de datos y tabla del documento"
+msgstr "Discrepancy between database and document acronym table"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:279
+msgid "  Acrónimo:"
+msgstr "    Acronym:"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:281
+msgid " (EN LISTA NEGRA)"
+msgstr " (BLACKLISTED)"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:284
+msgid " Principal:"
+msgstr "       Main:"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:285
+msgid "Traducción:"
+msgstr "Translation:"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:296
+msgid "Introduce comando"
+msgstr "Enter command"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:328
+msgid "Se guarda el acrónimo"
+msgstr "Acronym is saved"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:332
+msgid "ERROR - Comprueba que el acrónimo está definido y que al menos 1 definición está seleccionada"
+msgstr "ERROR - Check that the acronym is defined and with at least one definition selected"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:337
+msgid "Se descarta el acrónimo"
+msgstr "Acronym is discarded"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:346
+msgid "¿Cual quieres editar?"
+msgstr "Which do you want to edit?"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:363
+msgid "Elige que definiciones seleccionar (Ej: 1,2,4): "
+msgstr "Select definitions to use (Ex: 1,2,4)"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:366
+msgid "Esta opción solo está disponible para acrónimos con múltiples definiciones"
+msgstr "This option is only available for multiple definition acronyms"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:378
+msgid ""
+"ATENCIÓN - El borrado eliminará la definición de la base de datos (si está en esta)\n"
+msgstr "WARNING - Deletion will also erase the definition in the database (if existant)\n"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:379
+msgid "Para no usar el acrónimo usa el comando 'n', si hay múltiples definiciones usa 's' para elegir cuales usar"
+msgstr "To not use the acronym select 'n', if it has multiple definitions use 's' to select which to use"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:383
+msgid "¿Cual quieres eliminar?"
+msgstr "Which one to delete?"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:386
+msgid "Se elimina el acrónimo"
+msgstr "The acronym was deleted"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:404
+msgid "¿Cambiar de modo de procesamiento?"
+msgstr "Change processing mode?"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:407
+msgid "Se cambia a modo manual"
+msgstr "Mode changed to manual"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:410
+msgid "Se cambia a modo semiautomático"
+msgstr "Mode changed to semiautomatic"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:416
+msgid "  y: Aceptar     - Guarda el acrónimo con la información mostrada y actualiza la base de datos."
+msgstr "  y: Accept      - Saves the acronym with the definition on screen and updates the database."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:417
+msgid "  n: Saltar      - Descarta el acrónimo y continúa al siguiente."
+msgstr "  n: Skip        - Discards the acronym and continues with the next."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:418
+msgid "  e: Editar      - Modifica una definición. En principal se indica la definición en el idioma de origen."
+msgstr "  e: Edit        - Modifies a definition. Under main the original language definition is stored."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:419
+msgid "                   En traducción se indica la definición en español. Dejar vacío si no es necesaria."
+msgstr "                   Under translation a translated definition can be stored. Keep empty if the main definition is already in your language."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:420
+msgid "  a: Añadir      - Añade una definición adicional."
+msgstr "  a: Add         - Adds an additional definition."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:421
+msgid "  s: Seleccionar - Selecciona las definiciones a usar. Aquellas deseleccionadas (en gris) no se incluirán en la tabla "
+msgstr "  s: Select      - Selects which definitions to use. Those unselected (in gray) won't be included in the output table "
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:422
+msgid "                   de acrónimos de salida. La diferencia con eliminar es que la definición se mantiene en la base de datos."
+msgstr "                   The difference respect to delete is that the definition remains on the database."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:423
+msgid "  b: Blacklist   - Alterna el estado del acrónimo en la lista negra. Si está en esta lista se saltará "
+msgstr "  b: Blacklist   - Toggles the acronym blacklist status. If in this list it will be skipped"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:424
+msgid "                   automáticamente al procesar en modo auto o semi-automático."
+msgstr "                   automatically when processing in auto or semiautomatic."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:425
+msgid "  d: Eliminar    - Elimina el acrónimo o una de sus definiciones de la base de datos."
+msgstr "  d: Delete      - Deletes the acronym or one of their definitions from the database."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:426
+msgid "  z: Deshacer    - Retrocede al acrónimo anterior."
+msgstr "  z: Undo        - Returns to the previous acronym."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:427
+msgid "  m: Modo        - Alterna entre modos de procesamiento manual y semiautomático."
+msgstr "  m: Mode        - Alternates between manual and semiautomatic processing modes."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:428
+msgid "  h: Ayuda       - Muestra esta información."
+msgstr "  h: Help        - Show this information."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:440
+msgid ""
+"Guardando\n"
+"Resumen de cambios en la base de datos:"
+msgstr ""
+"Saving\n"
+"Summary of database changes:"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:450
+msgid "ATENCIÓN - Es posible que otro usuario haya modificado el archivo de base de datos. Se recomienda guardar con otro nombre y revisar los cambios manualmente."
+msgstr "WARNING - Is possible that another user has modified the database. It is recommended to save it with a different name and manually resolve the conflicts."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:451
+msgid "¿Guardar con otro nombre?"
+msgstr "Save with a different name?"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:456
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:469
+msgid "La ruta %s no es accesible"
+msgstr "Path %s is not accessible"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:499
+msgid "Error de permisos al guardar. Se intentará con otro nombre"
+msgstr "Permission error while saving. Trying with a different name"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:502
+msgid "Se ha producido un error al guardar %s"
+msgstr "An error ocurred while saving %s"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:503
+msgid "¿Quieres volver a intentar?"
+msgstr "Retry?"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:506
+msgid "ERROR - Carpeta \"%s\" no encontrada al guardar"
+msgstr "ERROR - Folder \"%s\" not found while saving"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:508
+msgid "Se ha guardado el fichero: %s"
+msgstr "Saved successfully: %s"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:519
+msgid "Introduce la ruta de una carpeta: "
+msgstr "Enter path to a folder:"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:525
+msgid "ERROR - La ruta introducida no existe o no es una carpeta"
+msgstr "ERROR - Entered path does not exist or is not a folder"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:533
+msgid "Introduce definición: "
+msgstr "Enter definition: "
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:535
+msgid "ERROR - La definición no puede estar vacía"
+msgstr "ERROR - Definition can not be empty"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:538
+msgid "Introduce traducción: "
+msgstr "Enter translation: "
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:558
+msgid "ERROR - Introduce un número entero en el rango especificado"
+msgstr "ERROR - Enter a number in the specified range"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:560
+msgid "ERROR - Formato incorrecto. Introduce número entero"
+msgstr "ERROR - Wrong format. Enter an integer"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:564
+msgid "¿Desea continuar?"
+msgstr "Continue?"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:580
+msgid "ERROR - Comando no reconocido. Elige entre sí('y') y no('n')"
+msgstr "ERROR - Unrecognized command. Choose between yes('y') and no('n')"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:584
+msgid "Introduce enteros separados por comas: "
+msgstr "Enter integers separated by commas: "
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:601
+msgid "ERROR - Formato incorrecto. Introduce números enteros separados por comas"
+msgstr "ERROR - Wrong format. Enter integers separated by commas"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:614
+msgid "Selecciona opción"
+msgstr "Select option"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:619
+msgid "ERROR - Comando no reconocido. Usa el comando 'h' para obtener ayuda"
+msgstr "ERROR - Unrecognized command. Use command 'h' to get help"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:661
+msgid "Extrayendo acrónimos del documento"
+msgstr "Extracting acronyms from the document"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:664
+msgid "Repasando la búsqueda con acrónimos especiales"
+msgstr "Enhancing search with special acronyms"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:667
+msgid "Tablas"
+msgstr "Tables"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:670
+msgid "Párrafos"
+msgstr "Paragraphs"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:673
+msgid "Secciones"
+msgstr "Sections"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:677
+msgid "No se encuentra el archivo DB: %s"
+msgstr "Database file not found: %s"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:680
+msgid "Archivo DB no parseable: %s"
+msgstr "Database file not parseable: %s"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:683
+msgid "Error al acceder al diccionario: %s"
+msgstr "Error accessing dictionary: %s"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:686
+msgid "Cargando la base de datos de acrónimos (%s) ..."
+msgstr "Loading acronyms database (%s) ..."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:689
+msgid "Comprobando estado de la base de datos ..."
+msgstr "Checking database status ..."
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:692
+msgid "No se encuentran acrónimos, creando diccionario vacío"
+msgstr "Acronyms not found, creating empty dictionary"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:695
+msgid "El acrónimo %s está vacío"
+msgstr "The acronym %s is empty"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\cmdInterface\userCmdHandler.py:698
+msgid "La sección Admin_data no es correcta, no se podrá verificar el guardado seguro"
+msgstr "Incorrect Admin_data section, safe save will not be verified"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\docxHandlers\docxExporter.py:25
+msgid "Generando Word con tabla de acrónimos"
+msgstr "Generating Word with acronym table"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\docxHandlers\docxExporter.py:26
+msgid "Acrónimos"
+msgstr "Acronyms"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\docxHandlers\docxExporter.py:74
+msgid "Archivo procesado: %s"
+msgstr "File processed: %s"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\docxHandlers\docxExporter.py:75
+msgid "Acrónimos extraídos: %d"
+msgstr "Acronyms extracted: %d"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\docxHandlers\docxExporter.py:94
+msgid "Tiempo transcurrido: %s:%s:%s.%d"
+msgstr "Time ellapsed: %s:%s:%s.%d"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\docxHandlers\docxExporter.py:103
+msgid "Acrónimo"
+msgstr "Acronym"
+
+#:
+#: C:\Users\Santi\PycharmProjects\Acronymate\src\docxHandlers\docxExporter.py:104
+msgid "Definición"
+msgstr "Definition"
+

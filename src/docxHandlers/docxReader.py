@@ -4,21 +4,25 @@ import lxml
 from src.common import defines as dv
 from src.common import configVars as cv
 from src.common import pathHelpers
-from src.cmdInterface import ansiColorHelper, cmdProgressBar
+from src.cmdInterface import ansiColorHelper, cmdProgressBar, userCmdHandler
 
 
-def extract_acro_word(filepath, acro_dict_handler):
+def extract_acro_word(filepath, acro_dict_handler, filename_overwrite=None):
     """Main function. Opens a docx file and extracts its acronyms
 
     :param filepath: Path string to a docx file
     :param acro_dict_handler: Acronym dictionary objects
+    :param filename_overwrite: String that overwrites the loaded file name stored in the acro handler
     """
     # 1. Open file
     doc_obj = docx.Document(filepath)
     acro_dict_handler.str_file = pathHelpers.get_filename_from_path(filepath)
+    # Overwrite filename if needed. This is used with the word extension to keep only one temp file
+    if filename_overwrite:
+        acro_dict_handler.str_file = filename_overwrite
 
     # 2. Search for acronyms and extract them
-    print("Extrayendo acrónimos del documento")
+    userCmdHandler.print_acronym_search_start()
     extract_acro_from_paragraphs(doc_obj, acro_dict_handler)
     extract_acro_from_tables(doc_obj, acro_dict_handler)
     extract_acro_from_sections(doc_obj, acro_dict_handler)
@@ -38,7 +42,7 @@ def extract_acro_word(filepath, acro_dict_handler):
                 second_regex += re.escape(acro_key) + r'|'
 
     if second_regex != "":
-        print("Repasando la búsqueda con acrónimos especiales")
+        userCmdHandler.print_acronym_search_second_pass()
         # Add word boundries to regex
         second_regex = r'\b(' + second_regex[:-1] + r')(?![\wÁÉÍÓÚ])'
         # The last part fixes abbreviates. \b does not match '. ' as both are non alphanumeric
@@ -51,7 +55,6 @@ def extract_acro_word(filepath, acro_dict_handler):
 def accepted_text(docx_elem, docx_elem_xml, doc_nsmap):
     str_accepted_text = ""
     if "w:ins" in docx_elem_xml:
-        # print(docx_elem_xml)
         target = lxml.etree.XML(docx_elem_xml)
         # Search all paragraphs in the XML
         for paragraph in target.xpath('//w:p', namespaces=doc_nsmap):
@@ -73,7 +76,7 @@ def accepted_text(docx_elem, docx_elem_xml, doc_nsmap):
 def extract_acro_from_str(str_in_raw, acro_dict_handler, regex_in=""):
     """Finds acronyms in a text string and stores them into a dictionary
 
-    :param str_in: Input text string
+    :param str_in_raw: Input text string
     :param acro_dict_handler: Acronym dictionary objects
     :param regex_in: Regex string
     """
@@ -123,7 +126,7 @@ def extract_acro_from_paragraphs(doc_obj, acro_dict_handler, regex_in=""):
     :param regex_in: Regex string
     """
     # Iterate trough all paragraphs
-    obj_progress_bar = cmdProgressBar.CmdProgressBar(len(doc_obj.paragraphs), "Párrafos")
+    obj_progress_bar = cmdProgressBar.CmdProgressBar(len(doc_obj.paragraphs), userCmdHandler.get_translated_str_paragraphs())
     for i, paragraph in enumerate(doc_obj.paragraphs):
         str_accepted_text = accepted_text(paragraph, paragraph._p.xml, doc_obj.element.nsmap)
         extract_acro_from_str(str_accepted_text, acro_dict_handler, regex_in=regex_in)
@@ -139,7 +142,7 @@ def extract_acro_from_tables(doc_obj, acro_dict_handler, regex_in=""):
     :param regex_in: Regex string
     """
     # 1. Iterate trough table objects
-    obj_progress_bar = cmdProgressBar.CmdProgressBar(len(doc_obj.tables), "Tablas")
+    obj_progress_bar = cmdProgressBar.CmdProgressBar(len(doc_obj.tables), userCmdHandler.get_translated_str_tables())
     for i, table in enumerate(doc_obj.tables):
         # 2. Merge all row into a single string
         for j, row in enumerate(table.rows):
@@ -185,15 +188,12 @@ def process_acro_table(acro_table, acro_dict_handler):
     # Todo: Allow for custom tables via configure file
     # Fixme: Prevent explosion if table has merged lines
     if not acro_dict_handler.flag_doc_table_processed and len(acro_table.rows[0].cells) == 2:
-        for i, row in enumerate(acro_table.rows):
-            if i == 0:  # Skip header
-                continue
-
+        for i, row in enumerate(acro_table.rows[1:]):  # Skipping header (Row 1)
             # Get raw data
             acronym = row.cells[0].text.strip()
             definitions = row.cells[1].text.split('\n')
 
-            if acronym == "":
+            if acronym == "":  # Skip empty rows
                 continue
 
             # Process definitions
@@ -201,11 +201,22 @@ def process_acro_table(acro_table, acro_dict_handler):
                 main_def = raw_def.strip()
                 trans_def = ""
 
-                if '(' in main_def:
-                    re_match = re.fullmatch("(.*)\((.*)\)", main_def)  # Todo: Fix "Def (Expl) (Def_es (Expl_es))"
-                    if re_match:
-                        main_def = re_match.group(1).strip()
-                        trans_def = re_match.group(2).strip()
+                if ')' in main_def:
+                    # Finds the opening and closing parenthesis of the translated part to slice the definition
+                    opening_par = -1
+                    closing_par = main_def.rfind(')')
+                    groups_open = 1  # Group = (). Assumes proper closing of parenthesis
+                    for idx in range(closing_par - 1, 0, -1):
+                        char = main_def[idx]
+                        if main_def[idx] == ')':
+                            groups_open += 1
+                        elif main_def[idx] == '(':
+                            groups_open -= 1
+                        if groups_open == 0:
+                            opening_par = idx
+                            break
+                    trans_def = main_def[opening_par + 1:closing_par].strip()
+                    main_def = main_def[:opening_par - 1].strip()
 
                 acro_dict_handler.add_acronym_doc_table(acronym, main_def, trans_def)
     acro_dict_handler.flag_doc_table_processed = True
@@ -218,7 +229,7 @@ def extract_acro_from_sections(doc_obj, acro_dict_handler, regex_in=""):
     :param acro_dict_handler: Acronym dictionary objects
     :param regex_in: Regex string
     """
-    obj_progress_bar = cmdProgressBar.CmdProgressBar(len(doc_obj.sections), "Secciones")
+    obj_progress_bar = cmdProgressBar.CmdProgressBar(len(doc_obj.sections), userCmdHandler.get_translated_str_sections())
     nsmap = doc_obj.element.nsmap
     for i, section in enumerate(doc_obj.sections):
         # Sections include headers and footers
