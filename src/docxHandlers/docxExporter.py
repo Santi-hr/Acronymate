@@ -22,7 +22,7 @@ class DocxExporter:
         :return: python-docx document object
         """
         # --- Initialize ---
-        print(_("Generando word con tabla de acrónimos"))
+        print(_("Generando Word con tabla de acrónimos"))
         obj_progress_bar = cmdProgressBar.CmdProgressBar(len(self.acro_dict_handler.acros_output.keys()), _("Acrónimos"))
 
         self.document = docx.Document()

@@ -49,7 +49,7 @@ def get_docx_filepath_from_user(acro_dict_handler):
                     flag_finish = True
             except OSError:
                 print_error(_("ERROR - El nombre de archivo, el nombre de directorio o la sintaxis de la etiqueta del volumen no son correctos"))
-    user_num = get_num_from_user(_("Seleciona el archivo a procesar"), lower=1, upper=len(path_list))
+    user_num = get_num_from_user(_("Selecciona el archivo a procesar"), lower=1, upper=len(path_list))
 
     filepath = path_list[user_num-1]
 
@@ -196,7 +196,7 @@ def print_process_acro_found_modes_help():
     """Prints acronym processing modes help"""
     print(_("  m: Manual    - Se procesa uno a uno cada acrónimo de forma manual."))
     print(_("  s: Semi-auto - Automáticamente se aceptan los acrónimos que están en la base de datos y se saltan los que"))
-    print(_("                 están añadidos a la Blacklist. Se procesan manualmente aquellos no definidos, con múltiples"))
+    print(_("                 están añadidos a la blacklist. Se procesan manualmente aquellos no definidos, con múltiples"))
     print(_("                 definiciones o cuando la definición de la base de datos no coincida con la del documento."))
     print(_("  a: Auto      - Exporta todos los acrónimos encontrados, que no están en la blacklist, con su mejor definición."))
     print(_("                 Este modo no actualiza la base de datos."))
@@ -416,13 +416,13 @@ def print_process_acro_found_help():
     print(_("  y: Aceptar     - Guarda el acrónimo con la información mostrada y actualiza la base de datos."))
     print(_("  n: Saltar      - Descarta el acrónimo y continúa al siguiente."))
     print(_("  e: Editar      - Modifica una definición. En principal se indica la definición en el idioma de origen."))
-    print(_("                   En traducción se indica la definición en Español. Dejar vacío si no es necesaria."))
+    print(_("                   En traducción se indica la definición en español. Dejar vacío si no es necesaria."))
     print(_("  a: Añadir      - Añade una definición adicional."))
     print(_("  s: Seleccionar - Selecciona las definiciones a usar. Aquellas deseleccionadas (en gris) no se incluirán en la tabla "))
     print(_("                   de acrónimos de salida. La diferencia con eliminar es que la definición se mantiene en la base de datos."))
     print(_("  b: Blacklist   - Alterna el estado del acrónimo en la lista negra. Si está en esta lista se saltará "))
-    print(_("                   automáticamente al procesar en modo semi-automático."))
-    print(_("  d: Eliminar    - Elimina el acrónimo o una de sus definiciónes de la base de datos."))
+    print(_("                   automáticamente al procesar en modo auto o semi-automático."))
+    print(_("  d: Eliminar    - Elimina el acrónimo o una de sus definiciones de la base de datos."))
     print(_("  z: Deshacer    - Retrocede al acrónimo anterior."))
     print(_("  m: Modo        - Alterna entre modos de procesamiento manual y semiautomático."))
     print(_("  h: Ayuda       - Muestra esta información."))

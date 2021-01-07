@@ -183,7 +183,7 @@ class AcroDbHandler:
                 flag_status = False
 
         if flag_status:
-            userCmdHandler.print_ok("Base de datos correcta")
+            userCmdHandler.print_ok(_("Base de datos correcta"))
 
     def __set_admin_data_in_db(self):
         """Sets values asociated to ['Admin_data'] in the DB dictionary"""

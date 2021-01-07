@@ -1,8 +1,9 @@
 import gettext
 from pathlib import Path
+from src.common import pathHelpers
 
 # Global variables for translation
-localedir = "locales"#resource_path('locales')
+localedir = pathHelpers.resource_path('locales')
 
 # Default language
 translate = gettext.translation('acronymate', localedir, languages=['es'], fallback=True)
