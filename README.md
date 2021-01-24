@@ -1,5 +1,5 @@
 # Acronymate
-Helpful script to aid with the generation of acronym tables from word documents
+Helpful script to extract acronyms from word documents and aid in the generation of definition tables
 
 ## What is its purpose?
 This script was created after the tedious task of reviewing several documents at work and having to extract and define the same acronyms in all of them.
