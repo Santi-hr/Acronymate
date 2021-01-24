@@ -21,7 +21,8 @@ if obj_argv.input_path == "":
     docx_input_path = userCmdHandler.get_docx_filepath_from_user(acro_dict_handler)
 else:
     docx_input_path = obj_argv.input_path
-docxReader.extract_acro_word(docx_input_path, acro_dict_handler, obj_argv.filename)
+docx_reader = docxReader.DocxReader(acro_dict_handler)
+docx_reader.extract_acro_word(docx_input_path, obj_argv.filename)
 
 # 3. Present the user the acronyms found
 userCmdHandler.process_acro_found(acro_dict_handler, obj_argv.mode)
