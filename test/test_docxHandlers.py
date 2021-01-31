@@ -5,6 +5,7 @@ from src.docxHandlers import docxReader
 import sys
 import os
 
+
 class TestDocxMethods(unittest.TestCase):
 
     def setUp(self):
@@ -77,6 +78,22 @@ class TestDocxMethods(unittest.TestCase):
 
         for i in range(len(self.acros_expected)):
             self.assertEqual(self.acros_expected[i], sorted_acros[i])
+
+    def test_no_acronym_table(self):
+        # Uses other document
+        self.docx_test = "doc_testing_no_acro_tb.docx"
+        self.acros_expected = ["ACROINPAR", "ACROTABLE"]
+        self.len_acros_expected = len(self.acros_expected)
+
+        acro_dict_handler = acroDictHandler.AcroDictHandler()
+        docx_reader = docxReader.DocxReader(acro_dict_handler)
+        docx_reader.extract_acro_word(self.docx_test, acro_dict_handler)
+
+        # Check all expected acronyms
+        for acro_ex in self.acros_expected:
+            self.assertIn(acro_ex, acro_dict_handler.acros_found.keys())
+        # Check if more acros than expected are found
+        self.assertEqual(len(self.acros_expected), len(acro_dict_handler.acros_found.keys()))
 
 
 if __name__ == '__main__':
