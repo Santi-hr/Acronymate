@@ -26,17 +26,20 @@ class DocxReader:
         # 1. Open file
         self.document = docx.Document(filepath)
         self._doc_namespace = self.document.element.nsmap
-        self.acro_dict_handler.str_file = pathHelpers.get_filename_from_path(filepath)
-        # Overwrite filename if needed. This is used with the word extension to keep only one temp file
+        self.acro_dict_handler.str_file_open = pathHelpers.get_filename_from_path(filepath)
+        # Overwrite filename if needed. This is used with the word extensions to keep only one temp file but not lose
+        # from which file the acronyms come
         if filename_overwrite:
             self.acro_dict_handler.str_file = filename_overwrite
+        else:
+            self.acro_dict_handler.str_file = self.acro_dict_handler.str_file_open
 
         userCmdHandler.print_acronym_search_start()
 
         # 2. Set regex expression
         # Includes acronyms or abbreviates that do not match with the main regex from the DB or the acronym table
         # on the document (Ej: ExCOMMS, JdP)
-        main_regex = cv.config_regex_acro_find #Todo: añadir test de documento sin tabla de acros
+        main_regex = cv.config_regex_acro_find
 
         brute_regex_list = []
 
@@ -104,11 +107,19 @@ class DocxReader:
 
             obj_progress_bar.update(i + 1)
 
-    def __extract_acro_from_paragraph(self, paragraph): #todo: doc
+    def __extract_acro_from_paragraph(self, paragraph):
+        """Extracts acronyms from a paragraph
+
+        :param paragraph: Paragraph python-docx object
+        """
         str_accepted_text = self.accepted_text(paragraph, paragraph._p.xml, self._doc_namespace)
         self.__extract_acro_from_str(str_accepted_text)
 
-    def __extract_acro_from_table(self, table): #todo: doc
+    def __extract_acro_from_table(self, table):
+        """Extracts acronyms from a table
+
+        :param table: Table python-docx object
+        """
         for j, row in enumerate(table.rows):
             row_cell_list = [self.accepted_text(cell, cell._tc.xml, self._doc_namespace) for cell in row.cells]
             row_text = dv.define_tb_col_separator.join(row_cell_list)
@@ -232,7 +243,14 @@ class DocxReader:
         self.acro_dict_handler.flag_doc_table_processed = True
 
     @staticmethod
-    def accepted_text(docx_elem, docx_elem_xml, doc_nsmap): #todo: documentar. Pasar solo docx_elem?
+    def accepted_text(docx_elem, docx_elem_xml, doc_nsmap):
+        """Returns text from a word xml section as if it had all changed accepted (From track changes mode).
+
+        :param docx_elem: Python-docx object with an element
+        :param docx_elem_xml: Private xml corresponding to the docx_elem variable
+        :param doc_nsmap: Document namespace, for its use by xpath to find tags
+        :return:
+        """
         str_accepted_text = ""
         if "w:ins" in docx_elem_xml:
             target = lxml.etree.XML(docx_elem_xml)

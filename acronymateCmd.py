@@ -33,7 +33,7 @@ userCmdHandler.handle_db_save(acro_dict_handler)
 
 obj_docx_exporter = docxExporter.DocxExporter(acro_dict_handler)
 obj_output_doc = obj_docx_exporter.generate_output_docx(time_begin_acronymate)
-docx_export_filename = "Acronyms_" + acro_dict_handler.str_file
+docx_export_filename = "Acronyms_" + acro_dict_handler.str_file_open
 if docx_export_filename[-5:] != ".docx":
     docx_export_filename += ".docx"
 str_docx_exported_path = userCmdHandler.save_file(

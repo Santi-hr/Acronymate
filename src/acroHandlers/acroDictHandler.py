@@ -5,14 +5,15 @@ class AcroDictHandler:
     """Class to handle all acronym data dictionaries and pass around data between functions"""
     def __init__(self):
         # Get datetime once to keep it constant
-        self.str_file = "Undefined"             # File path for logging purposes
+        self.str_file = "Undefined"       # Filename for logging purposes
+        self.str_file_open = "Undefined"  # Filename of opened file. Can differ from previous if launched from Word macro
 
-        self.acros_found = dict()               # Acronyms found in the document
+        self.acros_found = dict()              # Acronyms found in the document
 
-        self.acros_doc_table = dict()           # Acronyms from the document acronyms table
-        self.flag_doc_table_processed = False   # True if the document acronyms table is found and processed
+        self.acros_doc_table = dict()          # Acronyms from the document acronyms table
+        self.flag_doc_table_processed = False  # True if the document acronyms table is found and processed
 
-        self.acros_output = dict()              # Acronyms to be exported
+        self.acros_output = dict()             # Acronyms to be exported
 
         self.obj_db = acroDbHandler.AcroDbHandler()  # Object to handle DB
 
