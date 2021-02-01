@@ -22,7 +22,5 @@ benckmark.py
 *~*.docx
 
 # Pyinstaler
-dist/
-dist_onedir/
-build/
+pyinstaller/
 *.spec
