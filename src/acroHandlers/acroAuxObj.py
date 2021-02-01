@@ -126,7 +126,7 @@ class AcroAuxObj:
         self.flag_update_db = True
 
     def select_defs(self, idx_list):
-        """Alternates an acronym slection state
+        """Sets all acronym selection states from a list
 
         :param idx: Acronyms to be selected
         """

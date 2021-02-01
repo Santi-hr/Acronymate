@@ -195,6 +195,4 @@ class AcroDbHandler:
 
     def __find_non_regex_acronyms(self):
         """Compiles list of acronyms that do not match the current regex"""
-        for acro in self.acros_db.keys():
-            if not re.match(cv.config_regex_acro_find, acro):
-                self.list_no_regex.append(acro)
+        self.list_no_regex = [acro for acro in self.acros_db.keys() if not re.fullmatch(cv.config_regex_acro_find, acro)]

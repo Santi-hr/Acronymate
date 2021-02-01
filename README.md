@@ -1,5 +1,5 @@
 # Acronymate
-Helpful script to aid with the generation of acronym tables from word documents
+Helpful script to extract acronyms from word documents and aid in the generation of definition tables
 
 ## What is its purpose?
 This script was created after the tedious task of reviewing several documents at work and having to extract and define the same acronyms in all of them.
@@ -13,7 +13,7 @@ The script is thought to be used with colleagues keeping the database file in a 
 The current user interface is a plain console, but with plenty of options and quite user-friendly. For example, for each acronym all appearances with context are shown, so it's easy to see where it was used on the document. The interface looks like this:  
 ![User interface](https://raw.githubusercontent.com/Santi-hr/Acronymate/master/other/User_Interface_Example.jpg)
 
-The user interface is provided in english and spanish. Use the configuration to select language.
+The user interface is provided in english and spanish. Use the configuration menu or file to change the language.
 If you are processing documents that are not in the supported languages, please check if the regex in *common/defines* contains all the special characters your language uses.
 
 
@@ -27,13 +27,14 @@ If the script proves to be useful I will invest more time to it.
 
 # How to use
 Launch *acronymateCmd.py*, or the precompiled executable for Windows, and follow the instructions of the user interface.
-Currently, all user interaction is done through the console. Use the command 'h' to get help. 
+Currently, all user interaction is done through the console. Use the command 'h' for help. 
 
 ## Word Integration
 To facilitate its use a Word macro is available in the folder "other".
-This macro allows to easily extract the acronyms of the active document and save time otherwise lost looking for the executable file.
+This macro allows for launching Acronymate directly from the document whose acronyms want to be extracted.
+Removing the need of looking for the executable and entering the document path saves a lot of time.
 
 Before using the macro some variables need to be defined. Read the comments on the same file.
 
 ## Requirements (Python script)
-To run the program as a python script the modules *python-docx* and *lxml* are required. The versions are specified in the *requirements.txt* file.
+To run the program as a python script the modules *python-docx* and *lxml* are required. Their versions are specified in the *requirements.txt* file.

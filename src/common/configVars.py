@@ -30,7 +30,7 @@ config_use_acro_from_doc_table = True  # Searches non regex matching acronyms fr
 config_use_non_matching_acro_from_db = True  # Adds to the search non regex matching acronyms added to the database
 # Storage flags
 config_save_backups = True  # Set to True to enable the creation of backups after each run
-config_allow_overwriting_exported = False  # Overwriting output files reduce the growth rate of the output folder
+config_allow_overwriting_exported = True  # Overwriting output files reduce the growth rate of the output folder
 # Note: Overwriting might not be possible if the file is in use. In that case the flag is ignored
 # Usability flags
 config_open_docx_after_export = True  # Opens the generated acronym .docx using the default program (Only for Windows)
