@@ -13,12 +13,14 @@ venv/
 data/
 input/
 output/
-script_launcher.bat
+
+# User files
+acronymate_config.json
+benckmark.py
 
 # Hidden docx files
 *~*.docx
 
 # Pyinstaler
-dist/
-build/
+pyinstaller/
 *.spec

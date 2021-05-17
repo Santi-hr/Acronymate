@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys, os
 
 
 def ensure_directory(directory_in):
@@ -40,3 +41,14 @@ def get_not_existing_file(path_in):
         idx += 1
         new_path = file_folder / (file_name + "_" + str(idx) + file_suffix)
     return new_path
+
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)

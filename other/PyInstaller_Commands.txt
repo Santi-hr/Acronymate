@@ -1,0 +1,6 @@
+Use the following commands to compile an executable using PyInstaller (v4.2):
+    - Onedir version (Prefered, faster loading times):
+acronymateCmd.py -c --name Acronymate --onedir --icon="../other/icon.ico" --add-data "../locales/es/LC_MESSAGES/*.mo;locales/es/LC_MESSAGES" --add-data "../locales/en/LC_MESSAGES/*.mo;locales/en/LC_MESSAGES" --distpath "pyinstaller/dist/onedir" --workpath "pyinstaller/build" --specpath "pyinstaller" --clean --noconfirm
+
+    - Onefile version (More clean):
+acronymateCmd.py -c --name Acronymate --onefile --icon="../other/icon.ico" --add-data "../locales/es/LC_MESSAGES/*.mo;locales/es/LC_MESSAGES" --add-data "../locales/en/LC_MESSAGES/*.mo;locales/en/LC_MESSAGES" --distpath "pyinstaller/dist/onefile" --workpath "pyinstaller/build" --specpath "pyinstaller"
