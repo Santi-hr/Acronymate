@@ -31,7 +31,7 @@ The following documents were used as benckmark:
 Documents are real, but work related, so they can not be shared.
 
 For each one, their acronyms were extracted to an empty table.
-A timer starts as the macro is launched (Check "Word integration" below for Acronymate) and stops when the results document is open.
+A timer starts as the macro is launched (Check ["Word integration"](#word-integration) below for Acronymate) and stops when the results document is open.
 The macro was executed both configured to detect an acronym as a word consisting of 3 or more uppercase letters and 2 or more uppercase letters. Acronymate by default is configured for 2 or more uppercase letters. 
 The resulting time on the chart is the average of 3 runs, in seconds.
 
@@ -47,7 +47,7 @@ Launch *acronymateCmd.py*, or the precompiled executable for Windows, and follow
 Currently, all user interaction is done through the console. Use the command 'h' for help. 
 
 ## Word Integration
-To facilitate its use a Word macro is available in the folder "other".
+To facilitate its use a Word macro is available [here](other/Word_Integration_Macro.txt).
 This macro allows for launching Acronymate directly from the document whose acronyms want to be extracted.
 Removing the need of looking for the executable and entering the document path saves a lot of time.
 
