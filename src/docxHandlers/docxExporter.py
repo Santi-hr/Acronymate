@@ -66,7 +66,7 @@ class DocxExporter:
         """Adds the footer of the document"""
         # Only one section in document
         section_footer = self.document.sections[0].footer
-        section_footer.paragraphs[0].text = "ACRONYMATE " + dv.define_acronymate_version + " - SAHR Projects 2021"
+        section_footer.paragraphs[0].text = "ACRONYMATE " + dv.define_acronymate_version + " - SAHR Projects 2023"
         section_footer.paragraphs[0].alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.RIGHT
 
     def _add_summary_paragraphs(self):
