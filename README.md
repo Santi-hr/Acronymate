@@ -4,9 +4,9 @@ Helpful script to quickly extract acronyms from word documents and aid in the ge
 ## What is its purpose?
 This script was created after the tedious task of reviewing several documents at work and having to extract and define the same acronyms in all of them.
 
-The script extracts the acronyms from any *.docx* file. It analyzes all paragraphs and tables, including those with "Track Changes" enabled. Acronymate also provides a "database" for definitions to ensure consistency. Once a new acronym is added its definition will appear automatically the next time it is found in another document. This way no time is wasted in manually searching everytime how exactly that acronym was defined. Finally, it generates an acronym table in *.docx* format that eases copying it to the final document.
+The script extracts the acronyms from any *.docx* file, searching in all paragraphs and tables, including those with "Track Changes" enabled. Acronymate also provides a "database" for definitions to ensure consistency. Once a new acronym is added its definition will appear automatically the next time it is found in another document. This way no time is wasted in manually searching everytime how exactly that acronym was defined. Finally, it generates an acronym table in *.docx* format that eases copying it to the final document.
 
-It also detects and process an already existing acronym table to import new definitions and avoid detecting those listed acronyms as needed if they only appear in that table.
+It also detects and process an already existing acronym table to skip these false positives (if they appear on the table but were later removed in the document body) and to import new definitions.
 
 The script is thought to be used with colleagues keeping the database file in a shared folder. Some degree of protection is added to prevent overwriting others changes.
 
@@ -35,12 +35,11 @@ A timer starts as the macro is launched (Check ["Word integration"](#word-integr
 The macro was executed both configured to detect an acronym as a word consisting of 3 or more uppercase letters and 2 or more uppercase letters. Acronymate by default is configured for 2 or more uppercase letters. 
 The resulting time on the chart is the average of 3 runs, in seconds.
 
-![Benchmark results](other/Benchmark_Results.png)
+![Benchmark results](other/Benchmark_Results_only_last_version.png)
 
-Clearly the script processes the documents orders of magnitude faster than a plain word macro. The speed boost is very noticeable for long documents.
-Also, the processing time was almost halved after the v0.5.0 release.
+The script clearly processes the documents orders of magnitude faster than a plain word macro. The speed boost is very noticeable for long documents.
 
-Finally, regarding accuracy, all the acronyms detected by the macro were detected by Acronymate.
+Regarding accuracy, all the acronyms detected by the macro were detected by Acronymate.
 
 # How to use
 Launch *acronymateCmd.py*, or the precompiled executable for Windows, and follow the instructions of the user interface.
