@@ -207,7 +207,7 @@ def print_process_acro_found_modes_help():
 
 def print_about_info():
     """Prints about info"""
-    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2021")
+    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2021 - 2023")
     print(_("Dependencias:"))
     print("    python-docx: Copyright (c) 2013 Steve Canny, https://github.com/scanny")
     print("    lxml: Copyright (c) 2004 Infrae. All rights reserved.")
@@ -648,7 +648,7 @@ def print_logo():
     print(ach.color_str("   AbmmmqMA  MM.           MM  YM.  MM.      ,MP M   `MM.M      MM      M  YM.P'  MM    AbmmmqMA    MM        MM   Y  ,", color))
     print(ach.color_str("  A'     VML `Mb.     ,'   MM   `Mb.`Mb.    ,dP' M     YMM      MM      M  `YM'   MM   A'     VML   MM        MM     ,M", color))
     print(ach.color_str(".AMA.   .AMMA. `\"bmmmd'  .JMML. .JMM. `\"bmmd\"' .JML.    YM    .JMML.  .JML. `'  .JMML.AMA.   .AMMA.JMML.    .JMMmmmmMMM", color))
-    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2021")
+    print("Acronymate", dv.define_acronymate_version, " - SAHR Projects 2023")
     print("")
 
 
