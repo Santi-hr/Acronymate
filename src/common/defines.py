@@ -9,4 +9,4 @@ define_tb_col_separator = "·|·"        # Used to represent a table column when
 define_new_line_separator = "·(\\n)·"  # Used to represent a line break
 
 # --------- OTHER -------------
-define_acronymate_version = "v0.5.1"
+define_acronymate_version = "v0.5.2"
