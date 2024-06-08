@@ -1,5 +1,4 @@
-lxml==4.9.2
-pip==23.1.2
-python-docx==0.8.11
-setuptools==67.7.2
-wheel==0.40.0
+lxml==5.2.2
+pip==24.0
+python-docx==1.1.2
+typing_extensions==4.12.1
