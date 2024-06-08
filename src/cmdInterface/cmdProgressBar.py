@@ -38,7 +38,7 @@ class CmdProgressBar:
                       + "[" + ach.AnsiColorCode.DARK_GREEN \
                       + "#" * char_completed + " " * char_not_completed \
                       + ach.AnsiColorCode.END + "] " \
-                      + "Tiempo transcurrido: %0.2fs" % (time.perf_counter() - self.start_time)
+                      + _("Tiempo transcurrido:") + " %0.2fs" % (time.perf_counter() - self.start_time)
             print('\r' + str_out, end="")
             # Print a line break in the last iteration
             if value_in >= self.upper:
